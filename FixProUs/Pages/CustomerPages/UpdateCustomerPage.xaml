@@ -1,0 +1,672 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                     x:Class="FixProUs.Pages.CustomerPages.UpdateCustomerPage"
+                      xmlns:Controls="clr-namespace:FixProUs.Controls"
+                      xmlns:Helpers="clr-namespace:FixProUs.Helpers"
+                      xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                      xmlns:syncfusion="clr-namespace:Syncfusion.Maui.ListView;assembly=Syncfusion.Maui.ListView"
+                      BackgroundColor="White"
+                      x:Name="page"
+                      IsEnabled="{Binding IsEnable}">
+
+    <StackLayout>
+        <StackLayout>
+            <!--Update Cust-->
+            <Controls:ToolBar x:Name="TitleUpdate" Title="Update Customer" HasBackButton="True" HorizontalOptions="FillAndExpand">
+            </Controls:ToolBar>
+        </StackLayout>
+        <ScrollView VerticalOptions="FillAndExpand">
+            <StackLayout>
+                <StackLayout>
+                    <Label Text="Details" TextColor="#b66dff" FontAttributes="Bold" HorizontalOptions="StartAndExpand" Padding="20,0,20,5"></Label>
+
+                    <Border BackgroundColor="White" HorizontalOptions="FillAndExpand" Margin="20,0,20,20" Padding="20,10,20,10">
+                        <Grid RowSpacing="10" Padding="5,10,5,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="5"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <StackLayout Grid.Column="0" HorizontalOptions="FillAndExpand">
+                                <Label Text="First Name" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='5,0,5,0', iOS='5,3,5,3'}" HorizontalOptions="FillAndExpand">
+                                    <Entry 
+                                          Text="{Binding CustomerDetails.FirstName}" 
+                                          Placeholder="First Name"
+                                          TextColor="#8f1fff"
+                                          FontSize="12"
+                                          HorizontalOptions="FillAndExpand"
+                                          VerticalTextAlignment="Center">
+                                    </Entry>
+
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                </Border>
+                            </StackLayout>
+
+                            <StackLayout Grid.Column="3" HorizontalOptions="FillAndExpand">
+                                <Label Text="Last Name" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='5,0,5,0', iOS='5,3,5,3'}" HorizontalOptions="FillAndExpand">
+                                    <Entry 
+                                          Text="{Binding CustomerDetails.LastName}" 
+                                          Placeholder="Last Name"
+                                          TextColor="#8f1fff"
+                                          FontSize="12"
+                                          HorizontalOptions="FillAndExpand"
+                                          VerticalTextAlignment="Center">
+                                    </Entry>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                </Border>
+                            </StackLayout>
+
+                            <StackLayout Grid.Row="1" Grid.Column="0" HorizontalOptions="FillAndExpand">
+                                <Label Text="Category" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='5,0,5,0', iOS='5,3,5,3'}" HorizontalOptions="FillAndExpand">
+                                    <Picker ItemsSource="{Binding CustomerFeatures.LstCustomerCategory}" IsEnabled="False" ItemDisplayBinding="{Binding CategoryName}" SelectedItem="{Binding OneCategoryModel,Mode=TwoWay}" SelectedIndexChanged="Picker_SelectedIndexChanged_1" 
+                                            TextColor="#8f1fff" Title="Category"
+                                            HorizontalOptions="FillAndExpand"
+                                            FontSize="12"
+                                            VerticalTextAlignment="Center">
+                                    </Picker>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                </Border>
+                            </StackLayout>
+
+                            <StackLayout Grid.Row="1" Grid.Column="3" HorizontalOptions="FillAndExpand">
+                                <Label Text="Source" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='5,0,5,0', iOS='5,3,5,3'}" HorizontalOptions="FillAndExpand">
+                                    <Picker ItemsSource="{Binding LstCampaigns}" ItemDisplayBinding="{Binding Lable}" IsEnabled="False" SelectedItem="{Binding OneCampaign,Mode=TwoWay}" SelectedIndexChanged="Picker_SelectedIndexChanged_3"
+                                        TextColor="#8f1fff" Title="Source"
+                                        FontSize="12"
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalTextAlignment="Center">
+                                    </Picker>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                </Border>
+                            </StackLayout>
+                            <StackLayout Grid.Row="2" Grid.Column="0" HorizontalOptions="FillAndExpand" VerticalOptions="Center">
+                                <Label Text="Member?" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="Center" Spacing="0">
+                                    <RadioButton x:Name="rdBtnYes" 
+                                                   Content="Yes$" 
+                                                 IsEnabled="False"
+                                                   TextColor="#333" 
+                                                   GroupName="Group1"
+                                                   IsChecked="False"
+                                                   Scale="{OnPlatform Android=.8,iOS=.9}"
+                                                   FontSize="{OnPlatform Android=16, iOS=13}" 
+                                                   CheckedChanged="rdBtnYes_CheckedChanged">
+                                        <RadioButton.Triggers>
+                                            <DataTrigger TargetType="RadioButton" Binding="{Binding IsMemberShip}" Value="True">
+                                                <Setter Property="IsChecked" Value="True"></Setter>
+                                            </DataTrigger>
+                                        </RadioButton.Triggers>
+                                    </RadioButton>
+                                    <RadioButton x:Name="rdBtnNo" 
+                                                   Content="No%" 
+                                                 IsEnabled="False"
+                                                   TextColor="#333" 
+                                                   GroupName="Group1" 
+                                                   IsChecked="True"
+                                                   Scale="{OnPlatform Android=.8,iOS=.9}"
+                                                   FontSize="{OnPlatform Android=16, iOS=13}" 
+                                                   CheckedChanged="rdBtnNo_CheckedChanged">
+                                    </RadioButton>
+                                </StackLayout>
+                            </StackLayout>
+
+                            <StackLayout x:Name="stkMember" IsVisible="False" Grid.Row="2" Grid.Column="3" HorizontalOptions="FillAndExpand">
+                                <Label Text="Member Type" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='5,0,5,0', iOS='5,3,5,3'}" HorizontalOptions="FillAndExpand">
+                                    <Picker ItemsSource="{Binding CustomerFeatures.LstMemberships}" IsEnabled="False" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding OneMemberModel,Mode=TwoWay}" SelectedIndexChanged="Picker_SelectedIndexChanged"
+                                            Title="Choose Membership"
+                                            TextColor="#8f1fff"
+                                            FontSize="12"
+                                            HorizontalOptions="FillAndExpand"
+                                            VerticalTextAlignment="Center">
+                                    </Picker>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                </Border>
+
+                                <Label Text="Member Expire Date" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='5,0,5,0', iOS='5,3,5,3'}" HorizontalOptions="FillAndExpand">
+                                    <DatePicker 
+                                             Date="{Binding CustomerDetails.MemeberExpireDate}"
+                                             TextColor="#8f1fff"
+                                             FontSize="12"
+                                             HorizontalOptions="FillAndExpand">
+                                        <DatePicker.Triggers>
+                                            <DataTrigger TargetType="DatePicker" Binding="{Binding IsUpdateCust}" Value="2">
+                                                <Setter Property="IsEnabled" Value="False"></Setter>
+                                            </DataTrigger>
+                                        </DatePicker.Triggers>
+                                    </DatePicker>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                </Border>
+                            </StackLayout>
+
+                            <StackLayout x:Name="stkDiscount" Grid.Row="2" Grid.Column="3" HorizontalOptions="FillAndExpand">
+                                <Label Text="Discount %" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='5,0,5,0', iOS='5,3,5,3'}" HorizontalOptions="FillAndExpand">
+                                    <Entry 
+                                        Text="{Binding CustomerDetails.Discount}"
+                                        Placeholder="Enter Discount"
+                                        IsEnabled="False"
+                                        TextColor="#8f1fff"
+                                        Keyboard="Numeric"
+                                        FontSize="12"
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalTextAlignment="Center">
+                                    </Entry>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                </Border>
+                            </StackLayout>
+
+
+                            <StackLayout Grid.Row="3" Grid.Column="0" HorizontalOptions="FillAndExpand" VerticalOptions="Center">
+                                <StackLayout Orientation="Horizontal" Padding="5,10,5,10">
+                                    <Label Text="Texable" TextColor="Black" FontSize="13" VerticalOptions="Center" HorizontalOptions="Start"></Label>
+                                    <Switch x:Name="swtTaxable" IsToggled="{Binding CustomerDetails.Taxable}" IsEnabled="False" VerticalOptions="Center" Toggled="swtTaxable_Toggled">
+                                        <Switch.Triggers>
+                                            <DataTrigger TargetType="Switch" Binding="{Binding CustomerDetails.Id}" Value="0">
+                                                <Setter Property="IsToggled" Value="True"></Setter>
+                                            </DataTrigger>
+                                        </Switch.Triggers>
+                                    </Switch>
+                                </StackLayout>
+                            </StackLayout>
+
+                            <StackLayout x:Name="stkTexable" IsVisible="False" Grid.Row="3" Grid.Column="3" HorizontalOptions="FillAndExpand">
+                                <Label Text="Choose Tax" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='5,0,5,0', iOS='5,3,5,3'}" HorizontalOptions="FillAndExpand">
+                                    <Picker ItemsSource="{Binding CustomerFeatures.LstTaxes}" IsEnabled="False" ItemDisplayBinding="{Binding Taxname}" SelectedItem="{Binding OneTaxModel,Mode=TwoWay}" SelectedIndexChanged="Picker_SelectedIndexChanged_2"
+                                            Title="Choose Tax"
+                                            TextColor="#8f1fff"
+                                            FontSize="12"
+                                            HorizontalOptions="FillAndExpand"
+                                            VerticalTextAlignment="Center">
+                                    </Picker>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                </Border>
+                            </StackLayout>
+                        </Grid>
+
+                        <Border.Shadow>
+                            <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                        </Border.Shadow>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                        </Border.StrokeShape>
+                    </Border>
+                </StackLayout>
+
+                <StackLayout>
+                    <Label Text="Contact" HorizontalOptions="StartAndExpand" TextColor="#b66dff" FontAttributes="Bold" Padding="20,0,20,5"></Label>
+
+                    <Border BackgroundColor="White" HorizontalOptions="FillAndExpand" Margin="20,0,20,20" Padding="20,10,20,10">
+                        <Grid RowSpacing="10" Padding="5,10,5,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"></RowDefinition>
+                                <RowDefinition Height="1*"></RowDefinition>
+                                <RowDefinition Height="auto"></RowDefinition>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <StackLayout HorizontalOptions="FillAndExpand" Grid.Column="0" Grid.ColumnSpan="4">
+                                <Label Text="Phone" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='5,0,5,0', iOS='5,3,5,3'}" HorizontalOptions="FillAndExpand">
+                                    <Entry 
+                                          Text="{Binding CustomerDetails.Phone1}" 
+                                          Placeholder="Phone"
+                                          Keyboard="Telephone"
+                                          TextColor="#8f1fff"
+                                          FontSize="12"
+                                          HorizontalOptions="FillAndExpand"
+                                          VerticalTextAlignment="Center">
+                                    </Entry>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                </Border>
+                            </StackLayout>
+
+                            <StackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" HorizontalOptions="FillAndExpand">
+                                <Label Text="Email" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='5,0,5,0', iOS='5,3,5,3'}" HorizontalOptions="FillAndExpand">
+                                    <Entry 
+                                        Text="{Binding CustomerDetails.Email}"
+                                        Placeholder="Email"
+                                        Keyboard="Email"
+                                        TextColor="#8f1fff"
+                                        FontSize="12"
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalTextAlignment="Center">
+                                    </Entry>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                </Border>
+                            </StackLayout>
+
+
+                            <StackLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" HorizontalOptions="FillAndExpand">
+                                <Label Text="Notes" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='5,0,5,0', iOS='5,3,5,3'}" HorizontalOptions="FillAndExpand">
+                                    <Editor  AutoSize="TextChanges"
+                                        Text="{Binding CustomerDetails.Notes}" 
+                                        Placeholder="Notes" 
+                                        IsEnabled="False"
+                                        TextColor="#8f1fff"
+                                        FontSize="12" BackgroundColor="White"
+                                        HorizontalOptions="FillAndExpand">
+                                    </Editor>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                </Border>
+                            </StackLayout>
+
+                        </Grid>
+
+                        <Border.Shadow>
+                            <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                        </Border.Shadow>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                        </Border.StrokeShape>
+                    </Border>
+                </StackLayout>
+
+
+                <StackLayout>
+                    <Label Text="Location" HorizontalOptions="StartAndExpand" TextColor="#b66dff" FontAttributes="Bold" Padding="20,0,20,5"></Label>
+                    <Border BackgroundColor="White" HorizontalOptions="FillAndExpand" Margin="20,0,20,20" Padding="20,10,20,10">
+                        <Grid RowSpacing="{OnPlatform Android=10,iOS=20}" Padding="5,10,5,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*"></RowDefinition>
+                                <RowDefinition Height="1*"></RowDefinition>
+                            </Grid.RowDefinitions>
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+
+                            <StackLayout Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalOptions="FillAndExpand">
+                                <Label Text="Address" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='5,0,5,0', iOS='5,3,5,3'}" HorizontalOptions="FillAndExpand">
+                                    <Entry 
+                                           Text="{Binding Address}"  
+                                           TextColor="#8f1fff"
+                                           Placeholder="Address"
+                                           FontSize="12"
+                                           HorizontalOptions="FillAndExpand"
+                                           VerticalTextAlignment="Center"
+                                           Focused="Entry_Focused">
+                                    </Entry>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                </Border>
+                            </StackLayout>
+
+
+                            <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="4" Spacing="5" HorizontalOptions="FillAndExpand">
+                                <StackLayout HorizontalOptions="FillAndExpand">
+                                    <Label Text="Year Built" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
+                                    <Border BackgroundColor="White" Padding="{OnPlatform Android=10, iOS=18}" HorizontalOptions="FillAndExpand">
+                                        <Label TextColor="#333" 
+                                             Text="{Binding YearBuilt}"      
+                                             HorizontalOptions="FillAndExpand"
+                                             FontSize="12"
+                                             VerticalTextAlignment="Center">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding YearBuilt}" Value="0">
+                                                    <Setter Property="Text" Value=""></Setter>
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+
+                                        <Border.Shadow>
+                                            <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                        </Border.Shadow>
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                        </Border.StrokeShape>
+                                    </Border>
+                                </StackLayout>
+
+                                <StackLayout HorizontalOptions="FillAndExpand">
+                                    <Label Text="Estimate Value" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
+                                    <Border BackgroundColor="White" Padding="{OnPlatform Android=10, iOS=18}" HorizontalOptions="FillAndExpand">
+                                        <Label 
+                                             Text="{Binding HouseValue}"            
+                                             FontSize="12" TextColor="#333"
+                                             HorizontalOptions="FillAndExpand"
+                                             VerticalTextAlignment="Center">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding HouseValue}" Value="0">
+                                                    <Setter Property="Text" Value=""></Setter>
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                        <Border.Shadow>
+                                            <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                        </Border.Shadow>
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                        </Border.StrokeShape>
+                                    </Border>
+                                </StackLayout>
+
+                                <StackLayout HorizontalOptions="FillAndExpand">
+                                    <Label Text="Square Footage" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
+                                    <Border BackgroundColor="White" Padding="{OnPlatform Android=10, iOS=18}" HorizontalOptions="FillAndExpand">
+                                        <Label 
+                                               Text="{Binding SquareFootage}"               
+                                               FontSize="12" TextColor="#333"
+                                               HorizontalOptions="FillAndExpand"
+                                               VerticalTextAlignment="Center">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding SquareFootage}" Value="0">
+                                                    <Setter Property="Text" Value=""></Setter>
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                        <Border.Shadow>
+                                            <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                        </Border.Shadow>
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                        </Border.StrokeShape>
+                                    </Border>
+                                </StackLayout>
+                            </StackLayout>
+
+                        </Grid>
+
+                        <Border.Shadow>
+                            <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                        </Border.Shadow>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                        </Border.StrokeShape>
+                    </Border>
+
+
+
+                </StackLayout>
+
+                <StackLayout Margin="0,0,0,30">
+                    <Label Text="Custom Fields" HorizontalOptions="StartAndExpand" TextColor="#b66dff" FontAttributes="Bold" Padding="20,0,20,5"></Label>
+
+                    <!--Update Customer-->
+                    <StackLayout x:Name="stkCustomFieldUpdate" Orientation="Horizontal" IsEnabled="False" Spacing="10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Margin="20,0,20,0">
+
+                        <syncfusion:SfListView x:Name="lstCustomFieldsUpdate" 
+                                                SelectionMode="None" BackgroundColor="White"
+                                                AllowGroupExpandCollapse="True"
+                                                ItemSize="75"
+                                                Padding="0"
+                                                Margin="0" HorizontalOptions="CenterAndExpand"
+                                                AutoFitMode="DynamicHeight"
+                                                ScrollBarVisibility="Default"
+                                                ItemsSource="{Binding CustomerDetails.LstCustomersCustomField}">
+                            <syncfusion:SfListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <StackLayout Spacing="0">
+
+                                            <Border BackgroundColor="White" Margin="0,0,0,15" HorizontalOptions="FillAndExpand">
+                                                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Padding="0,10,0,10">
+                                                    <Label Text="{Binding CustomFieldName,StringFormat='{0} :'}"          
+                                                            FontAttributes="Bold"
+                                                            TextColor="Black" FontSize="12"
+                                                            HorizontalTextAlignment="Start"
+                                                            VerticalTextAlignment="Center"
+                                                            Padding="20,7,20,7">
+                                                    </Label>
+
+                                                    <Border IsVisible="False" Padding="5,0,5,0">
+                                                        <!--<Entry Text="{Binding DefaultValue}"                                                              
+                                                                TextColor="#8f1fff"
+                                                                FontSize="12"
+                                                                WidthRequest="100"
+                                                                FontAttributes="Bold">
+                                                        </Entry>-->
+                                                        <Label Text="{Binding DefaultValue}" TextColor="#333" FontSize="12" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Padding="5,0,5,0"></Label>
+                                                        <Border.StrokeShape>
+                                                            <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                                        </Border.StrokeShape>
+                                                        <Border.Triggers>
+                                                            <DataTrigger TargetType="Border" Binding="{Binding FieldType}" Value="1">
+                                                                <Setter Property="IsVisible" Value="True"></Setter>
+                                                            </DataTrigger>
+                                                        </Border.Triggers>
+                                                    </Border>
+
+                                                    <Border IsVisible="False" Padding="5,0,5,0">
+                                                        <!--<Editor Text="{Binding DefaultValue}"  
+                                                                 TextColor="#8f1fff"
+                                                                FontSize="12"
+                                                                WidthRequest="100"
+                                                                FontAttributes="Bold">
+                                                        </Editor>-->
+                                                        <Label Text="{Binding DefaultValue}" TextColor="#333" FontSize="12" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Padding="5,0,5,0"></Label>
+
+                                                        <Border.StrokeShape>
+                                                            <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                                        </Border.StrokeShape>
+                                                        <Border.Triggers>
+                                                            <DataTrigger TargetType="Border" Binding="{Binding FieldType}" Value="2">
+                                                                <Setter Property="IsVisible" Value="True"></Setter>
+                                                            </DataTrigger>
+                                                        </Border.Triggers>
+                                                    </Border>
+
+                                                    <StackLayout Orientation="Horizontal" IsVisible="False"  HorizontalOptions="End" VerticalOptions="Center" Spacing="0">
+                                                        <RadioButton x:Name="rdBtYes" TextColor="#333" Content="Yes" Scale="{OnPlatform Android=.7,iOS=.9}" FontSize="16">
+                                                            <RadioButton.Triggers>
+                                                                <DataTrigger TargetType="RadioButton" Binding="{Binding DefaultValue}" Value="Yes">
+                                                                    <Setter Property="IsChecked" Value="True"></Setter>
+                                                                </DataTrigger>
+                                                            </RadioButton.Triggers>
+                                                        </RadioButton>
+                                                        <RadioButton x:Name="rdBtNo" TextColor="#333" Content="No" Scale="{OnPlatform Android=.7,iOS=.9}" FontSize="16">
+                                                            <RadioButton.Triggers>
+                                                                <DataTrigger TargetType="RadioButton" Binding="{Binding DefaultValue}" Value="No">
+                                                                    <Setter Property="IsChecked" Value="True"></Setter>
+                                                                </DataTrigger>
+                                                            </RadioButton.Triggers>
+                                                        </RadioButton>
+
+                                                        <CheckBox IsChecked="{Binding DefaultValue}" IsVisible="False">
+                                                            <CheckBox.Triggers>
+                                                                <DataTrigger TargetType="CheckBox" Binding="{Binding Source={x:Reference rdBtYes},Path=IsChecked}" Value="True">
+                                                                    <Setter Property="IsChecked" Value="True"></Setter>
+                                                                </DataTrigger>
+                                                                <DataTrigger TargetType="CheckBox" Binding="{Binding Source={x:Reference rdBtNo},Path=IsChecked}" Value="True">
+                                                                    <Setter Property="IsChecked" Value="False"></Setter>
+                                                                </DataTrigger>
+                                                            </CheckBox.Triggers>
+                                                        </CheckBox>
+                                                        <StackLayout.Triggers>
+                                                            <DataTrigger TargetType="StackLayout" Binding="{Binding FieldType}" Value="4">
+                                                                <Setter Property="IsVisible" Value="True"></Setter>
+                                                            </DataTrigger>
+                                                        </StackLayout.Triggers>
+                                                    </StackLayout>
+
+                                                    <Border IsVisible="False" Padding="5,0,5,0">
+                                                        <!--<Picker ItemsSource="{Binding LstString}" Title="Enter Value" ItemDisplayBinding="{Binding}" SelectedItem="{Binding DefaultValue}"
+                                                                FontSize="12"
+                                                                TextColor="#8f1fff"
+                                                                WidthRequest="100"
+                                                                FontAttributes="Bold">
+                                                        </Picker>-->
+                                                        <Label Text="{Binding DefaultValue}" TextColor="#333" FontSize="12" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Padding="5,0,5,0"></Label>
+
+                                                        <Border.StrokeShape>
+                                                            <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                                        </Border.StrokeShape>
+                                                        <Border.Triggers>
+                                                            <DataTrigger TargetType="Border" Binding="{Binding FieldType}" Value="6">
+                                                                <Setter Property="IsVisible" Value="True"></Setter>
+                                                            </DataTrigger>
+                                                        </Border.Triggers>
+                                                    </Border>
+
+                                                    <Border IsVisible="False" WidthRequest="100" Padding="5,0,5,0">
+                                                        <!--<DatePicker Date="{Binding DefaultValue}"                                                                     
+                                                                    TextColor="#8f1fff"
+                                                                    FontSize="12"
+                                                                    FontAttributes="Bold">
+                                                        </DatePicker>-->
+                                                        <Label Text="{Binding DefaultValue}" TextColor="#333" FontSize="12" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Padding="5,0,5,0"></Label>
+
+                                                        <Border.StrokeShape>
+                                                            <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                                        </Border.StrokeShape>
+                                                        <Border.Triggers>
+                                                            <DataTrigger TargetType="Border" Binding="{Binding FieldType}" Value="3">
+                                                                <Setter Property="IsVisible" Value="True"></Setter>
+                                                            </DataTrigger>
+                                                        </Border.Triggers>
+                                                    </Border>
+
+                                                    <Switch IsToggled="{Binding DefaultValue}" 
+                                                            IsVisible="False" Scale="0.9">
+                                                        <Switch.Triggers>
+                                                            <DataTrigger TargetType="Switch" Binding="{Binding FieldType}" Value="5">
+                                                                <Setter Property="IsVisible" Value="True"></Setter>
+                                                            </DataTrigger>
+                                                        </Switch.Triggers>
+                                                    </Switch>
+
+                                                </StackLayout>
+                                                <Border.Shadow>
+                                                    <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                                </Border.Shadow>
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="2"></RoundRectangle>
+                                                </Border.StrokeShape>
+                                            </Border>
+                                        </StackLayout>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </syncfusion:SfListView.ItemTemplate>
+                            <syncfusion:SfListView.Triggers>
+                                <DataTrigger TargetType="syncfusion:SfListView" Binding="{Binding CustomerDetails.LstCustomersCustomField.Count}" Value="0">
+                                    <Setter Property="IsVisible" Value="False"></Setter>
+                                    <Setter Property="HeightRequest" Value="0"></Setter>
+                                </DataTrigger>
+                            </syncfusion:SfListView.Triggers>
+                        </syncfusion:SfListView>
+
+
+                        <StackLayout.Triggers>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding CustomerDetails.LstCustomersCustomField.Count}" Value="0">
+                                <Setter Property="IsVisible" Value="False"></Setter>
+                                <Setter Property="HeightRequest" Value="0"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding CustomerDetails.LstCustomersCustomField.Count}" Value="1">
+                                <Setter Property="HeightRequest" Value="120"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding CustomerDetails.LstCustomersCustomField.Count}" Value="2">
+                                <Setter Property="HeightRequest" Value="200"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding CustomerDetails.LstCustomersCustomField.Count}" Value="3">
+                                <Setter Property="HeightRequest" Value="320"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding CustomerDetails.LstCustomersCustomField.Count}" Value="4">
+                                <Setter Property="HeightRequest" Value="430"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding CustomerDetails.LstCustomersCustomField.Count}" Value="5">
+                                <Setter Property="HeightRequest" Value="560"></Setter>
+                            </DataTrigger>
+                        </StackLayout.Triggers>
+                    </StackLayout>
+
+                </StackLayout>
+
+            </StackLayout>
+        </ScrollView>
+
+        <Button x:Name="btnSubmit" HeightRequest="45" 
+                VerticalOptions="End" FontSize="16"
+                Text="Submit" TextTransform="None"
+                BackgroundColor="#b66dff" 
+                TextColor="White"
+                Margin="{OnPlatform Android='50,20,50,20',iOS='50,20,50,50'}"
+                Padding="0" 
+                CornerRadius="20"
+                Command="{Binding UpdateCustomerCommand}" CommandParameter="{Binding CustomerDetails}">
+        </Button>
+    </StackLayout>
+</Controls:CustomsPage>

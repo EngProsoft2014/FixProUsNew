@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FixProUs.Pages.PopupPages.EmployeesPopup"
+                  xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+                  xmlns:mopupsanim="clr-namespace:Mopups.Animations;assembly=Mopups"
+                  xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                  BackgroundColor="#80000000"
+                  IsEnabled="{Binding IsEnable}">
+
+
+    <Border HeightRequest="500" 
+                       WidthRequest="350"
+                       BackgroundColor="White"
+                       HorizontalOptions="CenterAndExpand"
+                       VerticalOptions="CenterAndExpand">
+        <!--Branches-->
+        <StackLayout Padding="10" VerticalOptions="FillAndExpand">
+
+
+                <Border 
+                               VerticalOptions="FillAndExpand"    
+                               Padding="10,10,10,10"
+                               Margin="10"
+                               BackgroundColor="White" 
+                               HorizontalOptions="FillAndExpand">
+                    <StackLayout>
+
+                        <ListView x:Name="lstEmployees" BackgroundColor="White" SelectionMode="None" HasUnevenRows="True" VerticalScrollBarVisibility="Never">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <StackLayout>
+                                            <StackLayout Orientation="Horizontal">
+
+                                                <StackLayout Orientation="Horizontal">
+                                                    <Label Text="{Binding FirstName}" 
+                                                             FontSize="14" TextColor="#333" 
+                                                             HorizontalOptions="FillAndExpand" 
+                                                             VerticalTextAlignment="Center"></Label>
+                                                    <Label Text="{Binding LastName}" 
+                                                             FontSize="14" TextColor="#333" 
+                                                             HorizontalOptions="FillAndExpand" 
+                                                             VerticalTextAlignment="Center"></Label>
+                                                </StackLayout>
+                                                <CheckBox x:Name="chBxChooseEmployees" 
+                                                          Color="#333"
+                                                             HorizontalOptions="EndAndExpand" 
+                                                             IsChecked="{Binding IsChecked}" 
+                                                             ScaleX="1" ScaleY="1"
+                                                             ></CheckBox>
+                                            </StackLayout>
+
+                                            <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>
+                                        </StackLayout>
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+
+                        <Button Text="Apply" 
+                                HorizontalOptions="FillAndExpand"
+                                WidthRequest="{OnPlatform iOS=100}"
+                                TextColor="White" Margin="0,20,0,0"
+                                BackgroundColor="#b66dff"
+                                HeightRequest="45"
+                                CornerRadius="20"
+                                Clicked="Button_Clicked"></Button>
+                    </StackLayout>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                    </Border.StrokeShape>
+                </Border>
+
+                <!--<ActivityIndicator x:Name="actIndLoading" IsRunning="{Binding IsBusy}" IsVisible="False" PropertyChanged="actIndLoading_PropertyChanged">
+
+                    <ActivityIndicator.BindingContext>
+                        <vm:SchedulesViewModel></vm:SchedulesViewModel>
+                    </ActivityIndicator.BindingContext>
+                </ActivityIndicator>-->
+        </StackLayout>
+
+
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="20"></RoundRectangle>
+        </Border.StrokeShape>
+    </Border>
+</mopups:PopupPage>

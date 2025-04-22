@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="FixProUs.Pages.NoInternetPage"
+                      xmlns:Controls="clr-namespace:FixProUs.Controls"
+                      xmlns:Helpers="clr-namespace:FixProUs.Helpers"
+                      xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                      x:Name="page"
+                      BackgroundColor="White"
+                      IsEnabled="{Binding IsEnable}">
+
+
+    <ContentPage.Content>
+        <Grid VerticalOptions="StartAndExpand" HorizontalOptions="CenterAndExpand" Margin="0,100,0,0">
+            <StackLayout Spacing="30">
+                <Image Source="nointernet.jpg" Aspect="Fill" HeightRequest="250" WidthRequest="250"/>
+
+                <Label Text="No internet connection" FontSize="22" TextColor="#333" HorizontalOptions="CenterAndExpand"></Label>
+
+                <Button Text="Retry" 
+                    TextTransform="None"
+                    BackgroundColor="#eedeff"
+                    TextColor="Gray" 
+                    BorderColor="#b66dff"
+                    Margin="30,30,30,0"
+                    VerticalOptions="End"
+                    Clicked="Button_Clicked"></Button>
+            </StackLayout>
+
+        </Grid>
+    </ContentPage.Content>
+</Controls:CustomsPage>

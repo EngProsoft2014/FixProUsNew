@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                     x:Class="FixProUs.Pages.PlansPages.PlanPaymentPage"
+                     xmlns:Controls="clr-namespace:FixProUs.Controls"
+                    xmlns:Helpers="clr-namespace:FixProUs.Helpers"
+                    xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                    x:Name="page"
+                    BackgroundColor="White"
+                     Title="PlanPaymentPage"
+                      IsEnabled="{Binding IsEnable}">
+
+    <StackLayout>
+        <!--Toolbar Credit Card-->
+        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Padding="{OnPlatform iOS='15,0,15,10', Android='15,10,15,10'}">
+
+            <Image x:Name="imgback">
+                <Image.Source>
+                    <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="20"></FontImageSource>
+                </Image.Source>
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                </Image.GestureRecognizers>
+            </Image>
+
+            <Label x:Name="lblTitle" Text="Payment" HeightRequest="30"
+                    VerticalOptions="FillAndExpand" Style="{StaticResource lblHeaderText}"
+                    HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+        </StackLayout>
+
+        <ScrollView VerticalOptions="FillAndExpand" Padding="0,0,0,30">
+            <StackLayout Padding="20,20,20,0" VerticalOptions="FillAndExpand" TranslationY="0" Spacing="25">
+                <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="EndAndExpand" Margin="0,0,20,10">
+                    <Image x:Name="imgBack">
+                        <Image.Source>
+                            <FontImageSource FontFamily="FontIconSolid" Color="#b66dff" Glyph="" Size="25"></FontImageSource>
+                        </Image.Source>
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BindingContext.ScanCommand,Source={x:Reference page}}"></TapGestureRecognizer>
+                        </Image.GestureRecognizers>
+                    </Image>
+
+                    <Label Text="Scan Card" VerticalTextAlignment="Center" TextColor="#333"></Label>
+                </StackLayout>
+
+                <Border BackgroundColor="White" Padding="{OnPlatform Android='10,5,10,5',iOS=10}" HorizontalOptions="FillAndExpand">
+                    <Entry Text="{Binding HolderName}"          
+                                 TextColor="#333"
+                                 Placeholder="Card holder name"
+                                 FontSize="12"
+                                 HorizontalOptions="FillAndExpand"
+                                 VerticalTextAlignment="Center">
+                    </Entry>
+                    <Border.StrokeShape>
+                        <RoundRectangle Stroke="Gray" StrokeThickness="1" CornerRadius="10"></RoundRectangle>
+                    </Border.StrokeShape>
+                    <Border.Shadow>
+                        <Shadow Offset="1,2" Brush="{OnPlatform Android=LightGray,iOS=LightGray}" Radius="{OnPlatform Android=3,iOS=1}" Opacity="1"></Shadow>
+                    </Border.Shadow>
+                </Border>
+
+                <Border BackgroundColor="White" Padding="{OnPlatform Android='10,5,10,5',iOS=10}" HorizontalOptions="FillAndExpand">
+                    <Entry Text="{Binding CardNumber}"
+                                 TextColor="#333"
+                                 Placeholder="Card Number"
+                                 FontSize="12"
+                                 HorizontalOptions="FillAndExpand"
+                                 VerticalTextAlignment="Center">
+                    </Entry>
+                    <Border.StrokeShape>
+                        <RoundRectangle Stroke="Gray" StrokeThickness="1" CornerRadius="10"></RoundRectangle>
+                    </Border.StrokeShape>
+                    <Border.Shadow>
+                        <Shadow Offset="1,2" Brush="{OnPlatform Android=LightGray,iOS=LightGray}" Radius="{OnPlatform Android=3,iOS=1}" Opacity="1"></Shadow>
+                    </Border.Shadow>
+                </Border>
+
+                <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                    <Border BackgroundColor="White" Padding="{OnPlatform Android='10,5,10,5',iOS=10}" WidthRequest="160" HorizontalOptions="StartAndExpand">
+                        <Entry Text="{Binding ExpirationDate}"               
+                         TextColor="#333"
+                         Placeholder="Expired Date"
+                         FontSize="12"
+                         HorizontalOptions="FillAndExpand"
+                         VerticalTextAlignment="Center">
+                        </Entry>
+                        <Border.StrokeShape>
+                            <RoundRectangle Stroke="Gray" StrokeThickness="1" CornerRadius="10"></RoundRectangle>
+                        </Border.StrokeShape>
+                        <Border.Shadow>
+                            <Shadow Offset="1,2" Brush="{OnPlatform Android=LightGray,iOS=LightGray}" Radius="{OnPlatform Android=3,iOS=1}" Opacity="1"></Shadow>
+                        </Border.Shadow>
+                    </Border>
+
+                    <Image x:Name="imgCard" HorizontalOptions="Center" Margin="10,0,10,0">
+                        <Image.Source>
+                            <FontImageSource FontFamily="FontIconSolid" Glyph="" Color="Gray" Size="25"></FontImageSource>
+                        </Image.Source>
+                    </Image>
+
+                    <Border BackgroundColor="White" Padding="{OnPlatform Android='10,5,10,5',iOS=10}" WidthRequest="150" HorizontalOptions="FillAndExpand">
+                        <Entry Text="{Binding Cvv}"
+                             TextColor="#333"
+                             Placeholder="Cvv"
+                             FontSize="12"
+                             HorizontalOptions="FillAndExpand"
+                             VerticalTextAlignment="Center">
+                        </Entry>
+                        <Border.StrokeShape>
+                            <RoundRectangle Stroke="Gray" StrokeThickness="1" CornerRadius="10"></RoundRectangle>
+                        </Border.StrokeShape>
+                        <Border.Shadow>
+                            <Shadow Offset="1,2" Brush="{OnPlatform Android=LightGray,iOS=LightGray}" Radius="{OnPlatform Android=3,iOS=1}" Opacity="1"></Shadow>
+                        </Border.Shadow>
+                    </Border>
+                </StackLayout>
+
+
+                <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="CenterAndExpand" Margin="0,20,0,0">
+
+                    <StackLayout  WidthRequest="150">
+
+                        <Border x:Name="pnkYearlyMethod" Padding="10" BackgroundColor="Transparent" >
+                            <Border.StrokeShape>
+                                <RoundRectangle Stroke="#c995fc" StrokeThickness="2" CornerRadius="10"></RoundRectangle>
+                            </Border.StrokeShape>
+                            <StackLayout >
+                                <CheckBox x:Name="rdYearly" IsChecked="{Binding IsYearly}"
+                                             BackgroundColor="Transparent"
+                                             HorizontalOptions="End"
+                                             VerticalOptions="Start">
+                                    <CheckBox.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"></TapGestureRecognizer>
+                                    </CheckBox.GestureRecognizers>
+                                </CheckBox>
+
+                                <Button x:Name="btnYearly" 
+                                        Text="{Binding OnePlan.AnnualPrice,StringFormat='${0}'}"
+                                        Margin="0,4,0,4" 
+                                        HorizontalOptions="Center"
+                                        CornerRadius="10"
+                                        WidthRequest="100"
+                                        HeightRequest="40"
+                                        TextColor="White"
+                                        BackgroundColor="#3570b8">
+
+                                </Button>
+
+                                <Label Text="Once a year" 
+                                       FontFamily="InterMedium"
+                                       TextColor="#212121"
+                                       FontSize="14"
+                                       HorizontalOptions="Center"></Label>
+                            </StackLayout>
+                        </Border>
+                    </StackLayout>
+
+
+
+                    <StackLayout  WidthRequest="150">
+                        <Border x:Name="pnkMonthlyMethod" Padding="10" BackgroundColor="Transparent" >
+                            <Border.StrokeShape>
+                                <RoundRectangle Stroke="#c995fc" StrokeThickness="2" CornerRadius="10"></RoundRectangle>
+                            </Border.StrokeShape>
+                            <StackLayout>
+                                <CheckBox x:Name="rdMonthly" IsChecked="{Binding IsMonthly}"
+                                             BackgroundColor="Transparent"
+                                             HorizontalOptions="End"
+                                             VerticalOptions="Start">
+                                    <CheckBox.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_2"></TapGestureRecognizer>
+                                    </CheckBox.GestureRecognizers>
+                                </CheckBox>
+
+                                <Button x:Name="btnMonthly" 
+                                        Text="{Binding OnePlan.MonthlyPrice,StringFormat='${0}'}"
+                                        Margin="0,4,0,4" 
+                                        HorizontalOptions="Center"
+                                        CornerRadius="10"
+                                        WidthRequest="100"
+                                        HeightRequest="40"
+                                        TextColor="White"
+                                        BackgroundColor="#3570b8">
+                                </Button>
+
+
+                                <Label Text="Once a month" 
+                                       FontFamily="InterMedium"
+                                       TextColor="#212121"
+                                       FontSize="14"
+                                       HorizontalOptions="Center"></Label>
+                            </StackLayout>
+                        </Border>
+                    </StackLayout>
+                </StackLayout>
+
+            </StackLayout>
+
+        </ScrollView>
+
+        <Border BackgroundColor="#8f1fff" Padding="{OnPlatform Android='5,10,5,10',iOS='5,15,5,15'}" Margin="{OnPlatform Android=20,iOS='20,20,20,50'}" HorizontalOptions="FillAndExpand" VerticalOptions="End">
+            <Label x:Name="btnPayCredit" Text="Pay Now"
+                                 TextColor="White"
+                                 FontSize="16"
+                                 HorizontalOptions="CenterAndExpand"
+                                 VerticalTextAlignment="Center">
+            </Label>
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10"></RoundRectangle>
+            </Border.StrokeShape>
+            <Border.Shadow>
+                <Shadow Offset="1,2" Brush="{OnPlatform Android=LightGray,iOS=LightGray}" Radius="{OnPlatform Android=3,iOS=1}" Opacity="1"></Shadow>
+            </Border.Shadow>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding CreditPayNowCommand}" CommandParameter="{Binding OnePlan}"></TapGestureRecognizer>
+            </Border.GestureRecognizers>
+        </Border>
+
+    </StackLayout>
+</Controls:CustomsPage>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FixProUs.Pages.LoginPage"
+             xmlns:Controls="clr-namespace:FixProUs.Controls"
+             xmlns:Helpers="clr-namespace:FixProUs.Helpers"
+             xmlns:vm="clr-namespace:FixProUs.ViewModels"
+             xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Name="page"
+             BackgroundColor="White"
+             Visual="Material"
+             IsEnabled="{Binding IsEnable}">
+
+    <ContentPage.Content>
+    <ScrollView VerticalOptions="FillAndExpand">
+        <StackLayout VerticalOptions="FillAndExpand" Spacing="50">
+            <!-- Gradient Background -->
+            <StackLayout.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="#B36DFF" Offset="0.0" />
+                    <GradientStop Color="#FFFFFF" Offset="1.0" />
+                </LinearGradientBrush>
+            </StackLayout.Background>
+            <VerticalStackLayout Margin="20,50,20,0">
+                <Label Text="Hello 👋" FontSize="34" TextColor="White" FontAttributes="Bold" FontFamily="AlmaraiBold"></Label>
+                <Label Text="Sign in to your account" FontSize="28" TextColor="White" FontAttributes="Bold" FontFamily="AlmaraiBold"></Label>
+            </VerticalStackLayout>
+            <Border StrokeShape="RoundRectangle 70,70,0,0" Padding="20" BackgroundColor="White" VerticalOptions="FillAndExpand">
+
+                <StackLayout Spacing="50">
+
+                    <Label Text="Welcome Back" FontSize="22" TextColor="#b66dff" FontAttributes="Bold" HorizontalTextAlignment="Center"
+                       FontFamily="AlmaraiBold" Margin="0,20,0,0"></Label>
+
+                    <StackLayout Spacing="20">
+                        <Border StrokeShape="RoundRectangle 10" Padding="{OnPlatform Android='10,0,10,0' ,iOS='10,5,10,5'}"  BackgroundColor="White" HorizontalOptions="FillAndExpand">
+                            <Entry Placeholder="Username" 
+                                   FontSize="14" TextColor="#333"
+                                   PlaceholderColor="Gray"
+                                   Text="{Binding LoginModel.UserName}"
+                                   xct:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference entPassword}">
+
+                            </Entry>
+
+                        </Border>
+
+
+                        <StackLayout>
+                            <Border StrokeShape="RoundRectangle 10" Padding="{OnPlatform Android='10,0,10,0' ,iOS='10,5,10,5'}" BackgroundColor="White" HorizontalOptions="FillAndExpand">
+                                <StackLayout Orientation="Horizontal">
+                                    <Entry x:Name="entPassword" 
+                                           HorizontalOptions="FillAndExpand"
+                                           FontSize="14" TextColor="#333"
+                                           Placeholder="Password" 
+                                           IsPassword="True"
+                                           Text="{Binding LoginModel.Password}"
+                                           PlaceholderColor="Gray"
+                                           xct:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference btnLogin}">
+                                    </Entry>
+                                    <Image x:Name="imgEyePass" Margin="0,0,10,0">
+                                        <Image.Source>
+                                            <FontImageSource FontFamily="FontIconSolid" Glyph="" Color="Gray" Size="15"></FontImageSource>
+                                        </Image.Source>
+                                        <Image.Triggers>
+                                            <DataTrigger TargetType="Image" Binding="{Binding Source={x:Reference entPassword},Path=IsPassword}" Value="False">
+                                                <Setter Property="Source">
+                                                    <Setter.Value>
+                                                        <FontImageSource FontFamily="FontIconSolid" Glyph="" Color="Gray" Size="15"></FontImageSource>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Image.Triggers>
+                                        <Image.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                                        </Image.GestureRecognizers>
+                                    </Image>
+                                </StackLayout>
+
+                            </Border>
+
+                        </StackLayout>
+
+                    </StackLayout>
+
+                    <Button x:Name="btnLogin"
+                            Style="{StaticResource BtnBase}"
+                            FontFamily="AlmaraiBold"
+                            CornerRadius="10"
+                            Text="Login"
+                            Margin="0,30,0,30" VerticalOptions='EndAndExpand'
+                            Command="{Binding ClickLoginCommand}" CommandParameter="{Binding LoginModel}">
+                    </Button>
+
+                </StackLayout>
+
+                <Border.Shadow>
+                    <Shadow Brush="{OnPlatform Android=Gray, iOS=Gray}" Radius="{OnPlatform Android=15,iOS=15}"></Shadow>
+                </Border.Shadow>
+            </Border>
+        </StackLayout>
+    </ScrollView>
+    </ContentPage.Content>
+
+</Controls:CustomsPage>

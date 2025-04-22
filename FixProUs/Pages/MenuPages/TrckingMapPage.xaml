@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                     x:Class="FixProUs.Pages.MenuPages.TrckingMapPage"
+                      xmlns:Controls="clr-namespace:FixProUs.Controls"
+                      xmlns:Helpers="clr-namespace:FixProUs.Helpers"
+                      xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
+                      xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                      xmlns:sensors="clr-namespace:Microsoft.Maui.Devices.Sensors;assembly=Microsoft.Maui.Essentials"
+                      Visual="Material"
+                      BackgroundColor="White"
+                      IsEnabled="{Binding IsEnable}">
+
+    <StackLayout>
+        <!--Toolbar-->
+        <StackLayout>
+            <Controls:ToolBar Title="{Binding OneEmployee.FullName}" HasBackButton="True"></Controls:ToolBar>
+        </StackLayout>
+
+        <StackLayout VerticalOptions="FillAndExpand">
+
+            <maps:Map x:Name="myMap" MapClicked="myMap_MapClicked"
+                      IsTrafficEnabled="True"
+                      IsShowingUser="True"
+                      IsZoomEnabled="True" 
+                      HorizontalOptions="FillAndExpand"
+                      VerticalOptions="FillAndExpand" 
+                      MapType="Street">
+                <!--<maps:Map.ItemTemplate>
+                    <DataTemplate>
+                        <maps:Pin x:Name="mapsPin" Type="Place" Location="{Binding MPosition}" Label="{Binding Id}" MarkerId="{Binding Id}">
+
+                        </maps:Pin>
+                    </DataTemplate>
+                </maps:Map.ItemTemplate>-->
+                <!--<maps:Map.Pins>
+                    <maps:Pin Label="4543"
+                              Address="The city with a boardwalk"
+                              Type="Place"
+                              MarkerId="675727">
+                        <maps:Pin.Location>
+                            <sensors:Location>
+                                <x:Arguments>
+                                    <x:Double>36.9628066</x:Double>
+                                    <x:Double>-122.0194722</x:Double>
+                                </x:Arguments>
+                            </sensors:Location>
+                        </maps:Pin.Location>
+                    </maps:Pin>
+                </maps:Map.Pins>-->
+            </maps:Map>
+
+        </StackLayout>
+
+    </StackLayout>
+</Controls:CustomsPage>

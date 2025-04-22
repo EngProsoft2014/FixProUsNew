@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="FixProUs.Pages.CallPages.NewCallPage"
+                      xmlns:Controls="clr-namespace:FixProUs.Controls"
+                      xmlns:Helpers="clr-namespace:FixProUs.Helpers"
+                      xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                      x:Name="page"
+                      BackgroundColor="White"
+                      IsEnabled="{Binding IsEnable}">
+
+    <StackLayout VerticalOptions="FillAndExpand">
+
+        <!--Toolbar-->
+        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Padding="{OnPlatform iOS='20,0,20,10', Android='15,15,15,10'}">
+
+            <Image x:Name="imgBack">
+                <Image.Source>
+                    <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="20"></FontImageSource>
+                </Image.Source>
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                </Image.GestureRecognizers>
+            </Image>
+
+            <Label x:Name="lblTitle" Text="Call Details" HeightRequest="30" HorizontalOptions="CenterAndExpand"
+                        VerticalOptions="FillAndExpand" Style="{StaticResource lblHeaderText}"
+                        HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label" Binding="{Binding OneCall.Id}" Value="0">
+                        <Setter Property="Text" Value="New Call"></Setter>
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
+
+            <Image x:Name="imgDelete" IsVisible="True">
+                <Image.Source>
+                    <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="20"></FontImageSource>
+                </Image.Source>
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding DeleteCallCommand}" CommandParameter="{Binding OneCall.Id}"></TapGestureRecognizer>
+                </Image.GestureRecognizers>
+                <Image.Triggers>
+                    <DataTrigger TargetType="Image" Binding="{Binding OneCall.Id}" Value="0">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                </Image.Triggers>
+            </Image>
+        </StackLayout>
+
+        <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray" Margin="0,0,0,10"></Line>
+
+        <ScrollView>
+            <StackLayout Padding="25,5,25,30" Spacing="20">
+
+                <!--Phone Number-->
+                <StackLayout HorizontalOptions="FillAndExpand">
+                    <Label Text="Phone Number" TextColor="Black"></Label>
+                    <StackLayout Orientation="Horizontal" Spacing="10">
+                        <Border Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}" BackgroundColor="#debdff" HorizontalOptions="FillAndExpand">
+                            <Entry x:Name="entryPhone" 
+                                   Text="{Binding OneCall.PhoneNum}"
+                                   Keyboard="Telephone"
+                                   IsReadOnly="True"
+                                   BackgroundColor="#debdff"
+                                   Placeholder="Enter Phone" 
+                                   PlaceholderColor="Gray"
+                                   TextColor="Black" 
+                                   FontSize="13">
+                                <Entry.Triggers>
+                                    <DataTrigger TargetType="Entry" Binding="{Binding OneCall.Id}" Value="0">
+                                        <Setter Property="IsReadOnly" Value="False"></Setter>
+                                    </DataTrigger>
+                                </Entry.Triggers>
+                                <Entry.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_Phone"></TapGestureRecognizer>
+                                </Entry.GestureRecognizers>
+                            </Entry>
+
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=Gray}" Radius="{OnPlatform Android=15,iOS=15}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10"></RoundRectangle>
+                            </Border.StrokeShape>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_Phone"></TapGestureRecognizer>
+                            </Border.GestureRecognizers>
+                        </Border>
+
+                        <!--Add Job-->
+                        <Border x:Name="yumMkSch" HorizontalOptions="End" IsVisible="False" Padding="10" BackgroundColor="#b66dff">
+                            <StackLayout Spacing="0" VerticalOptions="Center">
+                                <Label Text="Add Job" FontSize="12" TextColor="#333" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+
+                                </Label>
+                            </StackLayout>
+
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=Gray}" Radius="{OnPlatform Android=15,iOS=15}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10"></RoundRectangle>
+                            </Border.StrokeShape>
+                            <!--<Border.Background>
+                                <LinearGradientBrush>
+                                    <GradientStop Color="#b66dff" Offset="0.1"></GradientStop>
+                                    <GradientStop Color="#debdff" Offset="1.5"></GradientStop>
+                                </LinearGradientBrush>
+                            </Border.Background>-->
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border" Binding="{Binding IsShowBtnSch}" Value="1">
+                                    <Setter Property="IsVisible" Value="True"></Setter>
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CreateScheduleFromCallCommand}" CommandParameter="{Binding CustomerDetails}"></TapGestureRecognizer>
+                            </Border.GestureRecognizers>
+                        </Border>
+
+                        <!--Go Job-->
+                        <Border HorizontalOptions="End" IsVisible="False" Padding="10" BackgroundColor="#b66dff">
+                            <StackLayout Spacing="0" VerticalOptions="Center">
+                                <Label Text="Go Job" FontSize="12" TextColor="#333" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+
+                                </Label>
+                            </StackLayout>
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=Gray}" Radius="{OnPlatform Android=15,iOS=15}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10"></RoundRectangle>
+                            </Border.StrokeShape>
+                            <!--<Border.Background>
+                                <LinearGradientBrush>
+                                    <GradientStop Color="#b66dff" Offset="0.1"></GradientStop>
+                                    <GradientStop Color="#debdff" Offset="1.5"></GradientStop>
+                                </LinearGradientBrush>
+                            </Border.Background>-->
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border" Binding="{Binding IsShowBtnSch}" Value="2">
+                                    <Setter Property="IsVisible" Value="True"></Setter>
+                                </DataTrigger>
+                            </Border.Triggers>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SelectGoJobCommand}" CommandParameter="{Binding OneCall}"></TapGestureRecognizer>
+                            </Border.GestureRecognizers>
+                        </Border>
+                    </StackLayout>
+
+                </StackLayout>
+
+                <!--Cust Name Get-->
+                <StackLayout x:Name="stkCustNameGet" HorizontalOptions="FillAndExpand">
+                    <Label Text="Customer Name" TextColor="Black"></Label>
+                    <Border Padding="{OnPlatform Android='10,12,10,12', iOS='10,17,10,17'}" BackgroundColor="#debdff" HorizontalOptions="FillAndExpand">
+                        <Label x:Name="entryNameGet" Text="{Binding OneCall.CustomerName,Mode=TwoWay}"
+                               TextColor="Black"
+                               BackgroundColor="#debdff"
+                               FontSize="13">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label" Binding="{Binding OneCall.CustomerName}" Value="">
+                                    <Setter Property="Text" Value="Enter customer"></Setter>
+                                </DataTrigger>
+                                <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference entryNameGet},Path=Text}" Value="Enter customer">
+                                    <Setter Property="TextColor" Value="Gray"></Setter>
+                                </DataTrigger>
+                            </Label.Triggers>
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_CustName"></TapGestureRecognizer>
+                            </Label.GestureRecognizers>
+                        </Label>
+                        <Border.Shadow>
+                            <Shadow Offset="1,2" Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                        </Border.Shadow>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10"></RoundRectangle>
+                        </Border.StrokeShape>
+
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_CustName"></TapGestureRecognizer>
+                        </Border.GestureRecognizers>
+                    </Border>
+
+                </StackLayout>
+
+                <StackLayout Spacing="20">
+                    <!--Call Reason-->
+                    <StackLayout>
+                        <Label Text="Call Reason" TextColor="Black"></Label>
+                        <Border Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}" BackgroundColor="#debdff" HorizontalOptions="FillAndExpand">
+                            <Picker x:Name="pkrReason" ItemsSource="{Binding LstReasons}" ItemDisplayBinding="{Binding Lable}" SelectedItem="{Binding OneReason,Mode=TwoWay}" 
+                                    Title="Select Reason"
+                                    BackgroundColor="#debdff"
+                                    TitleColor ="Gray" 
+                                    TextColor="Black"
+                                    FontFamily="AlmaraiRegular" FontSize="13">
+                            </Picker>
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=Gray}" Radius="{OnPlatform Android=15,iOS=15}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10"></RoundRectangle>
+                            </Border.StrokeShape>
+                        </Border>
+                    </StackLayout>
+
+
+                    <!--Campaign-->
+                    <StackLayout>
+                        <Label Text="Campaign" TextColor="Black"></Label>
+                        <Border Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}" BackgroundColor="#debdff" HorizontalOptions="FillAndExpand">
+                            <Picker x:Name="pkrCampaign" ItemsSource="{Binding LstCampaigns}" ItemDisplayBinding="{Binding Lable}" SelectedItem="{Binding OneCampaign,Mode=TwoWay}" 
+                                Title="Select Campaign" 
+                                FontFamily="AlmaraiRegular"
+                                    BackgroundColor="#debdff"
+                                FontSize="13" 
+                                TitleColor ="Gray" 
+                                TextColor="Black">
+                            </Picker>
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=Gray}" Radius="{OnPlatform Android=15,iOS=15}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10"></RoundRectangle>
+                            </Border.StrokeShape>
+                        </Border>
+                    </StackLayout>
+                    <!--Employee-->
+                    <StackLayout>
+                        <Label Text="Created by" TextColor="Black"></Label>
+                        <Border Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}" BackgroundColor="#debdff" HorizontalOptions="FillAndExpand">
+                            <Label x:Name="lblEmployee"
+                                Text="{Binding OneCall.EmployeeName}" 
+                                FontFamily="AlmaraiRegular"
+                                   BackgroundColor="#debdff"
+                                FontSize="13" Padding="5,10,5,10"
+                                TextColor="Black">
+                            </Label>
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=Gray}" Radius="{OnPlatform Android=15,iOS=15}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10"></RoundRectangle>
+                            </Border.StrokeShape>
+                        </Border>
+                        <StackLayout.Triggers>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding OneCall.Id}" Value="0">
+                                <Setter Property="IsVisible" Value="False"></Setter>
+                            </DataTrigger>
+                        </StackLayout.Triggers>
+                    </StackLayout>
+
+
+                    <!--Notes-->
+                    <StackLayout>
+                        <Label Text="Notes" TextColor="Black"></Label>
+                        <Border Padding="10,0,10,0" BackgroundColor="#debdff" HorizontalOptions="FillAndExpand">
+                            <Editor x:Name="pkrNotes" Text="{Binding OneCall.Notes}"
+                                    Placeholder="Enter Notes" 
+                                    PlaceholderColor="Gray"
+                                    BackgroundColor="#debdff"
+                                    FontFamily="AlmaraiRegular" 
+                                    FontSize="13" 
+                                    AutoSize="TextChanges"
+                                    TextColor="Black">
+                            </Editor>
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=Gray}" Radius="{OnPlatform Android=15,iOS=15}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10"></RoundRectangle>
+                            </Border.StrokeShape>
+                        </Border>
+                    </StackLayout>
+                </StackLayout>
+
+            </StackLayout>
+        </ScrollView>
+        <StackLayout VerticalOptions="EndAndExpand" Margin="{OnPlatform Android='0,0,0,7', iOS='0,0,0,50'}">
+            <Button  Text="Submit"  
+                      Margin="30,5,30,10"
+                      FontSize="16"
+                      FontAttributes="Bold"
+                      TextTransform="None"
+                      TextColor="White"
+                      HorizontalOptions="FillAndExpand"
+                      CornerRadius="10"
+                      BackgroundColor="#8f1fff"
+                      Command="{Binding SubmitCallCommand}" CommandParameter="{Binding OneCall}">
+                <Button.Triggers>
+                    <DataTrigger TargetType="Button" Binding="{Binding OneCall.Id}" Value="0">
+                        <Setter Property="Text" Value="Add"></Setter>
+                    </DataTrigger>
+                </Button.Triggers>
+            </Button>
+        </StackLayout>
+    </StackLayout>
+</Controls:CustomsPage>

@@ -1,0 +1,365 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="FixProUs.Pages.CustomerPages.CashOrCreditPaymentPage"
+                      xmlns:Controls="clr-namespace:FixProUs.Controls"
+                      xmlns:Helpers="clr-namespace:FixProUs.Helpers"
+                      xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+                      xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                      BackgroundColor="White"
+                      x:Name="page"
+                      IsEnabled="{Binding IsEnable}">
+
+    <StackLayout>
+
+        <!--Payment Credit Card-->
+
+        <StackLayout x:Name="stkCredit" VerticalOptions="FillAndExpand" IsVisible="False">
+
+            <!--Toolbar Credit Card-->
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Padding="{OnPlatform iOS='15,0,15,10', Android='15,10,15,10'}">
+
+                <Image x:Name="imgback">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="20"></FontImageSource>
+                    </Image.Source>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+
+
+                <Label x:Name="lblTitle" Text="Credit Card" TextColor="Black" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"
+                       FontSize="16"/>
+            </StackLayout>
+
+            <ScrollView VerticalOptions="FillAndExpand" Padding="0,0,0,30">
+                <StackLayout Padding="20,20,20,0" VerticalOptions="FillAndExpand" TranslationY="0" Spacing="25">
+
+                    <Border BackgroundColor="White" Padding="{OnPlatform Android='10,5,10,5',iOS=10}" HorizontalOptions="FillAndExpand">
+                        <Entry Text="{Binding HolderName}"          
+                                 TextColor="Gray"
+                                 Placeholder="Card holder name"
+                                 FontSize="12"
+                                 HorizontalOptions="FillAndExpand"
+                                 VerticalTextAlignment="Center">
+                        </Entry>
+
+                        <Border.Shadow>
+                            <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                        </Border.Shadow>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="2"></RoundRectangle>
+                        </Border.StrokeShape>
+                    </Border>
+
+                    <Border BackgroundColor="White" Padding="{OnPlatform Android='10,5,10,5',iOS=10}" HorizontalOptions="FillAndExpand">
+                        <Entry Text="{Binding CardNumber}"
+                                 TextColor="Gray"
+                                 Placeholder="Card Number"
+                                 FontSize="12" Keyboard="Numeric"
+                                 HorizontalOptions="FillAndExpand"
+                                 VerticalTextAlignment="Center">
+                        </Entry>
+                        <Border.Shadow>
+                            <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                        </Border.Shadow>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="2"></RoundRectangle>
+                        </Border.StrokeShape>
+                    </Border>
+
+                    <StackLayout HorizontalOptions="FillAndExpand" Orientation="Horizontal">
+                        <Border BackgroundColor="White" Padding="{OnPlatform Android='10,5,10,5',iOS=10}" WidthRequest="150" HorizontalOptions="Start">
+                            <Entry Text="{Binding ExpirationDate}"               
+                                     TextColor="Gray"
+                                     Placeholder="Expired Date"
+                                     FontSize="12"
+                                     HorizontalOptions="FillAndExpand"
+                                     VerticalTextAlignment="Center">
+                            </Entry>
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="2"></RoundRectangle>
+                            </Border.StrokeShape>
+                        </Border>
+
+                        <Image x:Name="imgCard" HorizontalOptions="Center" Margin="10,0,10,0">
+                            <Image.Source>
+                                <FontImageSource FontFamily="FontIconSolid" Glyph="" Color="Gray" Size="25"></FontImageSource>
+                            </Image.Source>
+                        </Image>
+
+                        <Border BackgroundColor="White" Padding="{OnPlatform Android='10,5,10,5',iOS=10}" WidthRequest="150" HorizontalOptions="FillAndExpand">
+                            <Entry Text="{Binding Cvv}"
+                                     TextColor="Gray"
+                                     Placeholder="Cvv"
+                                     FontSize="12" Keyboard="Numeric"
+                                     HorizontalOptions="FillAndExpand"
+                                     VerticalTextAlignment="Center">
+                            </Entry>
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="2"></RoundRectangle>
+                            </Border.StrokeShape>
+                        </Border>
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" Spacing="20">
+                        <StackLayout Orientation="Horizontal" VerticalOptions="Center" Padding="5,5,5,5" Spacing="10">
+                            <Label Text="Full Payment" TextColor="#333" FontSize="14" VerticalTextAlignment="Center"></Label>
+                            <Switch x:Name="swtPayCredit" IsToggled="True" Scale="1.2" Toggled="swtPayCredit_Toggled" ThumbColor="#8f1fff" OnColor="#debdff"></Switch>
+                        </StackLayout>
+
+                        <Border x:Name="yumPayCredit" BackgroundColor="White" TranslationX="18" Padding="{OnPlatform Android='10,5,10,5',iOS=10}" WidthRequest="160" HorizontalOptions="StartAndExpand">
+                            <Entry x:Name="entryNewAmount"
+                                   Text="{Binding OnePayment.Amount}"
+                                   Placeholder="{Binding OneInvoice.Net}"
+                                   FontSize="12" TextColor="#333"
+                                   Keyboard="Numeric"
+                                   VerticalTextAlignment="Center"
+                                   TextChanged="Entry_TextChanged"></Entry>
+
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="2"></RoundRectangle>
+                            </Border.StrokeShape>
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference swtPayCredit},Path=IsToggled}" Value="True">
+                                    <Setter Property="IsVisible" Value="False"></Setter>
+                                </DataTrigger>
+                            </Border.Triggers>
+                        </Border>
+                    </StackLayout>
+
+                    <StackLayout Spacing="10">
+                        <Label Text="Input Your Signature" TextColor="#333"/>
+                        <Frame BorderColor="Gray" HasShadow="True" Padding="2" BackgroundColor="White">
+                            <StackLayout>
+                                <mct:DrawingView x:Name="DrawBoardCredit"
+                                                   LineColor="Black"
+                                                   LineWidth="6"
+                                                   HorizontalOptions="FillAndExpand"
+                                                   VerticalOptions="FillAndExpand"
+                                                   HeightRequest="250"
+                                                   IsMultiLineModeEnabled="True"
+                                                   BackgroundColor="AliceBlue"/>
+
+                                <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="FillAndExpand">
+                                    <Button Text="Save" 
+                                            BackgroundColor="#b66dff" 
+                                            TextColor="White" 
+                                            HorizontalOptions="FillAndExpand"
+                                            Clicked="Button_Clicked_Save_Credit"/>
+                                                                    <Button Text="Clear Board" 
+                                            BorderColor="#b66dff"
+                                            BorderWidth="1" 
+                                            TextColor="#b66dff"
+                                            HorizontalOptions="FillAndExpand"
+                                            BackgroundColor="White" 
+                                            Clicked="Button_Clicked_Clear_Credit"/>
+                                </StackLayout>
+                            </StackLayout>
+
+                        </Frame>
+                    </StackLayout>
+
+                </StackLayout>
+
+            </ScrollView>
+
+            <Border BackgroundColor="#8f1fff" Padding="{OnPlatform Android='5,10,5,10',iOS='5,15,5,15'}" Margin="{OnPlatform Android=20,iOS='20,20,20,50'}" HorizontalOptions="FillAndExpand" VerticalOptions="End">
+                <Label x:Name="btnPayCredit" Text="{Binding OneInvoice.Net,StringFormat='Pay USD ${0}'}"
+                                 TextColor="White"
+                                 FontSize="16"
+                                 HorizontalOptions="CenterAndExpand"
+                                 VerticalTextAlignment="Center">
+                </Label>
+
+                <Border.Shadow>
+                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                </Border.Shadow>
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                </Border.StrokeShape>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CreditPayNowCommand}" CommandParameter="{Binding OneInvoice}"></TapGestureRecognizer>
+                </Border.GestureRecognizers>
+            </Border>
+
+            <StackLayout.Triggers>
+                <DataTrigger TargetType="StackLayout" Binding="{Binding CashOrCredit}" Value="2">
+                    <Setter Property="IsVisible" Value="True"></Setter>
+                </DataTrigger>
+                <DataTrigger TargetType="StackLayout" Binding="{Binding Source={x:Reference stkCash},Path=IsVisible}" Value="True">
+                    <Setter Property="IsVisible" Value="False"></Setter>
+                </DataTrigger>
+            </StackLayout.Triggers>
+        </StackLayout>
+
+
+        <!--Payment Cash-->
+
+        <StackLayout x:Name="stkCash" IsVisible="False" VerticalOptions="FillAndExpand">
+
+            <!--Toolbar Payment Cash-->
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Padding="{OnPlatform iOS='15,0,15,10', Android='15,10,15,10'}">
+
+                <Image x:Name="imgBack2">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="20"></FontImageSource>
+                    </Image.Source>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+                
+                <Label x:Name="lblTitle2" Text="Payment Cash" TextColor="Black" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" FontSize="16"/>
+            </StackLayout>
+
+            <ScrollView VerticalOptions="FillAndExpand">
+                <StackLayout Padding="{OnPlatform iOS='20,15,20,10', Android='20,50,20,10'}" VerticalOptions="FillAndExpand" Spacing="50">
+                    <Border HeightRequest="160" Padding="0,10,0,10" BackgroundColor="#8f1fff">
+                        <StackLayout  Spacing="0">
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="CenterAndExpand">
+                                <Label x:Name="lblPayCash" Text="{Binding OneInvoice.Net}" 
+                                       FontSize="50"
+                                       HorizontalOptions="Center"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalTextAlignment="Center" 
+                                       VerticalOptions="Center"
+                                       FontFamily="InterBold" 
+                                       TextColor="#FFFFFF"></Label>
+                                <Label Text="USD" 
+                                       FontSize="18"
+                                       HorizontalOptions="Start"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalTextAlignment="Center" 
+                                       VerticalOptions="Center"
+                                       FontFamily="AlmaraiBold" 
+                                       TextColor="#FFFFFF">
+                                </Label>
+                            </StackLayout>
+
+
+                            <Label Text="Outstanding Balance" 
+                                   FontSize="23"
+                                   HorizontalOptions="Center"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalTextAlignment="Center" 
+                                   VerticalOptions="Center"
+                                   FontFamily="AlmaraiRegular" 
+                                   TextColor="#FFFFFF"></Label>
+                        </StackLayout>
+
+                        <!--<Border.Background>
+                            <LinearGradientBrush>
+                                <GradientStop Color="#8f1fff" Offset="0"></GradientStop>
+                                <GradientStop Color="#b66dff" Offset="0.5"></GradientStop>
+                                <GradientStop Color="#c995fc" Offset="1.0"></GradientStop>
+                                <GradientStop Color="#e3c7ff" Offset="1.0"></GradientStop>
+                            </LinearGradientBrush>
+                        </Border.Background>-->
+
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="20"></RoundRectangle>
+                        </Border.StrokeShape>
+                    </Border>
+
+                    <StackLayout Orientation="Horizontal" Spacing="20">
+                        <StackLayout Orientation="Horizontal" Padding="5,5,5,5" Spacing="10">
+                            <Label Text="Full Payment" TextColor="#333" FontSize="14" VerticalTextAlignment="Center"></Label>
+                            <Switch x:Name="swtPayCash" IsToggled="True" Scale="1.2" Toggled="swtPayCredit_Toggled" ThumbColor="#8f1fff" OnColor="#debdff"></Switch>
+                        </StackLayout>
+
+                        <Border x:Name="yumPayCash" BackgroundColor="White" TranslationX="18" Padding="5,5,5,0" Margin="0,0,20,0" WidthRequest="150" HorizontalOptions="EndAndExpand">
+                            <Entry x:Name="entryCashNewAmount"
+                                   Text="{Binding OnePayment.Amount}"
+                                   Placeholder="{Binding OneInvoice.Net}"
+                                   FontSize="12" TextColor="#333"
+                                   Keyboard="Numeric"
+                                   VerticalTextAlignment="Center"
+                                   TextChanged="Entry_TextChanged"></Entry>
+
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="2"></RoundRectangle>
+                            </Border.StrokeShape>
+                            <Border.Triggers>
+                                <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference swtPayCash},Path=IsToggled}" Value="True">
+                                    <Setter Property="IsVisible" Value="False"></Setter>
+                                </DataTrigger>
+                            </Border.Triggers>
+                        </Border>
+                    </StackLayout>
+
+                    <StackLayout Spacing="10">
+                        <Label Text="Input Your Signature" TextColor="#333"/>
+                        <Frame BorderColor="Gray" HasShadow="True" Padding="2" BackgroundColor="White">
+                            <StackLayout>
+                                <mct:DrawingView x:Name="DrawBoardCash"
+                                                   LineColor="Black"
+                                                   LineWidth="6"
+                                                   HorizontalOptions="FillAndExpand"
+                                                   VerticalOptions="FillAndExpand"
+                                                   HeightRequest="250"
+                                                   IsMultiLineModeEnabled="True"
+                                                   BackgroundColor="AliceBlue"/>
+
+                                <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="FillAndExpand">
+                                    <Button Text="Save" 
+                                            BackgroundColor="#b66dff" 
+                                            TextColor="White" 
+                                            HorizontalOptions="FillAndExpand"
+                                            Clicked="Button_Clicked_Save_Cash"/>
+                                    <Button Text="Clear Board" 
+                                            BorderColor="#b66dff"
+                                            BorderWidth="1" 
+                                            TextColor="#b66dff"
+                                            HorizontalOptions="FillAndExpand"
+                                            BackgroundColor="White" 
+                                            Clicked="Button_Clicked_Clear_Cash"/>
+                                </StackLayout>
+                            </StackLayout>
+
+                        </Frame>
+                    </StackLayout>
+
+
+                </StackLayout>
+
+            </ScrollView>
+
+            <Border Padding="{OnPlatform Android='5,10,5,10',iOS='5,15,5,15'}" Margin="{OnPlatform Android=20,iOS='20,20,20,50'}" BackgroundColor="#8f1fff" VerticalOptions="End" HorizontalOptions="FillAndExpand">
+                <Label x:Name="btnPayCash" Text="{Binding OneInvoice.Net,StringFormat='Pay USD ${0}'}"
+                         TextColor="White"
+                         FontSize="16"
+                         HorizontalOptions="CenterAndExpand"
+                         VerticalTextAlignment="Center">
+                </Label>
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10"></RoundRectangle>
+                </Border.StrokeShape>
+                <Border.Shadow>
+                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                </Border.Shadow>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding CashPayNowCommand}" CommandParameter="{Binding OneInvoice}"></TapGestureRecognizer>
+                </Border.GestureRecognizers>
+            </Border>
+
+            <StackLayout.Triggers>
+                <DataTrigger TargetType="StackLayout" Binding="{Binding CashOrCredit}" Value="1">
+                    <Setter Property="IsVisible" Value="True"></Setter>
+                </DataTrigger>
+                <DataTrigger TargetType="StackLayout" Binding="{Binding Source={x:Reference stkCredit},Path=IsVisible}" Value="True">
+                    <Setter Property="IsVisible" Value="False"></Setter>
+                </DataTrigger>
+            </StackLayout.Triggers>
+        </StackLayout>
+
+    </StackLayout>
+</Controls:CustomsPage>

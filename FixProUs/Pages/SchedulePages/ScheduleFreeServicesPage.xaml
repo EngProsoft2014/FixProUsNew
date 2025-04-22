@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                     x:Class="FixProUs.Pages.SchedulePages.ScheduleFreeServicesPage"
+                      xmlns:Controls="clr-namespace:FixProUs.Controls"
+                      xmlns:Helpers="clr-namespace:FixProUs.Helpers"
+                      xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                      xmlns:combobox="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+                      BackgroundColor="White"
+                      x:Name="page"
+                      IsEnabled="{Binding IsEnable}">
+
+    
+    <Controls:CustomsPage.BindingContext>
+        <vm:ScheduleFreeServicesViewModel></vm:ScheduleFreeServicesViewModel>
+    </Controls:CustomsPage.BindingContext>
+
+
+    <Grid Padding="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+        <Border x:Name="yummyAddService" BackgroundColor="White" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <StackLayout Padding="{OnPlatform iOS='20,0,20,10', Android='20,20,20,20'}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                <!--Header-->
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource FontFamily="FontIconSolid" Color="Gray" Glyph="" Size="20"></FontImageSource>
+                        </Image.Source>
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                        </Image.GestureRecognizers>
+                    </Image>
+
+                    <Label Text="Service" TextColor="Black" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" FontSize="16"></Label>
+
+                </StackLayout>
+
+
+                <StackLayout>
+
+                    <StackLayout Spacing="25">
+
+                        <!--Service-->
+                        <StackLayout  HorizontalOptions="FillAndExpand" Margin="0,10,0,0">
+
+                            <Label Text="Service" FontSize="15" TextColor="#333" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                            <Border BackgroundColor="White" Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}" HorizontalOptions="FillAndExpand">
+
+                                <!--<Picker ItemsSource="{Binding LstItemCategory}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedServiceCateory,Mode=TwoWay}" SelectedIndexChanged="Picker_SelectedIndexChanged"
+                                        Title="Choose Item/Service"
+                                        FontSize="12"
+                                        HorizontalOptions="FillAndExpand">
+                                </Picker>-->
+
+                                <combobox:SfComboBox x:Name="cobxLstServices"
+                                                    ItemsSource="{Binding LstServiceCategory}" 
+                                                    SelectedItem="{Binding SelectedServiceCateory,Mode=TwoWay}"
+                                                    SelectionChanged="SfComboBox_SelectionChanged"
+                                                    Placeholder="Select Service"
+                                                    FontSize="15" TextColor="#333"
+                                                    MaxDropDownHeight="400"
+                                                    HeightRequest="45" 
+                                                    IsEditable="False"
+                                                    IsFilteringEnabled="False"
+                                                    DisplayMemberPath="Name">
+                                </combobox:SfComboBox>
+
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="Gray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                            </Border>
+                        </StackLayout>
+
+
+                        <!--Cost-->
+                        <StackLayout HorizontalOptions="FillAndExpand" >
+                            <Label Text="Cost" FontSize="15" TextColor="#333" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                            <Border BackgroundColor="White" Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}">
+                                <Entry x:Name="entryCost"
+                                         Text="{Binding ServiceDetails.CostperUnit}"
+                                         FontSize="15"
+                                         Placeholder="Cost"
+                                         TextColor="#333"
+                                         Keyboard="Numeric"
+                                         HorizontalOptions="FillAndExpand">
+                                </Entry>
+
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                            </Border>
+                        </StackLayout>
+
+                        <!--Qty-->
+                        <StackLayout HorizontalOptions="FillAndExpand" >
+                            <Label Text="Qty" FontSize="15" TextColor="#333" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                            <Border BackgroundColor="White" Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}">
+                                <Entry x:Name="entryQty"
+                                        Text="{Binding ServiceDetails.QTYTime}"
+                                        FontSize="15"
+                                        TextColor="#333"
+                                        Keyboard="Numeric"
+                                        HorizontalOptions="FillAndExpand">
+                                </Entry>
+
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                            </Border>
+
+                        </StackLayout>
+
+
+                        <!--Description-->
+                        <StackLayout  HorizontalOptions="FillAndExpand">
+                            <Label Text="Description" FontSize="15" TextColor="#333" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                            <Border BackgroundColor="White" Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}" Margin="0,0,0,10">
+                                <Editor x:Name="edtDescription"
+                                    Text="{Binding ServiceDetails.Description}"
+                                    Placeholder="Enter Description"
+                                    TextColor="#333" BackgroundColor="White"
+                                    FontSize="15" 
+                                    AutoSize="TextChanges"
+                                    HorizontalOptions="FillAndExpand">
+                                </Editor>
+
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                            </Border>
+                        </StackLayout>
+
+                    </StackLayout>
+
+                </StackLayout>
+
+                <StackLayout x:Name="stkBtns" Orientation="Horizontal" Spacing="20" HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Padding="{OnPlatform Android=10,iOS='10,10,10,50'}">
+
+                    <Button Text="Add"
+                            BackgroundColor="#b66dff"
+                            FontAttributes="Bold"
+                            FontSize="16" 
+                            CornerRadius="10"
+                            HorizontalOptions="FillAndExpand"
+                            TextColor="White" 
+                            x:Name="btnOk"
+                            Command="{Binding ApplyServiceCommand}" CommandParameter="{Binding ServiceDetails}">
+                    </Button>
+                </StackLayout>
+            </StackLayout>
+        </Border>
+
+    </Grid>
+</Controls:CustomsPage>

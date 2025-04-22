@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
+		<integer>2</integer>
+	</array>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>arm64</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>XSAppIconAssets</key>
+	<string>Assets.xcassets/logoicon.appiconset</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Can we use your location when your app is being used?</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Can we use your location at all times?</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Can we use your location when your app is being used?</string>
+	<key>NSCameraUsageDescription</key>
+	<string>We require access to your camera to allow you to capture photos for your profile or share them with customers within the app. For example, you can take a picture to upload as your profile image or take pictures of the problem after fixed to include it in the customer&apos;s invoice template</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We require access to your gallery to allow you to use photos for your profile or share them with customers within the app. For example, you can use a picture to upload as your profile image or use pictures of the problem after fixed to include it in the customer&apos;s invoice template.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We require access to your gallery to allow you to use photos for your profile or share them with customers within the app. For example, you can use a picture to upload as your profile image or use pictures of the problem after fixed to include it in the customer&apos;s invoice template.</string>
+	<key>UIRequiresFullScreen</key>
+	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
+	<key>OneSignal_suppress_launch_urls</key>
+	<true/>
+	<key>CFBundleVersion</key>
+	<string>1.0.0.4</string>
+	<key>CFBundleIdentifier</key>
+	<string></string>
+</dict>
+</plist>

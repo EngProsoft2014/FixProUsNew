@@ -1,0 +1,868 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                     x:Class="FixProUs.Pages.CustomerPages.EstimateDetailsPage"
+                      xmlns:Controls="clr-namespace:FixProUs.Controls"
+                      xmlns:Helpers="clr-namespace:FixProUs.Helpers"
+                      xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+                      xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                      BackgroundColor="White"
+                      x:Name="page"
+                      IsEnabled="{Binding IsEnable}">
+
+    <StackLayout>
+        <!--Toolbar-->
+        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Padding="{OnPlatform iOS='20,0,10,10', Android='20,10,10,10'}">
+
+            <StackLayout Orientation="Horizontal">
+                <Image x:Name="imgBack">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="20"></FontImageSource>
+                    </Image.Source>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Label x:Name="lblTitle" Text="Estimate Details" TextColor="Black" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"
+                       FontSize="16" Margin="0,0,0,10"/>
+            </StackLayout>
+
+            <Label 
+                   Text="{Binding BranchName}" 
+                   TextColor="#b66dff"
+                   FontSize="13"
+                   VerticalTextAlignment="Center"
+                   VerticalOptions="Center"
+                   HorizontalOptions="End"></Label>
+        </StackLayout>
+
+        <Grid VerticalOptions="FillAndExpand">
+            <ScrollView Margin="0,0,0,100">
+                <StackLayout HorizontalOptions="FillAndExpand">
+                    <!--Customer Details-->
+                    <StackLayout HorizontalOptions="CenterAndExpand" Spacing="2" Margin="0,5,0,20">
+                        <Image>
+                            <Image.Source>
+                                <FontImageSource FontFamily="FontIconSolid" Color="#333333" Glyph="" Size="50"></FontImageSource>
+                            </Image.Source>
+                        </Image>
+                        <Label FontSize="14" TextColor="#333333" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0} {1}">
+                                    <Binding Path="CustomerDetails.FirstName" />
+                                    <Binding Path="CustomerDetails.LastName" />
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+                        <Label Text="{Binding CustomerDetails.Phone1}" FontSize="14" TextColor="#333333" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"></Label>
+                        <Label Text="{Binding CustomerDetails.Email}" FontSize="14" TextColor="#333333" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"></Label>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="5">
+                            <Image>
+                                <Image.Source>
+                                    <FontImageSource FontFamily="FontIconSolid" Color="Gray" Glyph="" Size="20"></FontImageSource>
+                                </Image.Source>
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"></TapGestureRecognizer>
+                                </Image.GestureRecognizers>
+                            </Image>
+
+                            <Label Text="Discount" FontSize="14" TextColor="#b66dff" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"></Label>
+
+                            <Border BackgroundColor="Gray" Padding="15,0,15,0" HorizontalOptions="End">
+                                <StackLayout Orientation="Horizontal">
+                                    <Label x:Name="lblDiscountPersnt" IsVisible="False" Text="{Binding Discount,StringFormat='%{0}'}" FontSize="14" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding AmountOrPersent}" Value="False">
+                                                <Setter Property="IsVisible" Value="True"></Setter>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+
+                                    <Label x:Name="lblDiscountMember" IsVisible="False" Text="{Binding Discount,StringFormat='${0}'}" FontSize="14" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding AmountOrPersent}" Value="True">
+                                                <Setter Property="IsVisible" Value="True"></Setter>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </StackLayout>
+
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="{OnPlatform Android=40,iOS=10}"></RoundRectangle>
+                                </Border.StrokeShape>
+                            </Border>
+
+                        </StackLayout>
+
+                        <StackLayout x:Name="stkEditDiscount" IsVisible="False" Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="0,5,0,0" HeightRequest="35">
+                            <Border Padding="{OnPlatform Android='5,0,5,0', iOS='10,5,10,5'}">
+                                <Entry x:Name="entryDiscount"
+                                       Placeholder="Discount"
+                                       Keyboard="Numeric"
+                                       WidthRequest="70"
+                                       Text="{Binding CustomerDetails.Discount}"
+                                       FontSize="12" TextColor="#333"
+                                       TextChanged="entryDiscount_TextChanged">
+                                    <Entry.Triggers>
+                                        <DataTrigger TargetType="Entry" Binding="{Binding CustomerDetails.Discount}" Value="0">
+                                            <Setter Property="Text" Value=""></Setter>
+                                        </DataTrigger>
+                                    </Entry.Triggers>
+                                </Entry>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                            </Border>
+
+                            <Border x:Name="pnkSave"
+                                       IsVisible="False"
+                                        HeightRequest="30"
+                                        WidthRequest="50"
+                                        BackgroundColor="#b66dff">
+
+                                <Label x:Name="lblSave" Text="Save" FontSize="14" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                                </Label>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_2"
+                                                  Command="{Binding EditDiscountForCustomerEstimateCommand}" CommandParameter="{Binding CustomerDetails}"></TapGestureRecognizer>
+                                </Border.GestureRecognizers>
+
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="{OnPlatform Android=15,iOS=10}"></RoundRectangle>
+                                </Border.StrokeShape>
+                            </Border>
+                            <StackLayout.Triggers>
+                                <DataTrigger TargetType="StackLayout" Binding="{Binding OneEstimate.NotShowConvert}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                                <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.UserRole}" Value="1">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                                <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveEstimate}" Value="False">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                                <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveEditEstimate_Invoice}" Value="False">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                            </StackLayout.Triggers>
+                        </StackLayout>
+
+                    </StackLayout>
+
+                    <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray" Margin="0,0,0,10"></Line>
+
+                    <!--Send Email-->
+                    <Button Text="Send Email" TextColor="#b66dff" BackgroundColor="Transparent" Command="{Binding SelectSendEmailEstimateCommand}" CommandParameter="{Binding OneEstimate}"></Button>
+
+
+                    <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="FillAndExpand" Padding="20,0,20,10">
+
+                        <!--Schedule Title-->
+                        <StackLayout HorizontalOptions="StartAndExpand" WidthRequest="150">
+                            <Label Text="Schedule Title" FontSize="13" TextColor="#b66dff" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                            <Border BackgroundColor="White" Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}">
+                                <StackLayout>
+                                    <Label IsVisible="False"
+                                          Padding="5,13,5,13"
+                                          Text="{Binding OneEstimate.ScheduleName}"
+                                          FontSize="13" TextColor="#333"
+                                          HorizontalOptions="FillAndExpand">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding ShowScheduleName}" Value="True">
+                                                <Setter Property="IsVisible" Value="True"></Setter>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                    <Label IsVisible="False"
+                                          Padding="5,13,5,13"
+                                          Text="Without Schedule"
+                                          FontSize="13" TextColor="#333"
+                                          HorizontalOptions="FillAndExpand">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding ShowScheduleName}" Value="False">
+                                                <Setter Property="IsVisible" Value="True"></Setter>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </StackLayout>
+
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                            </Border>
+                        </StackLayout>
+
+                        <!--Estimate Date-->
+                        <StackLayout HorizontalOptions="Start" WidthRequest="150">
+                            <Label Text="Estimate Date" FontSize="13" TextColor="#b66dff" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                            <Border BackgroundColor="White" Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}">
+                                <DatePicker 
+                                   Date="{Binding OneEstimate.EstimateDate,StringFormat='{0:MM-dd-yyyy}'}"
+                                   FontSize="13" TextColor="#333"
+                                   HorizontalOptions="FillAndExpand">
+                                </DatePicker>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                            </Border>
+                        </StackLayout>
+                        <StackLayout.Triggers>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding OneEstimate.NotShowConvert}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.UserRole}" Value="1">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveEstimate}" Value="False">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveEditEstimate_Invoice}" Value="False">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                        </StackLayout.Triggers>
+                    </StackLayout>
+
+                    <StackLayout Padding="20,0,20,0">
+                        <Label Text="Estimate Status" FontSize="13" TextColor="#b66dff" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                        <!--<StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="FillAndExpand">
+                            <RadioButton GroupName="Status1" Content="Pending" Scale="{OnPlatform Android=.8,iOS=.9}" IsChecked="{Binding Pending}" FontSize="{OnPlatform Android=16,iOS=15}"></RadioButton>
+                            <RadioButton GroupName="Status1" Content="Accept" Scale="{OnPlatform Android=.8,iOS=.9}" IsChecked="{Binding Accept}" FontSize="{OnPlatform Android=16,iOS=15}"></RadioButton>
+                            <RadioButton GroupName="Status1" Content="Declind" Scale="{OnPlatform Android=.8,iOS=.9}" IsChecked="{Binding Declind}" FontSize="{OnPlatform Android=16,iOS=15}"></RadioButton>
+                        </StackLayout>-->
+
+
+                        <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="FillAndExpand">
+                            <StackLayout Orientation="Horizontal">
+                                <CheckBox x:Name="chkPending" Color="#333" IsChecked="{Binding Pending}">
+                                    <CheckBox.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_Pending"></TapGestureRecognizer>
+                                    </CheckBox.GestureRecognizers>
+                                </CheckBox>
+
+                                <Label Text="Pending" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" TextColor="#333" FontSize="{OnPlatform Android=13,iOS=14}" HorizontalOptions="StartAndExpand"></Label>
+                            </StackLayout>
+
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                                <CheckBox x:Name="chkAccept" Color="#333" IsChecked="{Binding Accept}">
+                                    <CheckBox.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_Accept"></TapGestureRecognizer>
+                                    </CheckBox.GestureRecognizers>
+                                </CheckBox>
+
+                                <Label Text="Accept" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" TextColor="#333" FontSize="{OnPlatform Android=13,iOS=14}" HorizontalOptions="StartAndExpand"></Label>
+                            </StackLayout>
+
+                            <StackLayout Orientation="Horizontal">
+                                <CheckBox x:Name="chkDeclind" Color="#333" IsChecked="{Binding Declind}">
+                                    <CheckBox.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_Declind"></TapGestureRecognizer>
+                                    </CheckBox.GestureRecognizers>
+                                </CheckBox>
+
+                                <Label Text="Declind" VerticalTextAlignment="Center" HorizontalTextAlignment="Start" TextColor="#333" FontSize="{OnPlatform Android=13,iOS=14}" HorizontalOptions="StartAndExpand"></Label>
+                            </StackLayout>
+                        </StackLayout>
+
+                        <StackLayout.Triggers>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding OneEstimate.NotShowConvert}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.UserRole}" Value="1">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveEstimate}" Value="False">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveEditEstimate_Invoice}" Value="False">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                        </StackLayout.Triggers>
+                    </StackLayout>
+
+                    <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>
+
+                    <StackLayout IsVisible="{Binding ShowDropdownDatesEstimate}">
+                        <!--Choose Schedule Dates-->
+                        <StackLayout Spacing="20" Margin="20,20,20,0">
+
+                            <StackLayout HorizontalOptions="FillAndExpand">
+                                <StackLayout>
+                                    <Label Text="Schedule Dates" FontSize="15" TextColor="#262626" FontAttributes="Bold" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                                    <Border BackgroundColor="White" IsEnabled="{Binding IsShowScheduleDates}" Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}">
+                                        <StackLayout>
+                                            <Label  TextColor="#333"
+                                                   Padding="10,12,10,12"
+                                                   FontSize="13"
+                                                   Text="{Binding StrEstimateDates}"
+                                                   HorizontalOptions="FillAndExpand">
+                                            </Label>
+
+
+                                            <!--<combobox:SfComboBox x:Name="comboBoxDates" Margin="20,0,20,0"
+                                                                     DataSource="{Binding LstEstimateSchaduleDates}"                                                  
+                                                                     SelectedIndices="{Binding LstEstimateSchaduleDatesActual,Mode=TwoWay}"
+                                                                     MultiSelectMode="Token" 
+                                                                     TokensWrapMode="Wrap" 
+                                                                     ShowSuggestionsOnFocus="true"
+                                                                     Watermark="Select Dates"
+                                                                     TextSize="14" 
+                                                                     ItemPadding="5"
+                                                                     MaximumDropDownHeight="200"
+                                                                     AllowFiltering="False"
+                                                                     IsEditableMode="False"
+                                                                     ShowClearButton="False"
+                                                                     TextHighlightMode="MultipleOccurrence"
+                                                                     HighlightedTextColor="#b66dff"
+                                                                     HighlightedTextFontAttributes="Bold"
+                                                                     DisplayMemberPath="Date">
+                                                <combobox:SfComboBox.DropDownHeaderView>
+                                                    <Label Text="Select Dates" Padding="5" TextColor="Gray"></Label>
+                                                </combobox:SfComboBox.DropDownHeaderView>
+                                            </combobox:SfComboBox>-->
+
+                                        </StackLayout>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding OpenEstimateScheduleDatesCommand}"></TapGestureRecognizer>
+                                        </Border.GestureRecognizers>
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                        </Border.StrokeShape>
+                                        <Border.Shadow>
+                                            <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                        </Border.Shadow>
+                                    </Border>
+                                </StackLayout>
+                            </StackLayout>
+
+                            <Border BackgroundColor="White" Padding="0" Margin="0,0,0,10">
+
+
+                                <ListView x:Name="lstdts" SelectionMode="None"
+                                          ItemsSource="{Binding LstEstimateDates}" 
+                                          HasUnevenRows="True" BackgroundColor="White" 
+                                          HeightRequest="140"
+                                          SeparatorVisibility="None"
+                                          VerticalScrollBarVisibility="Never">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <ViewCell>
+                                                <StackLayout Spacing="0">
+                                                    <StackLayout Orientation="Horizontal" Spacing="0" Padding="15,5,10,5" HorizontalOptions="FillAndExpand">
+                                                        <Image HorizontalOptions="Start" VerticalOptions="Center" Margin="0,10,0,10">
+                                                            <Image.Source>
+                                                                <FontImageSource FontFamily="FontIconSolid" Color="#b66dff" Glyph="" Size="8"></FontImageSource>
+                                                            </Image.Source>
+                                                        </Image>
+
+                                                        <Label Padding="10"
+                                                                Text="{Binding Id,StringFormat='#{0}'}"
+                                                                FontSize="14"
+                                                               TextColor="#333"
+                                                               HorizontalTextAlignment="Start"
+                                                               VerticalTextAlignment="Center"
+                                                                HorizontalOptions="FillAndExpand">
+                                                        </Label>
+
+                                                        <Label Padding="10"
+                                                                Text="{Binding Date}"
+                                                                FontSize="14"
+                                                               TextColor="#333"
+                                                               HorizontalTextAlignment="Start"
+                                                               VerticalTextAlignment="Center"
+                                                                HorizontalOptions="End">
+                                                        </Label>
+
+                                                        <Image HorizontalOptions="End" VerticalOptions="Center" Margin="10,10,0,10">
+                                                            <Image.Source>
+                                                                <FontImageSource FontFamily="FontIcon" Color="#b66dff" Glyph="" Size="18"></FontImageSource>
+                                                            </Image.Source>
+                                                            <Image.GestureRecognizers>
+                                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CustEstimatesViewModel}}, Path=RemoveEstimateDateCommand}" CommandParameter="{Binding}"></TapGestureRecognizer>
+                                                            </Image.GestureRecognizers>
+                                                        </Image>
+                                                    </StackLayout>
+
+                                                    <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>
+
+                                                </StackLayout>
+
+                                            </ViewCell>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                    <ListView.Triggers>
+                                        <DataTrigger TargetType="ListView" Binding="{Binding LstEstimateDates.Count}" Value="0">
+                                            <Setter Property="IsVisible" Value="False"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="ListView" Binding="{Binding LstEstimateDates.Count}" Value="0">
+                                            <Setter Property="HeightRequest" Value="0"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="ListView" Binding="{Binding LstEstimateDates.Count}" Value="1">
+                                            <Setter Property="HeightRequest" Value="55"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="ListView" Binding="{Binding LstEstimateDates.Count}" Value="2">
+                                            <Setter Property="HeightRequest" Value="110"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="ListView" Binding="{Binding LstEstimateDates.Count}" Value="3">
+                                            <Setter Property="HeightRequest" Value="150"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="ListView" Binding="{Binding LstEstimateDates.Count}" Value="4">
+                                            <Setter Property="HeightRequest" Value="200"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="ListView" Binding="{Binding LstEstimateDates.Count}" Value="5">
+                                            <Setter Property="HeightRequest" Value="250"></Setter>
+                                        </DataTrigger>
+                                    </ListView.Triggers>
+                                </ListView>
+
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                            </Border>
+                        </StackLayout>
+
+                        <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" Padding="20,10,20,10" Spacing="20">
+                        <Label Text="Items / Services" FontSize="15" TextColor="#262626" FontAttributes="Bold" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                        <StackLayout HorizontalOptions="Start">
+                            <Image>
+                                <Image.Source>
+                                    <FontImageSource FontFamily="FontIconSolid" Color="#8f1fff" Glyph="" Size="25"></FontImageSource>
+                                </Image.Source>
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SelecteNewItemsEstimateCommand}" CommandParameter="{Binding OneEstimate}"></TapGestureRecognizer>
+                                </Image.GestureRecognizers>
+                            </Image>
+
+                        </StackLayout>
+                        <StackLayout.Triggers>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding OneEstimate.NotShowConvert}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.UserRole}" Value="1">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveEstimate}" Value="False">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveEditEstimate_Invoice}" Value="False">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                        </StackLayout.Triggers>
+                    </StackLayout>
+
+
+                    <StackLayout x:Name="stkItemsServices">
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="25" Padding="20,0,20,0">
+                            <Label Text="Item/Service" TextColor="#b66dff" WidthRequest="120" FontSize="13" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="40">
+                                <Label Text="Qty" TextColor="#b66dff" FontSize="13" VerticalTextAlignment="Center"></Label>
+                            </StackLayout>
+                            <Label Text="Cost" TextColor="#b66dff" FontSize="13" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="Center"></Label>
+                        </StackLayout>
+                        <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>
+
+                        <ListView x:Name="lstItemsServices" SelectionMode="None"
+                              ItemsSource="{Binding LstItemsEstimate}" 
+                              HasUnevenRows="True" BackgroundColor="White" 
+                              SeparatorVisibility="None"
+                              VerticalScrollBarVisibility="Never">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <StackLayout>
+
+                                            <StackLayout Orientation="Horizontal" Spacing="0" Padding="20,0,5,0" HorizontalOptions="FillAndExpand">
+
+                                                <StackLayout HorizontalOptions="StartAndExpand" WidthRequest="120">
+                                                    <Label Padding="10" VerticalTextAlignment="Center"
+                                                           FontSize="14" TextColor="#333"
+                                                           Text="{Binding ItemsServicesName}"
+                                                           HorizontalOptions="FillAndExpand">
+                                                    </Label>
+                                                </StackLayout>
+
+                                                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="15">
+                                                    <StackLayout>
+                                                        <Label Padding="10" 
+                                                               HorizontalTextAlignment="Start"
+                                                               WidthRequest="50"
+                                                               Text="{Binding Quantity}" VerticalTextAlignment="Center"
+                                                               FontSize="14" TextColor="#333" 
+                                                               HorizontalOptions="FillAndExpand">
+                                                        </Label>
+                                                    </StackLayout>
+
+                                                </StackLayout>
+
+                                                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                                                    <Label Padding="10,10,2,10"
+                                                           Text="{Binding Price,StringFormat='${0}'}"
+                                                           FontSize="14" TextColor="#333" 
+                                                           HorizontalTextAlignment="Center" 
+                                                           VerticalTextAlignment="Center"
+                                                           HorizontalOptions="FillAndExpand">
+                                                    </Label>
+
+                                                    <Image HorizontalOptions="End">
+                                                        <Image.Source>
+                                                            <FontImageSource FontFamily="FontIcon" Color="#b66dff" Glyph="" Size="18"></FontImageSource>
+                                                        </Image.Source>
+                                                        <Image.GestureRecognizers>
+                                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CustEstimatesViewModel}}, Path=RemoveItemEstimateCommand}" CommandParameter="{Binding}"></TapGestureRecognizer>
+                                                        </Image.GestureRecognizers>
+                                                    </Image>
+                                                </StackLayout>
+
+                                            </StackLayout>
+
+                                            <Line  X1="400" HorizontalOptions="CenterAndExpand" Margin="0,10,0,5" BackgroundColor="LightGray"></Line>
+
+                                            <StackLayout.Triggers>
+                                                <DataTrigger TargetType="StackLayout" Binding="{Binding OneEstimate.NotShowConvert}" Value="True">
+                                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                                </DataTrigger>
+                                                <!--<DataTrigger TargetType="StackLayout" Binding="{Binding OneEstimate.Status}" Value="2">
+                                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                                </DataTrigger>-->
+                                                <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.UserRole}" Value="1">
+                                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveEstimate}" Value="False">
+                                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveEditEstimate_Invoice}" Value="False">
+                                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                                </DataTrigger>
+                                            </StackLayout.Triggers>
+                                        </StackLayout>
+
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.Triggers>
+                                <DataTrigger TargetType="ListView" Binding="{Binding LstItemsEstimate.Count}" Value="0">
+                                    <Setter Property="IsVisible" Value="False"></Setter>
+                                </DataTrigger>
+                            </ListView.Triggers>
+                        </ListView>
+
+                        <StackLayout.Triggers>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding LstItemsEstimate.Count}" Value="0">
+                                <Setter Property="HeightRequest" Value="0"></Setter>
+                                <Setter Property="IsVisible" Value="False"></Setter>
+                            </DataTrigger>
+
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding LstItemsEstimate.Count}" Value="1">
+                                <Setter Property="HeightRequest" Value="85"></Setter>
+                            </DataTrigger>
+
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding LstItemsEstimate.Count}" Value="2">
+                                <Setter Property="HeightRequest" Value="140"></Setter>
+                            </DataTrigger>
+
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding LstItemsEstimate.Count}" Value="3">
+                                <Setter Property="HeightRequest" Value="190"></Setter>
+                            </DataTrigger>
+
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding LstItemsEstimate.Count}" Value="4">
+                                <Setter Property="HeightRequest" Value="250"></Setter>
+                            </DataTrigger>
+
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding LstHeight}" Value="1">
+                                <Setter Property="HeightRequest" Value="250"></Setter>
+                            </DataTrigger>
+                        </StackLayout.Triggers>
+                    </StackLayout>
+
+                    <Label Text="Total Prices" FontSize="15" Padding="20,5,20,0" TextColor="#262626" FontAttributes="Bold" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                    <!--Prices-->
+                    <StackLayout Spacing="0" Padding="0,5,0,10">
+
+                        <StackLayout Orientation="Horizontal" Spacing="0" Margin="20,0,20,0">
+                            <!--Sub Total-->
+                            <Border BackgroundColor="White" Padding="{OnPlatform Android='5,0,5,0', iOS=5}" HorizontalOptions="FillAndExpand">
+
+                                <StackLayout Margin="10" WidthRequest="100">
+                                    <Label Text="Sub Total" 
+                                             FontSize="14" 
+                                             FontAttributes="Bold" 
+                                             TextColor="#b66dff"
+                                             HorizontalOptions="StartAndExpand" 
+                                             VerticalTextAlignment="Center"></Label>
+
+                                    <Label 
+                                          HorizontalOptions="EndAndExpand"
+                                          Text="{Binding SubTotalEst,StringFormat='${0}'}"
+                                          FontSize="15" TextColor="Black">
+                                    </Label>
+                                </StackLayout>
+
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="0" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                            </Border>
+
+
+                            <!--% Tax-->
+                            <Border BackgroundColor="White" Padding="{OnPlatform Android='5,0,5,0', iOS=5}" HorizontalOptions="FillAndExpand">
+
+                                <StackLayout Margin="10" WidthRequest="100">
+                                    <Label Text="% Tax" 
+                                             FontSize="14" 
+                                             TextColor="#b66dff"
+                                             FontAttributes="Bold"
+                                             HorizontalOptions="Start"
+                                             VerticalTextAlignment="Center"></Label>
+
+                                    <Label 
+                                         HorizontalOptions="EndAndExpand"
+                                         TextColor="Black"
+                                         Text="{Binding OneEstimate.Tax,StringFormat='%{0}'}"
+                                         FontSize="15">
+                                    </Label>
+                                </StackLayout>
+
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="0" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                            </Border>
+
+
+                        </StackLayout>
+
+
+                        <StackLayout Orientation="Horizontal" Spacing="0" Margin="20,0,20,0">
+                            <!--$ Net-->
+                            <Border BackgroundColor="White" Padding="{OnPlatform Android='5,0,5,0', iOS=5}" HorizontalOptions="FillAndExpand">
+
+                                <StackLayout Margin="10" WidthRequest="100">
+                                    <Label Text="$ Net" 
+                                             FontSize="14" 
+                                             FontAttributes="Bold" 
+                                             TextColor="#b66dff"
+                                             HorizontalOptions="StartAndExpand" 
+                                             VerticalTextAlignment="Center"></Label>
+
+                                    <Label 
+                                          HorizontalOptions="EndAndExpand"
+                                          Text="{Binding NetEst,StringFormat='${0}'}"
+                                          FontSize="15" TextColor="Black">
+                                    </Label>
+                                </StackLayout>
+
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="0" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                            </Border>
+
+                            <!--$ Total Due-->
+                            <Border BackgroundColor="White" Padding="{OnPlatform Android='5,0,5,0', iOS=5}" HorizontalOptions="FillAndExpand">
+
+                                <StackLayout Margin="10" WidthRequest="100">
+                                    <Label Text="$ Total Due" 
+                                            FontSize="14" 
+                                            TextColor="#b66dff"
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Start"
+                                            VerticalTextAlignment="Center"></Label>
+
+                                    <Label 
+                                        HorizontalOptions="EndAndExpand"
+                                        TextColor="Black"
+                                        Text="{Binding TotalDueEst,StringFormat='${0}'}"
+                                        FontSize="15">
+                                    </Label>
+                                </StackLayout>
+
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="0" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                            </Border>
+
+                        </StackLayout>
+
+
+                    </StackLayout>
+
+
+                    <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>
+
+                    <Label Text="Note" FontSize="15" TextColor="#262626" Padding="20,0,20,10" FontAttributes="Bold" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                    <Frame BorderColor="LightGray" BackgroundColor="White" HorizontalOptions="FillAndExpand" HasShadow="False" Padding="10" Margin="20,0,20,20">
+                        <Editor Placeholder="Enter Note" Text="{Binding OneEstimate.Notes}" AutoSize="TextChanges" FontSize="13" BackgroundColor="White" TextColor="#333">
+                            <Editor.Triggers>
+                                <DataTrigger TargetType="Editor" Binding="{Binding OneEstimate.NotShowConvert}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                                <DataTrigger TargetType="Editor" Binding="{Binding EmployeePermission.UserRole}" Value="1">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                                <DataTrigger TargetType="Editor" Binding="{Binding EmployeePermission.ActiveEstimate}" Value="False">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                                <DataTrigger TargetType="Editor" Binding="{Binding EmployeePermission.ActiveEditEstimate_Invoice}" Value="False">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                            </Editor.Triggers>
+                        </Editor>
+                    </Frame>
+
+                    <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>
+
+                    <Label Text="Signature" FontSize="15" TextColor="#262626" Padding="20,0,20,10" FontAttributes="Bold" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                    <Frame x:Name="frmSignature" BorderColor="Gray" BackgroundColor="White" HasShadow="False" Margin="20,0,20,20">
+                        <Image Source="{Binding OneEstimate.SignatureDrawView}" HeightRequest="130" Aspect="AspectFit" Margin="15">
+                        </Image>
+                        <Frame.Triggers>
+                            <DataTrigger TargetType="Frame" Binding="{Binding OneEstimate.SignatureDraw}" Value="">
+                                <Setter Property="IsVisible" Value="False"></Setter>
+                            </DataTrigger>
+                        </Frame.Triggers>
+                    </Frame>
+
+                    <Frame x:Name="frmSignatureEdit" BackgroundColor="White" IsVisible="False" Margin="20,0,20,20" BorderColor="Gray" HasShadow="False" Padding="2">
+                        <StackLayout>
+                            <mct:DrawingView x:Name="DrawBoard"
+                                               LineColor="Black"
+                                               LineWidth="6"
+                                               HorizontalOptions="FillAndExpand"
+                                               VerticalOptions="FillAndExpand"
+                                               HeightRequest="250"
+                                               IsMultiLineModeEnabled="True"
+                                               BackgroundColor="AliceBlue"/>
+
+                            <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="FillAndExpand" Margin="0,5,0,0">
+                                <Button Text="Save" 
+                                        BackgroundColor="#b66dff" 
+                                        TextColor="White" 
+                                        HorizontalOptions="FillAndExpand"
+                                        Clicked="Button_Clicked_Save"/>
+                                <Button Text="Clear Board" 
+                                        BorderColor="#b66dff"
+                                        BorderWidth="1" 
+                                        TextColor="#b66dff"
+                                        HorizontalOptions="FillAndExpand"
+                                        BackgroundColor="White" 
+                                        Clicked="Button_Clicked_Clear"/>
+                            </StackLayout>
+                            
+                        </StackLayout>
+                        <Frame.Triggers>
+                            <DataTrigger TargetType="Frame" Binding="{Binding OneEstimate.SignatureDraw}" Value="">
+                                <Setter Property="IsVisible" Value="True"></Setter>
+                            </DataTrigger>
+                        </Frame.Triggers>
+                    </Frame>
+                </StackLayout>
+                <ScrollView.Triggers>
+                    <DataTrigger TargetType="ScrollView" Binding="{Binding Source={x:Reference stkResponButtons},Path=IsVisible}" Value="False">
+                        <Setter Property="Padding" Value="0,0,0,20"></Setter>
+                        <Setter Property="Margin" Value="0"></Setter>
+                    </DataTrigger>
+                </ScrollView.Triggers>
+            </ScrollView>
+
+            <StackLayout x:Name="stkResponButtons" Orientation="Horizontal" BackgroundColor="White" HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Padding="{OnPlatform Android=10,iOS='10,10,10,50'}">
+                <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="FillAndExpand" TranslationX="20">
+
+                    <Button Text="Submit" 
+                            HeightRequest="40"
+                            BackgroundColor="#8f1fff"
+                            FontAttributes="Bold"
+                            FontSize="16" 
+                            CornerRadius="10"
+                            HorizontalOptions="FillAndExpand"
+                            TextTransform="None"
+                            TextColor="White"
+                            Command="{Binding SubmitEstimateCommand}" CommandParameter="{Binding OneEstimate}">
+                    </Button>
+
+                    <!--Delete-->
+                    <Image HorizontalOptions="End" Margin="0,0,20,0">
+                        <Image.Source>
+                            <FontImageSource FontFamily="FontIconSolid" Color="Gray" Glyph="" Size="25"></FontImageSource>
+                        </Image.Source>
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding DeleteEstimateCommand}" CommandParameter="{Binding OneEstimate.Id}"></TapGestureRecognizer>
+                        </Image.GestureRecognizers>
+                    </Image>
+
+                </StackLayout>
+
+                <StackLayout.Triggers>
+
+                    <DataTrigger TargetType="StackLayout" Binding="{Binding OneEstimate.NotShowConvert}" Value="True">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                    <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.UserRole}" Value="1">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                    <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveEstimate}" Value="False">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                    <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveEditEstimate_Invoice}" Value="False">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+
+                </StackLayout.Triggers>
+
+            </StackLayout>
+
+            <!--Go Invoie-->
+            <Border VerticalOptions="EndAndExpand" HorizontalOptions="EndAndExpand" IsVisible="False" Margin="0,0,20,50" Padding="16,19,16,19" BackgroundColor="#8f1fff">
+                <StackLayout Spacing="0" VerticalOptions="CenterAndExpand">
+                    <Label Text="Go" FontSize="12" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"></Label>
+                    <Label Text="Invoice" FontSize="12" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"></Label>
+                </StackLayout>
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="{OnPlatform Android=50,iOS=34}"></RoundRectangle>
+                </Border.StrokeShape>
+                <Border.Shadow>
+                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                </Border.Shadow>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding GoInvoiceCommand}" CommandParameter="{Binding OneEstimate.InvoiceId}"></TapGestureRecognizer>
+                </Border.GestureRecognizers>
+                <Border.Triggers>
+                    <DataTrigger TargetType="Border" Binding="{Binding OneEstimate.GoToInvoice}" Value="True">
+                        <Setter Property="IsVisible" Value="True"></Setter>
+                    </DataTrigger>
+                </Border.Triggers>
+            </Border>
+        </Grid>
+
+    </StackLayout>
+
+</Controls:CustomsPage>

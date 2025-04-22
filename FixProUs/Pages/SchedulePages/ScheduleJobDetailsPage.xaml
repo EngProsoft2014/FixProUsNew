@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="FixProUs.Pages.SchedulePages.ScheduleJobDetailsPage"
+                      xmlns:Controls="clr-namespace:FixProUs.Controls"
+                      xmlns:combobox="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+                      xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                      IsEnabled="{Binding IsEnable}"
+                      BackgroundColor="White">
+
+    
+    <StackLayout Margin="20" Padding="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+        <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+
+            <!--Header-->
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="0,0,0,10">
+
+                <Image x:Name="imgBack" HorizontalOptions="Start">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="20"></FontImageSource>
+                    </Image.Source>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <StackLayout HorizontalOptions="CenterAndExpand" Orientation="Horizontal" Spacing="20">
+                    <Label Text="Schedule" TextColor="Black" FontAttributes="Bold" FontSize="16" HorizontalOptions="Center" VerticalTextAlignment="Center"></Label>
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource FontFamily="FontIconSolid" Color="#d14343" Glyph="" Size="18"></FontImageSource>
+                        </Image.Source>
+                    </Image>
+                </StackLayout>
+            </StackLayout>
+            
+            <Line  X1="400" HorizontalOptions="FillAndExpand" BackgroundColor="LightGray" Margin="0,10,0,10"></Line>
+
+            <StackLayout Spacing="20" HorizontalOptions="FillAndExpand" Margin="0,40,0,20">
+
+                <!--Title&Date-->
+                <StackLayout x:Name="stkMain" Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="20" Margin="10,0,10,0">
+                    <!--Title-->
+                    <StackLayout HorizontalOptions="FillAndExpand">
+                        <Label Text="Title" FontSize="13" TextColor="#333" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                        <Border BackgroundColor="White" Padding="10,0,10,0" HorizontalOptions="FillAndExpand">
+                            <Label 
+                                    Padding="10" TextColor="#333"
+                                       Text="{Binding ScheduleDetails.Title}"
+                                       FontSize="13"
+                                       HorizontalOptions="FillAndExpand">
+                            </Label>
+
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                            </Border.StrokeShape>
+                        </Border>
+                    </StackLayout>
+                    <!--Date-->
+                    <StackLayout x:Name="stkDate" HorizontalOptions="FillAndExpand">
+                        <Label Text="Date" FontSize="13" TextColor="#333" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                        <Border BackgroundColor="White" Padding="10,0,10,0" HorizontalOptions="FillAndExpand">
+                            <Label Padding="10"
+                                       Text="{Binding ScheduleDate,StringFormat='{0:MM/dd/yyyy}'}"
+                                       FontSize="13" TextColor="#333"
+                                       HorizontalOptions="FillAndExpand">
+                            </Label>
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                            </Border.StrokeShape>
+                        </Border>
+                    </StackLayout>
+
+                </StackLayout>
+
+                <!--Start&End Time-->
+                <StackLayout x:Name="stkStEdTime" Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="20" Margin="10,0,10,0">
+                    <!--Start Time-->
+                    <StackLayout HorizontalOptions="FillAndExpand">
+                        <Label Text="Start Time" TextColor="#333" FontSize="13" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                        <Border BackgroundColor="White" Padding="10,0,10,0" HorizontalOptions="FillAndExpand">
+                            <Label x:Name="lblStart" Text="{Binding StartTime}" 
+                                       Padding="10" TextColor="#333"
+                                       FontSize="13"
+                                       HorizontalOptions="Start">
+                            </Label>
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                            </Border.StrokeShape>
+                        </Border>
+                    </StackLayout>
+                    <!--End Time-->
+                    <StackLayout HorizontalOptions="FillAndExpand">
+                        <Label Text="End Time" TextColor="#333" FontSize="13" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                        <Border BackgroundColor="White" Padding="10,0,10,0" HorizontalOptions="FillAndExpand">
+                            <Label x:Name="lblEnd" Text="{Binding EndTime}" 
+                                       Padding="10" TextColor="#333"
+                                       FontSize="13"
+                                       HorizontalOptions="Start">
+                            </Label>
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                            </Border.StrokeShape>
+                        </Border>
+                    </StackLayout>
+                </StackLayout>
+
+                <!--SpentHours&SpentMin-->
+                <StackLayout x:Name="stkSpHourMin" Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="20" Margin="10,0,10,0">
+                    <!--Spent Hours-->
+                    <StackLayout HorizontalOptions="FillAndExpand">
+                        <Label Text="Spent Hours" TextColor="#333" FontSize="13" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                        <Border BackgroundColor="White" Padding="10,0,10,0" HorizontalOptions="FillAndExpand">
+                            <Label x:Name="lblSpHours"
+                                       Padding="10" TextColor="#333"
+                                       Text="{Binding SpentHours}"
+                                       FontSize="13"
+                                       HorizontalOptions="FillAndExpand">
+                            </Label>
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                            </Border.StrokeShape>
+                        </Border>
+                    </StackLayout>
+                    <!--Spent Min-->
+                    <StackLayout HorizontalOptions="FillAndExpand">
+                        <Label Text="Spent Min" TextColor="#333" FontSize="13" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                        <Border BackgroundColor="White" Padding="10,0,10,0" HorizontalOptions="FillAndExpand">
+                            <Label x:Name="lblSpMins"
+                                       Padding="10" TextColor="#333"
+                                        Text="{Binding SpentMin}"
+                                        FontSize="13"
+                                        HorizontalOptions="FillAndExpand">
+                            </Label>
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                            </Border.StrokeShape>
+                        </Border>
+                    </StackLayout>
+                </StackLayout>
+
+                <!--Reason not service-->
+                <StackLayout x:Name="stkResponNotServ" IsVisible="False" HorizontalOptions="FillAndExpand">
+                    <Label Text="What Reason Of Not Serviced ?" TextColor="#333" FontSize="13" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                    <Border BackgroundColor="White" Padding="10,0,10,0" HorizontalOptions="FillAndExpand">
+                        <Editor x:Name="lblNotService" VerticalOptions="FillAndExpand" AutoSize="TextChanges"
+                                    HorizontalOptions="FillAndExpand" BackgroundColor="White"
+                                    Placeholder="Enter Reason"
+                                    TextColor="#333"
+                                    Text="{Binding ScheduleDetails.OneScheduleDate.Reasonnotserve}"
+                                    FontSize="13">
+                        </Editor>
+                        <Border.Shadow>
+                            <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                        </Border.Shadow>
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                        </Border.StrokeShape>
+                    </Border>
+                </StackLayout>
+
+                <!--Add Job Date-->
+                <StackLayout x:Name="stkAddJob" IsVisible="False" Spacing="20" Margin="10,0,10,0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+
+                    <!--Add Job Date-->
+                    <StackLayout HorizontalOptions="FillAndExpand">
+                        <Label Text="Job Date" FontSize="13" TextColor="#333" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                        <Border BackgroundColor="White" Padding="10,0,10,0" HorizontalOptions="FillAndExpand">
+                            <DatePicker 
+                                     Date="{Binding ScheduleAddDate}"
+                                     FontSize="13" TextColor="#333"
+                                     HorizontalOptions="FillAndExpand">
+                            </DatePicker>
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                            </Border.StrokeShape>
+                        </Border>
+                    </StackLayout>
+
+                    <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="FillAndExpand">
+
+
+                        <!--Start Time-->
+                        <StackLayout HorizontalOptions="FillAndExpand">
+                            <Label Text="Start Time" FontSize="13" TextColor="#333" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                            <Border BackgroundColor="White" Padding="10,0,10,0">
+                                <TimePicker 
+                                    Time="{Binding TimeFromAddDate}"
+                                    FontSize="13"
+                                    TextColor="#333"
+                                    HorizontalOptions="FillAndExpand">
+                                </TimePicker>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                            </Border>
+                        </StackLayout>
+
+                        <!--End Time-->
+                        <StackLayout HorizontalOptions="FillAndExpand">
+                            <Label Text="End Time" FontSize="13" TextColor="#333" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                            <Border BackgroundColor="White" Padding="10,0,10,0">
+                                <TimePicker 
+                                         Time="{Binding TimeToAddDate}"
+                                         FontSize="13"
+                                    TextColor="#333"
+                                         HorizontalOptions="FillAndExpand">
+                                </TimePicker>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                            </Border>
+                        </StackLayout>
+                    </StackLayout>
+
+                    <StackLayout Orientation="Vertical"  Spacing="20" HorizontalOptions="FillAndExpand">
+
+                        <!--Job Title-->
+                        <StackLayout HorizontalOptions="FillAndExpand">
+                            <Label Text="Job Title" FontSize="13" TextColor="#333" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                            <Border BackgroundColor="White" Padding="10,0,10,0" HeightRequest="40">
+                                <StackLayout>
+                                    <combobox:SfComboBox 
+                                           ItemsSource="{Binding LstEmpCategory}"
+                                           Placeholder="Job Title"
+                                           SelectedItem="{Binding SelectedCateory,Mode=TwoWay}" 
+                                           FontSize="13"
+                                           TextColor="#333"
+                                           SelectionChanged="SfComboBox_SelectionChanged"
+                                           MaxDropDownHeight="200" 
+                                           HeightRequest="40" 
+                                           IsFilteringEnabled="False"
+                                           IsEditable="False" 
+                                           IsClearButtonVisible="False"
+                                           DisplayMemberPath="CategoryName">
+
+                                    </combobox:SfComboBox>
+                                </StackLayout>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                            </Border>
+                        </StackLayout>
+
+                        <!--Choose Technicions-->
+                        <StackLayout HorizontalOptions="EndAndExpand">
+                            <StackLayout>
+                                <Label Text="Choose Technicions" FontSize="13" TextColor="#333" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                                <Border BackgroundColor="White" Padding="10,0,10,0">
+                                    <StackLayout>
+                                        <combobox:SfComboBox 
+                                               ItemsSource="{Binding LstEmpInOneCategory}"
+                                               Placeholder="Select Technicion"
+                                               SelectedItem="{Binding SelectedEmployeeAddDate,Mode=TwoWay}" 
+                                               FontSize="13"  
+                                            TextColor="#333"
+                                               MaxDropDownHeight="200" 
+                                               HeightRequest="40" 
+                                               IsFilteringEnabled="False"
+                                               IsEditable="False"
+                                               IsClearButtonVisible="False"
+                                               DisplayMemberPath="FullName">
+                                        </combobox:SfComboBox>
+                                    </StackLayout>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                </Border>
+                            </StackLayout>
+                        </StackLayout>
+
+                    </StackLayout>
+
+                </StackLayout>
+
+            </StackLayout>
+
+            <!--Re Open Buttons-->
+            <StackLayout x:Name="stkReopenButtons" IsVisible="False" Orientation="Horizontal" Spacing="5" HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Padding="10">
+
+                <Button Text="Re Open"
+                            WidthRequest="{OnPlatform Android=70, iOS=100}"
+                            HeightRequest="35"
+                            BackgroundColor="DeepSkyBlue"
+                            FontAttributes="Bold"
+                            FontSize="13" 
+                            CornerRadius="10"
+                            TextTransform="None"
+                            TextColor="White"
+                            Command="{Binding SaveReOpenScheduleDateCommand}" CommandParameter="{Binding OneScheduleDate}"></Button>
+                <StackLayout.Triggers>
+                    <!--<DataTrigger TargetType="StackLayout" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="0">
+                            <Setter Property="IsVisible" Value="True"></Setter>
+                        </DataTrigger>-->
+                    <DataTrigger TargetType="StackLayout" Binding="{Binding IsReOpen}" Value="True">
+                        <Setter Property="IsVisible" Value="True"></Setter>
+                    </DataTrigger>
+                </StackLayout.Triggers>
+            </StackLayout>
+
+            <!--Respon not service Buttons-->
+            <StackLayout x:Name="stkResponButtons" IsVisible="False" Orientation="Horizontal" Spacing="5" HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Padding="10">
+
+                <Button Text="Save"
+                            HorizontalOptions="FillAndExpand"
+                            HeightRequest="40"
+                            BackgroundColor="DeepSkyBlue"
+                            FontAttributes="Bold"
+                            FontSize="13" 
+                            CornerRadius="10"
+                            TextTransform="None"
+                            TextColor="White"
+                            Command="{Binding SaveResponNotServiceScheduleDateCommand}" CommandParameter="{Binding OneScheduleDate}"></Button>
+
+                <Button Text="Back"
+                            HorizontalOptions="FillAndExpand"
+                            HeightRequest="40"
+                            BackgroundColor="YellowGreen"
+                            FontAttributes="Bold"
+                            FontSize="13" 
+                            CornerRadius="10"
+                            TextTransform="None"
+                            TextColor="White"
+                            Clicked="Button_Clicked_2"></Button>
+
+            </StackLayout>
+
+            <!--Add Job Date Buttons-->
+            <StackLayout x:Name="stkAddJobDateButtons" IsVisible="False" Orientation="Horizontal" Spacing="10" HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Padding="10">
+
+                <Button Text="Yes"
+                           HorizontalOptions="FillAndExpand"
+                            HeightRequest="40"
+                            BackgroundColor="DeepSkyBlue"
+                            FontAttributes="Bold"
+                            FontSize="13" 
+                            CornerRadius="10"
+                            TextTransform="None"
+                            TextColor="White"
+                            Command="{Binding AddScheduleDateCommand}" CommandParameter="{Binding ScheduleDetails}"></Button>
+
+                <Button Text="No"
+                            HorizontalOptions="FillAndExpand"
+                            HeightRequest="40"
+                            BackgroundColor="YellowGreen"
+                            FontAttributes="Bold"
+                            FontSize="13" 
+                            CornerRadius="10"
+                            TextTransform="None"
+                            TextColor="White"
+                            Clicked="Button_Clicked_3"></Button>
+
+            </StackLayout>
+
+            <!--stkButtons-->
+            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Margin="10,20,10,0" Spacing="20">
+                <StackLayout x:Name="stkButtons" IsVisible="False" Orientation="Horizontal" Spacing="20" VerticalOptions="EndAndExpand" 
+                             HorizontalOptions="FillAndExpand">
+                    <Button Text="New Visit"
+                                 IsVisible="False"
+                                 HeightRequest="40"
+                                 BackgroundColor="DeepSkyBlue"
+                                 FontAttributes="Bold"
+                                 FontSize="13"
+                                 HorizontalOptions="FillAndExpand"
+                                 CornerRadius="10"
+                                 TextTransform="None"
+                                 TextColor="White"
+                                 Clicked="Button_Clicked_4">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="1">
+                                <Setter Property="IsVisible" Value="True"></Setter>
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+
+
+                    <Button Text="Not Serviced"
+                             HeightRequest="40"
+                             HorizontalOptions="FillAndExpand"
+                             BackgroundColor="Red"
+                             FontAttributes="Bold"
+                             FontSize="13" 
+                             CornerRadius="10"
+                             TextTransform="None"
+                             TextColor="White"
+                             Clicked="Button_Clicked_1">
+                    </Button>
+
+                    <StackLayout.Triggers>
+                        <DataTrigger TargetType="StackLayout" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="1">
+                            <Setter Property="IsVisible" Value="True"></Setter>
+                        </DataTrigger>
+                        <DataTrigger TargetType="StackLayout" Binding="{Binding ScheduleDetails.ShowCheckBtn}" Value="2">
+                            <Setter Property="IsEnabled" Value="False"></Setter>
+                            <Setter Property="Opacity" Value=".3"></Setter>
+                        </DataTrigger>
+                        <DataTrigger TargetType="StackLayout" Binding="{Binding Source={x:Reference stkAddJobDateButtons},Path=IsVisible}" Value="True">
+                            <Setter Property="IsVisible" Value="False"></Setter>
+                        </DataTrigger>
+                        <DataTrigger TargetType="StackLayout" Binding="{Binding Source={x:Reference stkResponNotServ},Path=IsVisible}" Value="True">
+                            <Setter Property="IsVisible" Value="False"></Setter>
+                        </DataTrigger>
+                    </StackLayout.Triggers>
+                </StackLayout>
+
+                <Button Text="Done" 
+                             IsVisible ="False"
+                             HeightRequest="40"
+                             BackgroundColor="YellowGreen"
+                             FontAttributes="Bold"
+                             FontSize="13"
+                             HorizontalOptions="FillAndExpand"
+                             CornerRadius="10"
+                             TextTransform="None"
+                             TextColor="White"
+                             Command="{Binding DoneScheduleDateCommand}" CommandParameter="{Binding OneScheduleDate}">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button" Binding="{Binding EmployeePermission.UserRole}" Value="1">
+                            <Setter Property="IsVisible" Value="False"></Setter>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="0">
+                            <Setter Property="IsVisible" Value="False"></Setter>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="2">
+                            <Setter Property="IsVisible" Value="False"></Setter>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button" Binding="{Binding Source={x:Reference stkAddJobDateButtons},Path=IsVisible}" Value="True">
+                            <Setter Property="IsVisible" Value="False"></Setter>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button" Binding="{Binding Source={x:Reference stkResponNotServ},Path=IsVisible}" Value="True">
+                            <Setter Property="IsVisible" Value="False"></Setter>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button" Binding="{Binding Source={x:Reference stkReopenButtons},Path=IsVisible}" Value="True">
+                            <Setter Property="IsVisible" Value="False"></Setter>
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+            </StackLayout>
+
+
+            <Line  X1="400" HorizontalOptions="FillAndExpand" BackgroundColor="LightGray" Margin="0,0,0,10"></Line>
+
+            <Button Text="Cancel"
+                        HeightRequest="40"
+                        TextTransform="None" 
+                        CornerRadius="10"
+                        VerticalOptions="EndAndExpand" Margin="10,10,10,20"
+                        HorizontalOptions="FillAndExpand"
+                        BackgroundColor="White" 
+                        FontAttributes="Bold"
+                        FontSize="13"
+                        TextColor="#d14343" 
+                        BorderColor="#d14343"
+                        BorderWidth="1"
+                        Clicked="Button_Clicked"></Button>
+
+        </StackLayout>
+    </StackLayout>
+</Controls:CustomsPage>

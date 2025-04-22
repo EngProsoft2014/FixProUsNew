@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  x:Class="FixProUs.Pages.CallPages.SearchCustomerPopup"
+                  xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+                  xmlns:mopupsanim="clr-namespace:Mopups.Animations;assembly=Mopups"
+                  xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                  BackgroundColor="#FFFFFF"
+                  CloseWhenBackgroundIsClicked="False"
+                  IsEnabled="{Binding IsEnable}">
+
+    <mopups:PopupPage.Animation>
+        <mopupsanim:ScaleAnimation
+            DurationIn="700"
+            EasingIn="BounceOut"
+            PositionIn="Bottom"
+            PositionOut="Center"
+            ScaleIn="1"
+            ScaleOut="0.7" />
+    </mopups:PopupPage.Animation>
+
+
+    <Border  BackgroundColor="#FFFFFF" VerticalOptions="FillAndExpand">
+        <StackLayout>
+            <StackLayout Orientation="Horizontal" VerticalOptions="Center" Padding="20">
+
+                <Image HorizontalOptions="End" VerticalOptions="Center">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontIconSolid" Glyph="" Color="#b66dff"></FontImageSource>
+                    </Image.Source>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>
+
+            <Grid VerticalOptions="FillAndExpand">
+
+                <StackLayout Padding="20,0,20,0">
+                    <Entry x:Name="searchBar"
+                       Placeholder="Search Customer By Phone"
+                       FontFamily="AlmaraiRegular"
+                       Keyboard="Text" TextColor="#333"
+                       ClearButtonVisibility="WhileEditing"
+                       TextChanged="SearchBar_OnTextChanged"></Entry>
+
+                    <ListView x:Name="costomersListView" BackgroundColor="White" HorizontalOptions="FillAndExpand" IsVisible="False" CachingStrategy="RecycleElement" ItemTapped="costomersListView_ItemTapped">
+                        <ListView.RowHeight>
+                            70
+                        </ListView.RowHeight>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto"></RowDefinition>
+                                            <RowDefinition Height="auto"></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <StackLayout Orientation="Horizontal" Spacing="5" Margin="0,15,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
+                                            <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="CenterAndExpand">
+                                                <Image.Source>
+                                                    <FontImageSource FontFamily="FontIconSolid" Glyph="" Size="20" Color="#b66dff"></FontImageSource>
+                                                </Image.Source>
+                                            </Image>
+                                            <StackLayout Grid.Column="1" Grid.RowSpan="2" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Spacing="10">
+                                                <StackLayout Spacing="0">
+                                                    <Label FontSize="16" FontFamily="AlmaraiRegular" TextColor="Black">
+                                                        <Label.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding Path="FirstName" />
+                                                                <Binding Path="LastName" />
+                                                            </MultiBinding>
+                                                        </Label.Text>
+                                                    </Label>
+                                                    <Label Text="{Binding Phone1}" FontSize="14" FontFamily="AlmaraiRegular" TextColor="#FF464859"/>
+                                                </StackLayout>
+                                                <!--<Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="Black"></Line>-->
+                                            </StackLayout>
+                                        </StackLayout>
+
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <StackLayout x:Name="stkApply" VerticalOptions="CenterAndExpand" Margin="0,50,0,7" IsVisible="False">
+                        <Button  Text="Apply"  
+                         Margin="50,5,50,10"
+                         FontSize="15"
+                         FontAttributes="Bold"
+                         TextTransform="None"
+                         TextColor="White"
+                         WidthRequest="80"
+                         CornerRadius="20"
+                         BackgroundColor="#b66dff"
+                         Clicked="Button_Clicked"></Button>
+                    </StackLayout>
+
+                </StackLayout>
+
+                <Border x:Name="yumCreateCust" 
+                           BackgroundColor="#8f1fff" 
+                           Padding="5" 
+                           VerticalOptions="End"
+                           HorizontalOptions="End" 
+                           Margin="{OnPlatform Android= 30, iOS='30,30,30,50'}"
+                           HeightRequest="50"
+                           WidthRequest="50">
+                    <Image WidthRequest="25">
+                        <Image.Source>
+                            <FontImageSource Glyph="+" Color="White" FontFamily="FontIconSolid"></FontImageSource>
+                        </Image.Source>
+                    </Image>
+
+                    <Border.Shadow>
+                        <Shadow Brush="{OnPlatform Android=Gray, iOS=Gray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                    </Border.Shadow>
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="{OnPlatform Android=100, iOS=25}"></RoundRectangle>
+                    </Border.StrokeShape>
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CallsViewModel}}, Path=CreateNewCustomerCommand}" ></TapGestureRecognizer>
+                    </Border.GestureRecognizers>
+                    <!--<Border.BindingContext>
+                        <vm:CallsViewModel></vm:CallsViewModel>
+                    </Border.BindingContext>-->
+                </Border>
+
+            </Grid>
+        </StackLayout>
+
+    </Border>
+
+</mopups:PopupPage>

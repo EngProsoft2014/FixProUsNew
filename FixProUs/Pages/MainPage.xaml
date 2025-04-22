@@ -1,0 +1,1515 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="FixProUs.Pages.MainPage"
+                      xmlns:Controls="clr-namespace:FixProUs.Controls"
+                      xmlns:Helpers="clr-namespace:FixProUs.Helpers"
+                      xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                      xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
+                      xmlns:ff="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
+                      xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                      xmlns:schedule="clr-namespace:Syncfusion.Maui.Scheduler;assembly=Syncfusion.Maui.Scheduler"
+                      xmlns:calendar="clr-namespace:Syncfusion.Maui.Calendar;assembly=Syncfusion.Maui.Calendar"
+                      x:Name="page"
+                      BackgroundColor="White"
+                      IsEnabled="{Binding IsEnable}">
+
+    <Grid>
+        <!--Tabs-->
+        <StackLayout VerticalOptions="FillAndExpand">
+            <tabView:SfTabView x:Name="tabMain" IndicatorBackground="#9b5ff5" IndicatorPlacement="Bottom" FlowDirection="LeftToRight"
+                           TabBarHeight="60" VerticalOptions="EndAndExpand" TabBarPlacement="Bottom" SelectionChanged="SfTabView_SelectionChanged">
+                <tabView:SfTabView.Items>
+                    <!--Schedules-->
+                    <tabView:SfTabItem TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" BackgroundColor="#f7f5fa">
+                        <tabView:SfTabItem.ImageSource>
+                            <FontImageSource Glyph="" FontFamily="FontIconSolid" Color="Gray"></FontImageSource>
+                        </tabView:SfTabItem.ImageSource>
+                        <tabView:SfTabItem.Content>
+                            <ContentView x:Name="SchedulesView" Margin="0,20,0,0">
+                                <StackLayout>
+
+                                    <!--Toolbar-->
+                                    <StackLayout>
+                                        <!--Toolbar-->
+                                        <Grid HorizontalOptions="FillAndExpand">
+
+                                            <Label x:Name="lblTitle" Text="Schedule" HeightRequest="30"
+                                                       VerticalOptions="FillAndExpand" Style="{StaticResource lblHeaderText}"
+                                                       HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+
+
+                                            <Label x:Name="lblSearch"
+                                                   Text="Search" 
+                                                   TextColor="#b66dff"
+                                                   FontSize="{OnPlatform Android=13,iOS=15}"
+                                                   Margin="{OnPlatform Android='0,0,20,0',iOS='0,0,20,0'}"
+                                                   VerticalTextAlignment="{OnPlatform Android=Center,iOS=Start}"
+                                                   HorizontalOptions="EndAndExpand">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_2" NumberOfTapsRequired="1"></TapGestureRecognizer>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+
+                                            <Label x:Name="lblCalender"
+                                                       Text="Calendar" 
+                                                       IsVisible="False"
+                                                       TextColor="#b66dff"
+                                                       FontSize="{OnPlatform Android=13,iOS=15}"
+                                                       Margin="{OnPlatform Android='0,0,20,0',iOS='0,0,20,0'}"
+                                                       VerticalTextAlignment="{OnPlatform Android=Center,iOS=Start}"
+                                                       HorizontalOptions="EndAndExpand">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_3"  NumberOfTapsRequired="1"></TapGestureRecognizer>
+                                                </Label.GestureRecognizers>
+                                            </Label>
+                                        </Grid>
+
+
+                                        <StackLayout x:Name="stkListOrCalAndWeekOrDays" Orientation="Horizontal" Margin="{OnPlatform iOS='0,0,0,10'}" HorizontalOptions="FillAndExpand">
+                                            <StackLayout Orientation="Horizontal" Spacing="2" Padding="10,0,10,0" HorizontalOptions="FillAndExpand" Margin="0,0,20,0">
+                                                <Label Text="List" VerticalTextAlignment="Center" TextColor="#333"></Label>
+                                                <Switch x:Name="swchCalenderOrListView" Toggled="swchCalenderOrListView_Toggled"></Switch>
+                                                <Label Text="Calendar" VerticalTextAlignment="Center" TextColor="#333"></Label>
+                                            </StackLayout>
+
+                                            <StackLayout x:Name="stkSwtScheduleView" Orientation="Horizontal" IsVisible="False" Spacing="2" Padding="10,0,10,0" HorizontalOptions="End" Margin="0,0,20,0">
+                                                <Label Text="Weeks" TextColor="#333" VerticalTextAlignment="Center"></Label>
+                                                <Switch x:Name="swchCalenderView" Toggled="swchCalenderView_Toggled"></Switch>
+                                                <Label Text="Days" VerticalTextAlignment="Center" TextColor="#333"></Label>
+                                            </StackLayout>
+                                        </StackLayout>
+
+                                    </StackLayout>
+
+                                    <Grid VerticalOptions="FillAndExpand">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="{OnPlatform Android=130,iOS=145}"></RowDefinition>
+                                            <RowDefinition Height="1*"></RowDefinition>
+                                            <RowDefinition Height="1*"></RowDefinition>
+                                        </Grid.RowDefinitions>
+
+
+                                        <!--CellTappedCommand="{Binding OpenScheduleDetailsCommand}"-->
+                                        <!--Schedule Jobs-->
+                                        <schedule:SfScheduler x:Name="schedule"
+                                                             Grid.RowSpan="3"
+                                                             IsVisible="False"
+                                                             View="Week"
+                                                             VerticalOptions="FillAndExpand"  Tapped="schedule_CellTapped" 
+                                                             TodayHighlightBrush="#b66dff"
+                                                             AppointmentsSource="{Binding LstSchedules}">
+
+                                            <schedule:SfScheduler.AppointmentMapping>
+                                                <schedule:SchedulerAppointmentMapping 
+                                                    Id="Id" 
+                                                    TextColorMapping="Color"
+                                                    Background="Background"
+                                                    EndTime="To"
+                                                    StartTime="From"
+                                                    Subject="Title"
+                                                    />
+                                            </schedule:SfScheduler.AppointmentMapping>
+                                            <!--<schedule:SfScheduler.BindingContext>
+                                                <vm:SchedulesViewModel/>
+                                            </schedule:SfScheduler.BindingContext>-->
+
+                                            <!--<schedule:SfScheduler.HeaderView>
+                                                <schedule:SchedulerHeaderView >
+                    
+                                                </schedule:SchedulerHeaderView>
+                                                <schedule:ViewHeaderStyle
+                                                    CurrentDateTextColor="#8f1fff"
+                                                    CurrentDayTextColor="#8f1fff"
+			                                        BackgroundColor="#eedeff" 
+			                                        DayTextColor="#404040" 
+			                                        DateTextColor="#404040" 
+			                                        DayFontFamily="Arial" 
+			                                        DateFontFamily="Arial">
+                                                </schedule:ViewHeaderStyle>
+                                            </schedule:SfScheduler.HeaderView>-->
+
+                                        </schedule:SfScheduler>
+
+                                        <!--Resources="{Binding LstScheduleEvevts}"-->
+                                        <!--Calendar Jobs-->
+                                        <calendar:SfCalendar  x:Name="calendar" 
+                                              Grid.Row="0"
+                                              View="Month" 
+                                              StartRangeSelectionBackground="#b66dff"
+                                              SelectionShape="Rectangle"
+                                              AllowViewNavigation="True"
+                                              SelectionMode="Single" 
+                                              SelectionBackground="#b66dff"
+                                              EnablePastDates="True"
+                                              Margin="0,0,0,0" 
+                                              VerticalOptions="StartAndExpand"
+                                              SelectionChanged="calendar_SelectionChanged">
+                                            <calendar:SfCalendar.HeaderView>
+                                                <calendar:CalendarHeaderView Height="50"
+                                             Background="#b66dff"></calendar:CalendarHeaderView>
+                                            </calendar:SfCalendar.HeaderView>
+                                            <calendar:SfCalendar.MonthView>
+                                                <calendar:CalendarMonthView NumberOfVisibleWeeks="1"
+                                            DisabledDatesBackground="#b66dff" >
+
+                                                </calendar:CalendarMonthView>
+                                            </calendar:SfCalendar.MonthView>
+
+                                            <!--<calendar:SfCalendar.MonthViewSettings>
+                                                <calendar:MonthViewSettings HeaderBackgroundColor="#b66dff" 
+                                                          HeaderFontFamily="InterMedium"
+                                                          HeaderFont="18" SelectionShape="Fill" 
+                                                          BorderColor ="#b66dff"  
+                                                          CellGridOptions="Both" DayCellFont="{OnPlatform iOS=20}" 
+                                                          TodayBorderColor="#b66dff"
+                                                          DateSelectionColor="#b66dff"
+                                                          TodaySelectionBackgroundColor="#b66dff"
+                                                          HeaderTextColor="#FFFFFF"
+                                                          DayHeight="50" DayHeaderFontSize="18" 
+                                                          DayHeaderTextColor="#000000"
+                                                          DayHeaderFontAttributes="Bold">
+
+                                                </calendar:MonthViewSettings>
+                                            </calendar:SfCalendar.MonthViewSettings>-->
+                                        </calendar:SfCalendar>
+
+                                        <!--Search Jobs-->
+                                        <StackLayout x:Name="stkSearch" Margin="30,20,30,0" Spacing="20" IsVisible="False">
+                                            <!--search bar-->
+                                            <Border BackgroundColor="White" HeightRequest="{OnPlatform Android=42, iOS=55}" HorizontalOptions="FillAndExpand">
+                                                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
+                                                    <SearchBar x:Name="srchJobs" BackgroundColor="White"  
+                                                               Placeholder="Search"
+                                                               HorizontalOptions="FillAndExpand"
+                                                               FontSize="{OnPlatform Android=13,iOS=18}" 
+                                                               Keyboard="Text" TextColor="#333"
+                                                               VerticalTextAlignment="Center" 
+                                                               TextChanged="srchJobs_TextChanged">
+                                                        <SearchBar.Behaviors>
+                                                            <xct:EventToCommandBehavior EventName="TextChanged"  Command="{Binding ChangeTextSearchJobsCommand}" CommandParameter="{Binding Text, Source={x:Reference srchJobs}}"></xct:EventToCommandBehavior>
+                                                        </SearchBar.Behaviors>
+                                                    </SearchBar>
+                                                </StackLayout>
+
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="{OnPlatform Android=25,iOS=20}" Stroke="Gray" StrokeThickness="1"></RoundRectangle>
+                                                </Border.StrokeShape>
+                                                <Border.Shadow>
+                                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                                </Border.Shadow>
+                                            </Border>
+
+                                            <StackLayout x:Name="stkSearchItems" IsVisible="{Binding IsShowSearchByItem}" Margin="20" Spacing="40" HorizontalOptions="CenterAndExpand">
+                                                <StackLayout Spacing="20">
+                                                    <Image>
+                                                        <Image.Source>
+                                                            <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="40"></FontImageSource>
+                                                        </Image.Source>
+                                                    </Image>
+
+                                                    <Label Text="Search your jobs by:" HorizontalOptions="CenterAndExpand" TextColor="#333"></Label>
+                                                </StackLayout>
+
+                                                <StackLayout Margin="20,0,0,0" Spacing="10">
+                                                    <StackLayout Orientation="Horizontal" Spacing="10">
+                                                        <Image>
+                                                            <Image.Source>
+                                                                <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="8"></FontImageSource>
+                                                            </Image.Source>
+                                                        </Image>
+                                                        <Label Text="Job Title" TextColor="#333"></Label>
+                                                    </StackLayout>
+
+                                                    <StackLayout Orientation="Horizontal" Spacing="10">
+                                                        <Image>
+                                                            <Image.Source>
+                                                                <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="8"></FontImageSource>
+                                                            </Image.Source>
+                                                        </Image>
+                                                        <Label Text="Address" TextColor="#333"></Label>
+                                                    </StackLayout>
+
+                                                    <StackLayout Orientation="Horizontal" Spacing="10">
+                                                        <Image>
+                                                            <Image.Source>
+                                                                <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="8"></FontImageSource>
+                                                            </Image.Source>
+                                                        </Image>
+                                                        <Label Text="Phone Number" TextColor="#333"></Label>
+                                                    </StackLayout>
+
+                                                    <StackLayout Orientation="Horizontal" Spacing="10">
+                                                        <Image>
+                                                            <Image.Source>
+                                                                <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="8"></FontImageSource>
+                                                            </Image.Source>
+                                                        </Image>
+                                                        <Label Text="Email" TextColor="#333"></Label>
+                                                    </StackLayout>
+
+                                                    <StackLayout Orientation="Horizontal" Spacing="10">
+                                                        <Image>
+                                                            <Image.Source>
+                                                                <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="8"></FontImageSource>
+                                                            </Image.Source>
+                                                        </Image>
+                                                        <Label Text="Source" TextColor="#333"></Label>
+                                                    </StackLayout>
+
+                                                    <StackLayout Orientation="Horizontal" Spacing="10">
+                                                        <Image>
+                                                            <Image.Source>
+                                                                <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="8"></FontImageSource>
+                                                            </Image.Source>
+                                                        </Image>
+                                                        <Label Text="Notes" TextColor="#333"></Label>
+                                                    </StackLayout>
+
+                                                </StackLayout>
+
+                                            </StackLayout>
+
+                                        </StackLayout>
+
+                                        <!--List Jobs Result-->
+                                        <CollectionView x:Name="colJobs" Grid.Row="1" Grid.RowSpan="2" VerticalScrollBarVisibility="Never" ItemsSource="{Binding CalendarDataToday}" VerticalOptions="StartAndExpand" Margin="10,20,10,0">
+                                            <CollectionView.ItemsLayout>
+                                                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"></LinearItemsLayout>
+                                            </CollectionView.ItemsLayout>
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border BackgroundColor="White">
+                                                        <Grid>
+                                                            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Padding="15" Spacing="5">
+                                                                <Image VerticalOptions="Start">
+                                                                    <Image.Source>
+                                                                        <FontImageSource FontFamily="FontIconSolid" Color="#538dd4" Glyph="" Size="14"></FontImageSource>
+                                                                    </Image.Source>
+                                                                </Image>
+
+                                                                <StackLayout HorizontalOptions="FillAndExpand">
+                                                                    <!--<Label Text="{Binding Title,StringFormat='Job Title : {0}'}" TextColor="#333"></Label>-->
+                                                                    <StackLayout Orientation="Horizontal">
+                                                                        <Label Text="{Binding From,StringFormat='{0:h:mm tt}'}" FontSize="12" TextColor="#333"></Label>
+
+                                                                        <Label Text="{Binding To,StringFormat='- {0:h:mm tt}'}" FontSize="12" TextColor="#333"></Label>
+                                                                    </StackLayout>
+
+                                                                    <Label Text="{Binding CustomerName}" TextColor="Black" FontAttributes="Bold"></Label>
+                                                                    <Label Text="{Binding CustomerPhone, StringFormat='{0:(###) ###-####}'}" TextColor="Gray"></Label>
+                                                                    <Label Text="{Binding Location}" FontSize="13" TextColor="Gray"></Label>
+                                                                </StackLayout>
+
+
+                                                                <StackLayout HeightRequest="100" HorizontalOptions="End">
+                                                                    <CollectionView ItemsSource="{Binding LstScheduleEmployeeDTO}" WidthRequest="110">
+                                                                        <CollectionView.ItemsLayout>
+                                                                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"></LinearItemsLayout>
+                                                                        </CollectionView.ItemsLayout>
+                                                                        <CollectionView.ItemTemplate>
+                                                                            <DataTemplate>
+
+                                                                                <StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="5">
+                                                                                    <Image VerticalOptions="Center">
+                                                                                        <Image.Source>
+                                                                                            <FontImageSource FontFamily="FontIconSolid" Color="#538dd4" Glyph="" Size="8"></FontImageSource>
+                                                                                        </Image.Source>
+                                                                                    </Image>
+                                                                                    <Label TextColor="#333" HorizontalTextAlignment="End" FontSize="11">
+                                                                                        <Label.Text>
+                                                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                                                <Binding Path="EmpFirstName" />
+                                                                                                <Binding Path="EmpLastName" />
+                                                                                            </MultiBinding>
+                                                                                        </Label.Text>
+                                                                                    </Label>
+
+                                                                                </StackLayout>
+
+                                                                            </DataTemplate>
+                                                                        </CollectionView.ItemTemplate>
+                                                                    </CollectionView>
+                                                                </StackLayout>
+
+
+
+                                                            </StackLayout>
+
+                                                            <StackLayout IsVisible="False" HorizontalOptions="End" VerticalOptions="End"  WidthRequest="70" HeightRequest="{OnPlatform Android=32,iOS=40}">
+                                                                <Button Text="Start" 
+                                                                        TextColor="White"
+                                                                        BackgroundColor="#538dd4" 
+                                                                        Padding="0" 
+                                                                        CornerRadius="13" 
+                                                                        TextTransform="None"
+                                                                        WidthRequest="70"
+                                                                        HeightRequest="{OnPlatform Android=32,iOS=40}"
+                                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SchedulesViewModel}}, Path=StartScheduleOutSideCommand}" CommandParameter="{Binding}"></Button>
+                                                                <StackLayout.Triggers>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding ShowCheckBtn}" Value="3">
+                                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding ShowCheckBtn}" Value="0">
+                                                                        <Setter Property="IsVisible" Value="True"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding ShowCheckBtn}" Value="1">
+                                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding ShowCheckBtn}" Value="2">
+                                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding OneScheduleDate.Status}" Value="2">
+                                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                </StackLayout.Triggers>
+                                                            </StackLayout>
+
+                                                            <StackLayout IsVisible="False" HorizontalOptions="End" VerticalOptions="End"  WidthRequest="70" HeightRequest="{OnPlatform Android=32,iOS=40}">
+                                                                <Button Text="End" 
+                                                                        TextColor="White"
+                                                                        BackgroundColor="#538dd4" 
+                                                                        Padding="0" 
+                                                                        CornerRadius="13" 
+                                                                        TextTransform="None"
+                                                                        WidthRequest="70"
+                                                                        HeightRequest="{OnPlatform Android=32,iOS=40}"
+                                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SchedulesViewModel}}, Path=EndScheduleOutSideCommand}" CommandParameter="{Binding}"></Button>
+                                                                <StackLayout.Triggers>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding ShowCheckBtn}" Value="3">
+                                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding ShowCheckBtn}" Value="0">
+                                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding ShowCheckBtn}" Value="1">
+                                                                        <Setter Property="IsVisible" Value="True"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding ShowCheckBtn}" Value="2">
+                                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding OneScheduleDate.Status}" Value="2">
+                                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                </StackLayout.Triggers>
+                                                            </StackLayout>
+
+                                                            <Grid.GestureRecognizers>
+                                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SchedulesViewModel}}, Path=ScheduleDetailsformListCommand}" CommandParameter="{Binding}"></TapGestureRecognizer>
+                                                            </Grid.GestureRecognizers>
+                                                        </Grid>
+
+                                                        <Border.Triggers>
+                                                            <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="2">
+                                                                <Setter Property="BackgroundColor" Value="LightGray"></Setter>
+                                                            </DataTrigger>
+                                                        </Border.Triggers>
+                                                        <Border.StrokeShape>
+                                                            <RoundRectangle CornerRadius="15" Stroke="LightGray" StrokeThickness="2"></RoundRectangle>
+                                                        </Border.StrokeShape>
+
+                                                    </Border>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+
+                                        <!--List search Jobs-->
+                                        <CollectionView x:Name="colSearchJobs" IsVisible="False" Grid.Row="1" Grid.RowSpan="2" VerticalScrollBarVisibility="Never" ItemsSource="{Binding LstSchedulesSearch}" VerticalOptions="Start" TranslationY="-50" Margin="10,0,10,0">
+                                            <CollectionView.ItemsLayout>
+                                                <LinearItemsLayout Orientation="Vertical" ItemSpacing="10"></LinearItemsLayout>
+                                            </CollectionView.ItemsLayout>
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border BackgroundColor="White">
+                                                        <Grid>
+                                                            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Padding="15" Spacing="5">
+                                                                <Image VerticalOptions="Start">
+                                                                    <Image.Source>
+                                                                        <FontImageSource FontFamily="FontIconSolid" Color="#538dd4" Glyph="" Size="14"></FontImageSource>
+                                                                    </Image.Source>
+                                                                </Image>
+
+                                                                <StackLayout HorizontalOptions="FillAndExpand">
+                                                                    <!--<Label Text="{Binding Title,StringFormat='Job Title : {0}'}" TextColor="#333"></Label>-->
+                                                                    <StackLayout Orientation="Horizontal">
+                                                                        <Label Text="{Binding From,StringFormat='{0:h:mm tt}'}" FontSize="12" TextColor="#333"></Label>
+
+                                                                        <Label Text="{Binding To,StringFormat='- {0:h:mm tt}'}" FontSize="12" TextColor="#333"></Label>
+                                                                    </StackLayout>
+
+                                                                    <Label Text="{Binding CustomerName}" TextColor="Black" FontAttributes="Bold"></Label>
+                                                                    <Label Text="{Binding CustomerPhone, StringFormat='{0:(###) ###-####}'}" TextColor="Gray"></Label>
+                                                                    <Label Text="{Binding Location}" FontSize="13" TextColor="Gray"></Label>
+                                                                </StackLayout>
+
+
+                                                                <StackLayout HeightRequest="100" HorizontalOptions="End">
+                                                                    <CollectionView ItemsSource="{Binding LstScheduleEmployeeDTO}" WidthRequest="110">
+                                                                        <CollectionView.ItemsLayout>
+                                                                            <LinearItemsLayout Orientation="Vertical" ItemSpacing="5"></LinearItemsLayout>
+                                                                        </CollectionView.ItemsLayout>
+                                                                        <CollectionView.ItemTemplate>
+                                                                            <DataTemplate>
+
+                                                                                <StackLayout Orientation="Horizontal" HorizontalOptions="End" Spacing="5">
+                                                                                    <Image VerticalOptions="Center">
+                                                                                        <Image.Source>
+                                                                                            <FontImageSource FontFamily="FontIconSolid" Color="#538dd4" Glyph="" Size="8"></FontImageSource>
+                                                                                        </Image.Source>
+                                                                                    </Image>
+                                                                                    <Label TextColor="#333" HorizontalTextAlignment="End" FontSize="11">
+                                                                                        <Label.Text>
+                                                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                                                <Binding Path="EmpFirstName" />
+                                                                                                <Binding Path="EmpLastName" />
+                                                                                            </MultiBinding>
+                                                                                        </Label.Text>
+                                                                                    </Label>
+
+                                                                                </StackLayout>
+
+                                                                            </DataTemplate>
+                                                                        </CollectionView.ItemTemplate>
+                                                                    </CollectionView>
+                                                                </StackLayout>
+
+
+
+                                                            </StackLayout>
+
+                                                            <StackLayout IsVisible="False" HorizontalOptions="End" VerticalOptions="End"  WidthRequest="70" HeightRequest="{OnPlatform Android=32,iOS=40}">
+                                                                <Button Text="Start" 
+                                                                        TextColor="White"
+                                                                        BackgroundColor="#538dd4" 
+                                                                        Padding="0" 
+                                                                        CornerRadius="13" 
+                                                                        TextTransform="None"
+                                                                        WidthRequest="70"
+                                                                        HeightRequest="{OnPlatform Android=32,iOS=40}"
+                                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SchedulesViewModel}}, Path=StartScheduleOutSideCommand}" CommandParameter="{Binding}"></Button>
+                                                                <StackLayout.Triggers>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding ShowCheckBtn}" Value="3">
+                                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding ShowCheckBtn}" Value="0">
+                                                                        <Setter Property="IsVisible" Value="True"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding ShowCheckBtn}" Value="1">
+                                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding ShowCheckBtn}" Value="2">
+                                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding OneScheduleDate.Status}" Value="2">
+                                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                </StackLayout.Triggers>
+                                                            </StackLayout>
+
+                                                            <StackLayout IsVisible="False" HorizontalOptions="End" VerticalOptions="End"  WidthRequest="70" HeightRequest="{OnPlatform Android=32,iOS=40}">
+                                                                <Button Text="End" 
+                                                                        TextColor="White"
+                                                                        BackgroundColor="#538dd4" 
+                                                                        Padding="0" 
+                                                                        CornerRadius="13" 
+                                                                        TextTransform="None"
+                                                                        WidthRequest="70"
+                                                                        HeightRequest="{OnPlatform Android=32,iOS=40}"
+                                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SchedulesViewModel}}, Path=EndScheduleOutSideCommand}" CommandParameter="{Binding}"></Button>
+                                                                <StackLayout.Triggers>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding ShowCheckBtn}" Value="3">
+                                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding ShowCheckBtn}" Value="0">
+                                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding ShowCheckBtn}" Value="1">
+                                                                        <Setter Property="IsVisible" Value="True"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding ShowCheckBtn}" Value="2">
+                                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding OneScheduleDate.Status}" Value="2">
+                                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                </StackLayout.Triggers>
+                                                            </StackLayout>
+
+                                                            <Grid.GestureRecognizers>
+                                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SchedulesViewModel}}, Path=ScheduleDetailsformListCommand}" CommandParameter="{Binding}"></TapGestureRecognizer>
+                                                            </Grid.GestureRecognizers>
+                                                        </Grid>
+
+                                                        <Border.Triggers>
+                                                            <DataTrigger TargetType="Border" Binding="{Binding Status}" Value="2">
+                                                                <Setter Property="BackgroundColor" Value="LightGray"></Setter>
+                                                            </DataTrigger>
+                                                        </Border.Triggers>
+                                                        <Border.StrokeShape>
+                                                            <RoundRectangle CornerRadius="15" Stroke="LightGray" StrokeThickness="2"></RoundRectangle>
+                                                        </Border.StrokeShape>
+
+                                                    </Border>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+
+
+                                        <!--No Data-->
+                                        <StackLayout x:Name="stkNoData4" Padding="0,200,0,300" IsVisible="False" HeightRequest="100" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                                            <Image Source="noresult.png" Aspect="AspectFill" VerticalOptions="FillAndExpand"></Image>
+                                        </StackLayout>
+
+                                        <!--Add New Job Button-->
+                                        <Border 
+                                               Grid.Row="2" 
+                                               BackgroundColor="#8f1fff" 
+                                               Padding="5" 
+                                               VerticalOptions="End"
+                                               HorizontalOptions="End" 
+                                               Margin="{OnPlatform Android= 30, iOS='30,30,30,50'}"
+                                               HeightRequest="50"
+                                               WidthRequest="50">
+                                            <Image WidthRequest="25">
+                                                <Image.Source>
+                                                    <FontImageSource Glyph="+" Color="White" FontFamily="FontIconSolid"></FontImageSource>
+                                                </Image.Source>
+                                            </Image>
+
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="{OnPlatform Android=100, iOS=25}" Stroke="Transparent"></RoundRectangle>
+                                            </Border.StrokeShape>
+                                            <Border.Shadow>
+                                                <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                            </Border.Shadow>
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                                            </Border.GestureRecognizers>
+                                        </Border>
+
+
+                                    </Grid>
+
+                                </StackLayout>
+                            </ContentView>
+                        </tabView:SfTabItem.Content>
+                    </tabView:SfTabItem>
+                    <!--Customers-->
+                    <tabView:SfTabItem TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" BackgroundColor="#f7f5fa">
+                        <tabView:SfTabItem.ImageSource>
+                            <FontImageSource Glyph="" FontFamily="FontIconSolid" Color="Gray"></FontImageSource>
+                        </tabView:SfTabItem.ImageSource>
+                        <tabView:SfTabItem.Content>
+                            <ContentView x:Name="CustomersView" Margin="20,20,20,0">
+                                <StackLayout VerticalOptions="FillAndExpand" Spacing="10">
+                                    <!--Toolbar-->
+                                    <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Spacing="10">
+                                        <Label x:Name="CustomersTitle" Text="Customers" TextColor="Black" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"
+                                           FontSize="16"/>
+                                        <Label 
+                                               Text="{Binding BranchName}" 
+                                               TextColor="#b66dff"
+                                               FontSize="14"
+                                               VerticalTextAlignment="Center"
+                                               HorizontalOptions="Center"></Label>
+                                    </StackLayout>
+                                    <!--Data-->
+                                    <Grid VerticalOptions="FillAndExpand">
+                                        <StackLayout>
+                                            <StackLayout>
+                                                <!--search bar Phone or Address-->
+                                                <Border BackgroundColor="White" HeightRequest="45" HorizontalOptions="FillAndExpand">
+                                                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                                                        <SearchBar x:Name="srchPhoneOrAddress" 
+                                                           Text="{Binding PhoneView}" BackgroundColor="White"
+                                                           Placeholder="Search by Phone or Address"
+                                                           HorizontalOptions="FillAndExpand"
+                                                           FontSize="14" TextColor="#333"
+                                                           VerticalTextAlignment="Center">
+                                                        </SearchBar>
+                                                    </StackLayout>
+
+                                                    <Border.Shadow>
+                                                        <Shadow Brush="{OnPlatform Android=Gray, iOS=Gray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                                    </Border.Shadow>
+                                                    <Border.StrokeShape>
+                                                        <RoundRectangle CornerRadius="{OnPlatform Android=25,iOS=20}" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                                    </Border.StrokeShape>
+                                                </Border>
+
+                                            </StackLayout>
+
+
+                                            <StackLayout VerticalOptions="FillAndExpand" Margin="0,20,0,0">
+
+                                                <CollectionView x:Name="lstCustomers" SelectionMode="None" VerticalOptions="FillAndExpand"
+                                                         ItemsSource="{Binding LstCustomers}"  
+                                                         BackgroundColor="White"
+                                                         VerticalScrollBarVisibility="Never">
+                                                    <CollectionView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <StackLayout Spacing="10">
+                                                                <StackLayout Orientation="Horizontal">
+                                                                    <Border BackgroundColor="#f1e3ff" HorizontalOptions="FillAndExpand" Padding="7">
+                                                                        <Label FontAttributes="Bold"
+                                                                       TextColor="Black" 
+                                                                       HorizontalTextAlignment="Start"
+                                                                       VerticalTextAlignment="Center">
+                                                                            <Label.Text>
+                                                                                <MultiBinding StringFormat="{}{0} {1}">
+                                                                                    <Binding Path="FirstName" />
+                                                                                    <Binding Path="LastName" />
+                                                                                </MultiBinding>
+                                                                            </Label.Text>
+                                                                        </Label>
+
+                                                                        <Border.Shadow>
+                                                                            <Shadow Brush="{OnPlatform Android=Gray, iOS=Gray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                                                        </Border.Shadow>
+                                                                        <Border.StrokeShape>
+                                                                            <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="2"></RoundRectangle>
+                                                                        </Border.StrokeShape>
+                                                                    </Border>
+
+                                                                    <StackLayout Orientation="Horizontal"  HorizontalOptions="End" Padding="0" Margin="10,0,0,0" Spacing="0">
+                                                                        <Image x:Name="imgTel">
+                                                                            <Image.Source>
+                                                                                <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="13"></FontImageSource>
+                                                                            </Image.Source>
+                                                                        </Image>
+                                                                        <Label Text="{Binding Phone1}" 
+                                                                               FontSize="12" TextColor="#333" 
+                                                                               WidthRequest="100" 
+                                                                               FontAttributes="Bold" 
+                                                                               HorizontalTextAlignment="Center"
+                                                                               VerticalTextAlignment="Center"></Label>
+                                                                    </StackLayout>
+
+                                                                </StackLayout>
+
+
+                                                                <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never" HorizontalOptions="StartAndExpand"
+                                                                        VerticalOptions="CenterAndExpand" Margin="0,0,0,10">
+                                                                    <StackLayout Orientation="Horizontal" Spacing="10" Padding="10,0,0,0">
+                                                                        <Image>
+                                                                            <Image.Source>
+                                                                                <FontImageSource FontFamily="FontIconSolid" Color="#debdff" Glyph="" Size="18"></FontImageSource>
+                                                                            </Image.Source>
+                                                                        </Image>
+                                                                        <Label Text="{Binding Address}" TextColor="#333" FontAttributes="Italic" VerticalTextAlignment="Center" FontSize="14"></Label>
+
+                                                                    </StackLayout>
+                                                                </ScrollView>
+                                                                <StackLayout.GestureRecognizers>
+                                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CustomersViewModel}}, Path=SelecteCustomerDetailsCommand}" CommandParameter="{Binding}"></TapGestureRecognizer>
+                                                                </StackLayout.GestureRecognizers>
+
+                                                            </StackLayout>
+                                                        </DataTemplate>
+                                                    </CollectionView.ItemTemplate>
+                                                    <CollectionView.Triggers>
+                                                        <DataTrigger TargetType="CollectionView" Binding="{Binding LstCustomers.Count}" Value="0">
+                                                            <Setter Property="IsVisible" Value="False"></Setter>
+                                                        </DataTrigger>
+                                                    </CollectionView.Triggers>
+                                                </CollectionView>
+
+                                                <StackLayout.Triggers>
+                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding Source={x:Reference stkNoData}, Path=IsVisible}" Value="True">
+                                                        <Setter Property="HeightRequest" Value="0"></Setter>
+                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                    </DataTrigger>
+                                                </StackLayout.Triggers>
+                                            </StackLayout>
+
+                                            <!--No Data-->
+                                            <StackLayout x:Name="stkNoData" IsVisible="False" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
+                                                <Label Text="No available customers" TextColor="Black" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"
+                                           FontSize="16"></Label>
+                                                <StackLayout.Triggers>
+                                                    <MultiTrigger TargetType="StackLayout">
+                                                        <MultiTrigger.Conditions>
+                                                            <BindingCondition Binding="{Binding LstCustomers.Count}" Value="0" />
+                                                        </MultiTrigger.Conditions>
+                                                        <Setter Property="IsVisible" Value="True"></Setter>
+                                                    </MultiTrigger>
+                                                </StackLayout.Triggers>
+                                            </StackLayout>
+                                        </StackLayout>
+                                        <Border BackgroundColor="#8f1fff" 
+                                        Padding="5" 
+                                        VerticalOptions="End"
+                                        HorizontalOptions="End"
+                                        HeightRequest="50"
+                                        WidthRequest="50" Margin="0,0,0,20">
+                                            <Image WidthRequest="25">
+                                                <Image.Source>
+                                                    <FontImageSource Glyph="+" Color="White" FontFamily="FontIconSolid"></FontImageSource>
+                                                </Image.Source>
+                                            </Image>
+
+                                            <Border.Shadow>
+                                                <Shadow Brush="{OnPlatform Android=Gray, iOS=Gray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                            </Border.Shadow>
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="{OnPlatform Android=100,iOS=25}"></RoundRectangle>
+                                            </Border.StrokeShape>
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding CreateNewCustomerCommand}" ></TapGestureRecognizer>
+                                            </Border.GestureRecognizers>
+                                        </Border>
+                                    </Grid>
+                                </StackLayout>
+                            </ContentView>
+                        </tabView:SfTabItem.Content>
+                    </tabView:SfTabItem>
+                    <!--Calls-->
+                    <tabView:SfTabItem TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" BackgroundColor="#f7f5fa">
+                        <tabView:SfTabItem.ImageSource>
+                            <FontImageSource Glyph="" FontFamily="FontIconSolid" Color="Gray"></FontImageSource>
+                        </tabView:SfTabItem.ImageSource>
+                        <tabView:SfTabItem.Content>
+                            <ContentView x:Name="CallsView" Margin="20,20,20,0">
+                                <StackLayout Spacing="15">
+                                    <!--Toolbar-->
+                                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+
+                                        <Label x:Name="CallsTitle" Text="Calls" TextColor="Black" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"
+                                           FontSize="16"/>
+
+                                        <Image x:Name="imgFilter">
+                                            <Image.Source>
+                                                <FontImageSource FontFamily="FontIconSolid" Color="#333" Glyph="" Size="20"></FontImageSource>
+                                            </Image.Source>
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding OpenFilterCallsCommand}"></TapGestureRecognizer>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                    </StackLayout>
+                                    <!--Refresh Button-->
+                                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                                        <Label Text="{Binding TotalCalls,StringFormat='{0} Calls'}" HorizontalOptions="CenterAndExpand" FontSize="13" TextColor="Gray">
+                                        </Label>
+
+                                        <Image x:Name="imgReset" HorizontalOptions="End" VerticalOptions="Start">
+                                            <Image.Source>
+                                                <FontImageSource FontFamily="FontIconSolid" Glyph="" Color="#8f1fff" Size="20"></FontImageSource>
+                                            </Image.Source>
+                                            <Image.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding ResetCallsCommand}"></TapGestureRecognizer>
+                                            </Image.GestureRecognizers>
+                                        </Image>
+                                        <StackLayout.Triggers>
+                                            <DataTrigger TargetType="StackLayout" Binding="{Binding LstCalls.Count}" Value="0">
+                                                <Setter Property="IsVisible" Value="False"></Setter>
+                                            </DataTrigger>
+                                        </StackLayout.Triggers>
+                                    </StackLayout>
+                                    <!--Lst Data-->
+                                    <Grid VerticalOptions="FillAndExpand">
+
+                                        <CollectionView x:Name="lstCalls" SelectionMode="None" VerticalOptions="FillAndExpand"
+                                                  ItemsSource="{Binding LstCalls}" BackgroundColor="White"
+                                                  VerticalScrollBarVisibility="Never">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackLayout Spacing="20">
+
+                                                        <StackLayout Orientation="Horizontal" Spacing="10">
+
+                                                            <Border HorizontalOptions="Start">
+                                                                <Border.Background>
+                                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                                        <GradientStop Color="#B36DFF" Offset="0.0" />
+                                                                        <GradientStop Color="#E06DFF" Offset="1.0" />
+                                                                    </LinearGradientBrush>
+                                                                </Border.Background>
+                                                                <Label Text="{Binding Id,StringFormat='#{0}'}" 
+                                                                       FontAttributes="Bold"
+                                                                       TextColor="#333"  WidthRequest="80"
+                                                                       HorizontalTextAlignment="Center"
+                                                                       VerticalTextAlignment="Center" Padding="15">
+                                                                </Label>
+                                                                <Border.Shadow>
+                                                                    <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                                                </Border.Shadow>
+                                                                <Border.StrokeShape>
+                                                                    <RoundRectangle CornerRadius="10"></RoundRectangle>
+                                                                </Border.StrokeShape>
+                                                            </Border>
+
+                                                            <StackLayout HorizontalOptions="FillAndExpand" Spacing="5" Padding="7,2,10,2">
+
+                                                                <Label Text="{Binding CustomerName}"
+                                                                       FontAttributes="Bold"
+                                                                       FontSize="14"
+                                                                       TextColor="#8f1fff" 
+                                                                       HorizontalTextAlignment="Start"
+                                                                       VerticalTextAlignment="Center"
+                                                                       Padding="0,0,0,0">
+                                                                </Label>
+
+                                                                <StackLayout Orientation="Horizontal" Spacing="15">
+
+                                                                    <StackLayout Orientation="Horizontal" HorizontalOptions="StartAndExpand" Spacing="2">
+                                                                        <Image x:Name="imgPhone" Rotation="100">
+                                                                            <Image.Source>
+                                                                                <FontImageSource FontFamily="FontIconSolid" Color="#b66dff" Glyph="" Size="12"></FontImageSource>
+                                                                            </Image.Source>
+                                                                        </Image>
+
+                                                                        <Label Text="{Binding PhoneNum}" 
+                                                                               FontSize="11"
+                                                                               FontAttributes="Bold"
+                                                                               TextColor="Black" 
+                                                                               HorizontalTextAlignment="Center"
+                                                                               VerticalTextAlignment="Center">
+                                                                        </Label>
+                                                                    </StackLayout>
+
+                                                                    <Label Text="{Binding CreateDate,StringFormat='{0:MM-dd-yyyy, h:mmtt}'}" 
+                                                                           HorizontalOptions="End"
+                                                                           TextColor="#333"
+                                                                           FontSize="12" 
+                                                                           FontAttributes="Bold"
+                                                                           HorizontalTextAlignment="Center"
+                                                                           VerticalTextAlignment="Center"></Label>
+                                                                </StackLayout>
+
+                                                                <StackLayout Orientation="Horizontal">
+
+                                                                    <Label Text="{Binding ReasonName}" HorizontalOptions="StartAndExpand"
+                                                                           FontSize="12"
+                                                                           FontAttributes="Bold"
+                                                                           TextColor="Gray" 
+                                                                           HorizontalTextAlignment="Center"
+                                                                           VerticalTextAlignment="Center">
+                                                                    </Label>
+
+                                                                    <Label Text="{Binding CampaignName}" 
+                                                                           HorizontalOptions="End"
+                                                                           TextColor="Gray"
+                                                                           FontSize="12" 
+                                                                           FontAttributes="Bold"
+                                                                           HorizontalTextAlignment="Center"
+                                                                           VerticalTextAlignment="Center"></Label>
+                                                                </StackLayout>
+                                                            </StackLayout>
+
+                                                            <StackLayout.GestureRecognizers>
+                                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CallsViewModel}}, Path=SelectCallDetailsCommand}" CommandParameter="{Binding}"></TapGestureRecognizer>
+                                                            </StackLayout.GestureRecognizers>
+                                                        </StackLayout>
+                                                    </StackLayout>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                            <CollectionView.ItemsLayout>
+                                                <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="15"></GridItemsLayout>
+                                            </CollectionView.ItemsLayout>
+                                            <CollectionView.Triggers>
+                                                <DataTrigger TargetType="CollectionView" Binding="{Binding LstCalls.Count}" Value="0">
+                                                    <Setter Property="IsVisible" Value="False"></Setter>
+                                                    <Setter Property="HeightRequest" Value="0"></Setter>
+                                                </DataTrigger>
+                                            </CollectionView.Triggers>
+                                        </CollectionView>
+
+                                        <!--No Data-->
+                                        <StackLayout IsVisible="False" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
+                                            <Label Text="No available Calls" TextColor="Black" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"
+                                               FontSize="16"></Label>
+                                            <StackLayout.Triggers>
+                                                <MultiTrigger TargetType="StackLayout">
+                                                    <MultiTrigger.Conditions>
+                                                        <BindingCondition Binding="{Binding LstCalls.Count}" Value="0" />
+                                                    </MultiTrigger.Conditions>
+                                                    <Setter Property="IsVisible" Value="True"></Setter>
+                                                </MultiTrigger>
+                                            </StackLayout.Triggers>
+                                        </StackLayout>
+
+                                        <Border 
+                                           BackgroundColor="#8f1fff" 
+                                           Padding="5" 
+                                           VerticalOptions="End"
+                                           HorizontalOptions="End" 
+                                           HeightRequest="50"
+                                           WidthRequest="50" Margin="0,0,0,20">
+                                            <Image WidthRequest="25">
+                                                <Image.Source>
+                                                    <FontImageSource Glyph="+" Color="White" FontFamily="FontIconSolid"></FontImageSource>
+                                                </Image.Source>
+                                            </Image>
+
+                                            <Border.Shadow>
+                                                <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                            </Border.Shadow>
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="{OnPlatform Android=100, iOS=25}"></RoundRectangle>
+                                            </Border.StrokeShape>
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding CreateNewCallCommand}" ></TapGestureRecognizer>
+                                            </Border.GestureRecognizers>
+                                        </Border>
+                                    </Grid>
+                                </StackLayout>
+                            </ContentView>
+                        </tabView:SfTabItem.Content>
+                    </tabView:SfTabItem>
+                    <!--Time Sheets-->
+                    <tabView:SfTabItem TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" BackgroundColor="#f7f5fa">
+                        <tabView:SfTabItem.ImageSource>
+                            <FontImageSource Glyph="" FontFamily="FontIconSolid" Color="Gray"></FontImageSource>
+                        </tabView:SfTabItem.ImageSource>
+                        <tabView:SfTabItem.Content>
+                            <ContentView x:Name="TimeSheetsView" Margin="20,20,20,10">
+                                <StackLayout Spacing="10">
+                                    <!--Toolbar-->
+                                    <Label x:Name="TimeSheetsTitle" Text="Time Sheet" TextColor="Black" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"
+                                               FontSize="16" Margin="0,0,0,15"/>
+                                    <!--Date-->
+                                    <Border StrokeShape="RoundRectangle 20" BackgroundColor="White" HeightRequest="60" HorizontalOptions="FillAndExpand">
+                                        <StackLayout Orientation="Horizontal" Padding="20,0,20,0" Spacing="0">
+
+                                            <!--Back Date-->
+                                            <Image>
+                                                <Image.Source>
+                                                    <FontImageSource FontFamily="FontIconSolid" Color="Gray" Glyph="" Size="20"></FontImageSource>
+                                                </Image.Source>
+                                                <Image.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding BackDayCommand}"></TapGestureRecognizer>
+                                                </Image.GestureRecognizers>
+                                            </Image>
+
+                                            <Border BackgroundColor="White" HorizontalOptions="FillAndExpand" HeightRequest="60" Margin="50,0,50,0">
+                                                <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                                                    <Label x:Name="lblDate" Text="{Binding Date}" TextColor="#333" FontSize="16"></Label>
+                                                    <Image>
+                                                        <Image.Source>
+                                                            <FontImageSource FontFamily="FontIconSolid" Color="Gray" Glyph="" Size="16"></FontImageSource>
+                                                        </Image.Source>
+                                                    </Image>
+                                                    <StackLayout.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding SelectedDateCommand}"></TapGestureRecognizer>
+                                                    </StackLayout.GestureRecognizers>
+                                                </StackLayout>
+                                                <Border.Shadow>
+                                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                                </Border.Shadow>
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="{OnPlatform Android=50,iOS=25}"></RoundRectangle>
+                                                </Border.StrokeShape>
+                                            </Border>
+
+                                            <!--Next Date-->
+                                            <Image>
+                                                <Image.Source>
+                                                    <FontImageSource FontFamily="FontIconSolid" Color="Gray" Glyph="" Size="20"></FontImageSource>
+                                                </Image.Source>
+                                                <Image.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding NextDayCommand}"></TapGestureRecognizer>
+                                                </Image.GestureRecognizers>
+                                            </Image>
+                                        </StackLayout>
+                                    </Border>
+                                    <!--Search Bar-->
+                                    <Border BackgroundColor="White" HeightRequest="45" Margin="0,10,0,10" HorizontalOptions="FillAndExpand">
+                                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                                            <SearchBar x:Name="srcBarEmployee"
+                                                       Placeholder="Search" TextColor="#333"
+                                                       HorizontalOptions="FillAndExpand" 
+                                                       BackgroundColor="White"
+                                                       FontSize="14"></SearchBar>
+                                        </StackLayout>
+
+                                        <Border.Shadow>
+                                            <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                        </Border.Shadow>
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="{OnPlatform Android=20,iOS=20}" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                        </Border.StrokeShape>
+                                    </Border>
+                                    <tabView:SfTabView IndicatorBackground="#9b5ff5" IndicatorPlacement="Top" FlowDirection="LeftToRight"
+                                                       TabBarHeight="60" VerticalOptions="EndAndExpand" TabBarPlacement="Bottom" Margin="-20,0,-20,-20"
+                                                       SelectionChanged="TimeSheet_SelectionChanged">
+                                        <!--Check In-->
+                                        <tabView:SfTabItem Header="Check In" TextColor="Black" BadgeText="{Binding NumIn}" FontSize="14" FontFamily="Almarai-Regular" 
+                                                           BackgroundColor="#f7f5fa" FontAttributes="Bold">
+                                            <tabView:SfTabItem.Content>
+                                                <ContentView Margin="10,0,10,0">
+                                                    <!--Clock IN-->
+                                                    <StackLayout x:Name="stkClockIN" VerticalOptions="FillAndExpand">
+
+                                                        <CollectionView x:Name="lstEmployeesIn" SelectionMode="None" BackgroundColor="White"
+                                                                      ItemsSource="{Binding LstEmployeesIn}" VerticalOptions="FillAndExpand"
+                                                                      VerticalScrollBarVisibility="Never">
+                                                            <CollectionView.ItemsLayout>
+                                                                <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="15"></GridItemsLayout>
+                                                            </CollectionView.ItemsLayout>
+                                                            <CollectionView.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <StackLayout Spacing="10">
+                                                                        <StackLayout Orientation="Horizontal">
+                                                                            <Border BackgroundColor="#b66dff" HorizontalOptions="FillAndExpand">
+                                                                                <Label Text="{Binding EmployeeName}"
+                                                                                            FontAttributes="Bold"
+                                                                                            TextColor="White" 
+                                                                                            HorizontalTextAlignment="Start"
+                                                                                            VerticalTextAlignment="Center"
+                                                                                            Padding="20,7,20,7"></Label>
+                                                                                <Border.Shadow>
+                                                                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                                                                </Border.Shadow>
+                                                                                <Border.StrokeShape>
+                                                                                    <RoundRectangle CornerRadius="10"></RoundRectangle>
+                                                                                </Border.StrokeShape>
+                                                                                <Border.Triggers>
+                                                                                    <DataTrigger TargetType="Border" Binding="{Binding MytimeSheet}" Value="1">
+                                                                                        <Setter Property="BackgroundColor" Value="#8f1fff"></Setter>
+                                                                                    </DataTrigger>
+                                                                                    <DataTrigger TargetType="Border" Binding="{Binding MytimeSheet}" Value="2">
+                                                                                        <Setter Property="BackgroundColor" Value="#8f1fff"></Setter>
+                                                                                    </DataTrigger>
+                                                                                </Border.Triggers>
+                                                                            </Border>
+
+                                                                            <Label Text="{Binding HoursFrom}" 
+                                                                                    FontSize="12" TextColor="#333" 
+                                                                                    Margin="50,0,0,0"
+                                                                                    FontAttributes="Bold"
+                                                                                    HorizontalOptions="End"
+                                                                                    HorizontalTextAlignment="Center"
+                                                                                    VerticalTextAlignment="Center"></Label>
+                                                                        </StackLayout>
+
+
+                                                                        <StackLayout Orientation="Horizontal" Spacing="10" Padding="10,0,0,0">
+                                                                            <Image>
+                                                                                <Image.Source>
+                                                                                    <FontImageSource FontFamily="FontIconSolid" Color="#b66dff" Glyph="" Size="18"></FontImageSource>
+                                                                                </Image.Source>
+                                                                                <Image.Triggers>
+                                                                                    <DataTrigger TargetType="Image" Binding="{Binding MytimeSheet}" Value="1">
+                                                                                        <Setter Property="Source">
+                                                                                            <Setter.Value>
+                                                                                                <FontImageSource FontFamily="FontIconSolid" Color="#8f1fff" Glyph="" Size="18"></FontImageSource>
+                                                                                            </Setter.Value>
+                                                                                        </Setter>
+                                                                                    </DataTrigger>
+                                                                                    <DataTrigger TargetType="Image" Binding="{Binding MytimeSheet}" Value="2">
+                                                                                        <Setter Property="Source">
+                                                                                            <Setter.Value>
+                                                                                                <FontImageSource FontFamily="FontIconSolid" Color="#8f1fff" Glyph="" Size="18"></FontImageSource>
+                                                                                            </Setter.Value>
+                                                                                        </Setter>
+                                                                                    </DataTrigger>
+                                                                                </Image.Triggers>
+                                                                            </Image>
+                                                                            <Grid HorizontalOptions="FillAndExpand">
+
+                                                                                <ScrollView Orientation="Horizontal" VerticalOptions="CenterAndExpand" HorizontalScrollBarVisibility="Never">
+                                                                                    <Label Text="{Binding BranchName}" TextColor="#333" FontAttributes="Italic" FontSize="14"></Label>
+                                                                                </ScrollView>
+                                                                            </Grid>
+                                                                            <Grid>
+                                                                                <StackLayout x:Name="stkBaseButton" IsVisible="False" Orientation="Horizontal" Spacing="5" HorizontalOptions="EndAndExpand">
+                                                                                    <Button Text="CheckIn" 
+                                                                                             FontSize="11" 
+                                                                                             WidthRequest="{OnPlatform iOS=70}"
+                                                                                             TextTransform="None"
+                                                                                             FontAttributes="Bold"
+                                                                                             CornerRadius="{OnPlatform Android=25,iOS=18}"                  
+                                                                                             HeightRequest="35" 
+                                                                                             TextColor="White"
+                                                                                             BorderColor="#b66dff"
+                                                                                             BorderWidth="1"
+                                                                                             BackgroundColor="#b66dff" 
+                                                                                             HorizontalOptions="Start"
+                                                                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TimeSheetViewModel}}, Path=SelectedTimeInCommand}" CommandParameter="{Binding}">
+                                                                                                                                                                        <!--<Button.Triggers>
+                                                                                             <DataTrigger TargetType="Button" Binding="{Binding MytimeSheet}" Value="2">
+                                                                                                 <Setter Property="BackgroundColor" Value="#a80724"></Setter>
+                                                                                                 <Setter Property="BorderColor" Value="#a80724"></Setter>
+                                                                                             </DataTrigger>
+                                                                                         </Button.Triggers>-->
+                                                                                    </Button>
+
+                                                                                    <Button Text="Checkout"
+                                                                                             FontSize="11" 
+                                                                                             WidthRequest="{OnPlatform iOS=70}"
+                                                                                             TextTransform="None"
+                                                                                             FontAttributes="Bold"
+                                                                                             CornerRadius="{OnPlatform Android=25,iOS=18}" 
+                                                                                             HeightRequest="35" 
+                                                                                             TextColor="Black"
+                                                                                             BorderColor="#b66dff"
+                                                                                             BorderWidth="1"
+                                                                                             BackgroundColor="#eedeff" 
+                                                                                             HorizontalOptions="EndAndExpand"
+                                                                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TimeSheetViewModel}}, Path=SelectedTimeOutCommand}" CommandParameter="{Binding}">
+                                                                                        <Button.Triggers>
+                                                                                            <DataTrigger TargetType="Button" Binding="{Binding Id}" Value="0">
+                                                                                                <Setter Property="IsVisible" Value="False"></Setter>
+                                                                                            </DataTrigger>
+                                                                                        </Button.Triggers>
+                                                                                    </Button>
+                                                                                    <StackLayout.Triggers>
+                                                                                        <DataTrigger TargetType="StackLayout" Binding="{Binding MytimeSheet}" Value="0">
+                                                                                            <Setter Property="IsVisible" Value="True"></Setter>
+                                                                                        </DataTrigger>
+                                                                                    </StackLayout.Triggers>
+                                                                                    <!--<StackLayout.Triggers>
+                                                                                         <DataTrigger TargetType="StackLayout" Binding="{Binding Source={x:Reference stkMyButton},Path=IsVisible}" Value="True">
+                                                                                             <Setter Property="IsVisible" Value="False"></Setter>
+                                                                                         </DataTrigger>
+                                                                                     </StackLayout.Triggers>-->
+                                                                                </StackLayout>
+                                                                            </Grid>
+
+                                                                            <StackLayout x:Name="stkMyButton" IsVisible="False" Orientation="Horizontal" Spacing="5" HorizontalOptions="EndAndExpand">
+                                                                                <Button Text="CheckIn" 
+                                                                                         FontSize="11" IsVisible="False"
+                                                                                         WidthRequest="{OnPlatform iOS=70}"
+                                                                                         TextTransform="None"
+                                                                                         FontAttributes="Bold"
+                                                                                         CornerRadius="{OnPlatform Android=25,iOS=18}"                  
+                                                                                         HeightRequest="35" 
+                                                                                         TextColor="White"
+                                                                                         BorderColor="#8f1fff"
+                                                                                         BorderWidth="1"
+                                                                                         BackgroundColor="#8f1fff" 
+                                                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TimeSheetViewModel}}, Path=SelectedTimeMyStartCommand}" CommandParameter="{Binding}">
+
+                                                                                    <Button.Triggers>
+                                                                                        <DataTrigger TargetType="Button" Binding="{Binding ShowEndTimeBtn}" Value="0">
+                                                                                            <Setter Property="IsVisible" Value="True"></Setter>
+                                                                                        </DataTrigger>
+                                                                                    </Button.Triggers>
+                                                                                </Button>
+
+                                                                                <Button Text="CheckOut" 
+                                                                                         FontSize="11" IsVisible="False"
+                                                                                         WidthRequest="{OnPlatform iOS=70}"
+                                                                                         TextTransform="None"
+                                                                                         FontAttributes="Bold"
+                                                                                         CornerRadius="{OnPlatform Android=25,iOS=18}"                  
+                                                                                         HeightRequest="35" 
+                                                                                         TextColor="White"
+                                                                                         BorderColor="#8f1fff"
+                                                                                         BorderWidth="1"
+                                                                                         BackgroundColor="#8f1fff" 
+                                                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TimeSheetViewModel}}, Path=SelectedTimeMyEndCommand}" CommandParameter="{Binding}">
+                                                                                    <Button.Triggers>
+                                                                                        <DataTrigger TargetType="Button" Binding="{Binding ShowEndTimeBtn}" Value="1">
+                                                                                            <Setter Property="IsVisible" Value="True"></Setter>
+                                                                                        </DataTrigger>
+                                                                                    </Button.Triggers>
+                                                                                </Button>
+
+                                                                                <StackLayout.Triggers>
+                                                                                    <DataTrigger TargetType="StackLayout" Binding="{Binding MytimeSheet}" Value="1">
+                                                                                        <Setter Property="IsVisible" Value="True"></Setter>
+                                                                                    </DataTrigger>
+                                                                                </StackLayout.Triggers>
+                                                                            </StackLayout>
+
+                                                                        </StackLayout>
+
+
+
+                                                                    </StackLayout>
+                                                                </DataTemplate>
+                                                            </CollectionView.ItemTemplate>
+                                                            <CollectionView.Triggers>
+                                                                <DataTrigger TargetType="CollectionView" Binding="{Binding LstEmployeesIn.Count}" Value="0">
+                                                                    <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    <Setter Property="HeightRequest" Value="0"></Setter>
+                                                                </DataTrigger>
+                                                            </CollectionView.Triggers>
+                                                        </CollectionView>
+
+                                                        <StackLayout x:Name="stkNoDataIN" IsVisible="{Binding IsShowNoDataIn}" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
+                                                            <Label Text="No available Data" TextColor="Black" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"
+                                                                    FontSize="16"></Label>
+                                                            <StackLayout.Triggers>
+                                                                <DataTrigger TargetType="StackLayout" Binding="{Binding LstEmployeesIn.Count}" Value="0">
+                                                                    <Setter Property="IsVisible" Value="True"></Setter>
+                                                                </DataTrigger>
+                                                            </StackLayout.Triggers>
+                                                        </StackLayout>
+                                                    </StackLayout>
+                                                </ContentView>
+                                            </tabView:SfTabItem.Content>
+                                        </tabView:SfTabItem>
+                                        <!--Check Out-->
+                                        <tabView:SfTabItem Header="Check Out" BadgeText="{Binding NumOut}" TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" 
+                                                           BackgroundColor="#f7f5fa" FontAttributes="Bold">
+                                            <tabView:SfTabItem.Content>
+                                                <ContentView Margin="10,0,10,0">
+                                                    <!--Clock OUT-->
+                                                    <StackLayout x:Name="stkClockOUT" VerticalOptions="FillAndExpand" IsVisible="False">
+
+                                                        <CollectionView x:Name="lstEmployeesOut" IsVisible="False" SelectionMode="None" VerticalOptions="FillAndExpand"
+                                                                        ItemsSource="{Binding LstEmployeesOut}" BackgroundColor="White"
+                                                                        VerticalScrollBarVisibility="Never">
+                                                            <CollectionView.ItemsLayout>
+                                                                <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="15"></GridItemsLayout>
+                                                            </CollectionView.ItemsLayout>
+                                                            <CollectionView.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <StackLayout Spacing="10">
+                                                                        <StackLayout Orientation="Horizontal">
+                                                                            <Border BackgroundColor="#eedeff" HorizontalOptions="FillAndExpand">
+                                                                                <Label Text="{Binding EmployeeName}"
+                                                                                        FontAttributes="Bold"
+                                                                                        TextColor="Gray" 
+                                                                                        HorizontalTextAlignment="Start"
+                                                                                        VerticalTextAlignment="Center"
+                                                                                        Padding="20,7,20,7"></Label>
+
+                                                                                <Border.Shadow>
+                                                                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                                                                </Border.Shadow>
+                                                                                <Border.StrokeShape>
+                                                                                    <RoundRectangle CornerRadius="10" Stroke="#b66dff" StrokeThickness="2"></RoundRectangle>
+                                                                                </Border.StrokeShape>
+                                                                            </Border>
+
+                                                                            <StackLayout Orientation="Horizontal" HorizontalOptions="End" Margin="20,0,0,0" Spacing="20">
+                                                                                <StackLayout Spacing="0">
+                                                                                    <Label Text="In" FontSize="12" 
+                                                                                            TextColor="#65a88c"
+                                                                                            FontAttributes="Bold"
+                                                                                            HorizontalTextAlignment="Center"
+                                                                                            VerticalTextAlignment="Center"></Label>
+                                                                                    <Label Text="{Binding HoursFrom,StringFormat='{0:HH:mm}'}" 
+                                                                                                FontSize="12" 
+                                                                                                TextColor="#65a88c"
+                                                                                                FontAttributes="Bold"
+                                                                                                HorizontalTextAlignment="Center"
+                                                                                                VerticalTextAlignment="Center"></Label>
+                                                                                </StackLayout>
+
+                                                                                <StackLayout Spacing="0">
+                                                                                    <Label Text="Out" 
+                                                                                            FontSize="12" 
+                                                                                            TextColor="Red"
+                                                                                            FontAttributes="Bold"
+                                                                                            HorizontalTextAlignment="Center"
+                                                                                            VerticalTextAlignment="Center"></Label>
+                                                                                    <Label Text="{Binding HoursTo,StringFormat='{0:HH:mm}'}" 
+                                                                                            FontSize="12" 
+                                                                                            TextColor="Red"
+                                                                                            FontAttributes="Bold"
+                                                                                            HorizontalTextAlignment="Center"
+                                                                                            VerticalTextAlignment="Center"></Label>
+                                                                                </StackLayout>
+
+                                                                            </StackLayout>
+
+                                                                        </StackLayout>
+
+                                                                        <StackLayout Orientation="Horizontal" Spacing="10" Padding="10,0,0,0">
+                                                                            <Image>
+                                                                                <Image.Source>
+                                                                                    <FontImageSource FontFamily="FontIconSolid" Color="Gray" Glyph="" Size="18"></FontImageSource>
+                                                                                </Image.Source>
+                                                                            </Image>
+                                                                            <Label Text="{Binding BranchName}" TextColor="#333" FontAttributes="Italic" VerticalTextAlignment="Center" FontSize="14"></Label>
+
+                                                                        </StackLayout>
+
+                                                                    </StackLayout>
+                                                                </DataTemplate>
+                                                            </CollectionView.ItemTemplate>
+                                                            <CollectionView.Triggers>
+                                                                <DataTrigger TargetType="CollectionView" Binding="{Binding LstEmployeesOut.Count}" Value="0">
+                                                                    <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    <Setter Property="HeightRequest" Value="0"></Setter>
+                                                                </DataTrigger>
+                                                            </CollectionView.Triggers>
+                                                        </CollectionView>
+
+                                                        <StackLayout x:Name="stkNoDataOUT" IsVisible="{Binding IsShowNoDataOut}" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
+                                                            <Label Text="No available Data" TextColor="Black" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" FontSize="16"></Label>
+                                                            <StackLayout.Triggers>
+                                                                <DataTrigger TargetType="StackLayout" Binding="{Binding LstEmployeesOut.Count}" Value="0">
+                                                                    <Setter Property="IsVisible" Value="True"></Setter>
+                                                                </DataTrigger>
+                                                            </StackLayout.Triggers>
+                                                        </StackLayout>
+                                                    </StackLayout>
+                                                </ContentView>
+                                            </tabView:SfTabItem.Content>
+                                        </tabView:SfTabItem>
+                                    </tabView:SfTabView>
+                                </StackLayout>
+                            </ContentView>
+                        </tabView:SfTabItem.Content>
+                    </tabView:SfTabItem>
+                    <!--More-->
+                    <tabView:SfTabItem TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" BackgroundColor="#f7f5fa">
+                        <tabView:SfTabItem.ImageSource>
+                            <FontImageSource Glyph="" FontFamily="FontIconSolid" Color="Gray"></FontImageSource>
+                        </tabView:SfTabItem.ImageSource>
+                        <tabView:SfTabItem.Content>
+                            <ContentView x:Name="MoreView" Margin="20,20,20,0">
+                                <StackLayout Spacing="30">
+                                    <!--Header-->
+                                    <Label Text="More" FontAutoScalingEnabled="False" FontSize="18" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"
+                                       TextColor="Black"></Label>
+                                    <!--Account & All Employees & Tracking-->
+                                    <Border StrokeThickness="1.5" StrokeShape="RoundRectangle 15" Padding="10" BackgroundColor="White">
+                                        <Border.Stroke>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Color="#B36DFF" Offset="0.0" />
+                                                <GradientStop Color="#E06DFF" Offset="1.0" />
+                                            </LinearGradientBrush>
+                                        </Border.Stroke>
+                                        <VerticalStackLayout Spacing="15">
+                                            <!--Account-->
+                                            <VerticalStackLayout>
+                                                <StackLayout Orientation="Horizontal">
+                                                    <Label Text="Account" FontAutoScalingEnabled="False" TextColor="Black" FontSize="14" 
+                                                       VerticalTextAlignment="Start" FontAttributes="Bold"></Label>
+                                                    <Image HorizontalOptions="EndAndExpand">
+                                                        <Image.Source>
+                                                            <FontImageSource Glyph="" FontFamily="FontIconSolid" Color="Black" Size="20"></FontImageSource>
+                                                        </Image.Source>
+                                                    </Image>
+                                                    <StackLayout.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding SelectedAccountPageCommand}"></TapGestureRecognizer>
+                                                    </StackLayout.GestureRecognizers>
+                                                </StackLayout>
+                                            </VerticalStackLayout>
+                                            <!--All Employees-->
+                                            <VerticalStackLayout>
+                                                <StackLayout Orientation="Horizontal">
+                                                    <Label Text="All Employees" FontAutoScalingEnabled="False" TextColor="Black" FontSize="14" 
+                                                           VerticalTextAlignment="Start" FontAttributes="Bold"></Label>
+                                                    <Image HorizontalOptions="EndAndExpand">
+                                                        <Image.Source>
+                                                            <FontImageSource Glyph="" FontFamily="FontIconSolid" Color="Black" Size="20"></FontImageSource>
+                                                        </Image.Source>
+                                                    </Image>
+                                                    <StackLayout.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding SelectedAllEmployeesPageCommand}"></TapGestureRecognizer>
+                                                    </StackLayout.GestureRecognizers>
+                                                </StackLayout>
+                                            </VerticalStackLayout>
+
+                                            <!--Tracking--> 
+                                            <VerticalStackLayout IsVisible="False">
+                                                <StackLayout Orientation="Horizontal">
+                                                    <Label Text="Tracking" FontAutoScalingEnabled="False" TextColor="Black" FontSize="14" VerticalTextAlignment="Start" FontAttributes="Bold"></Label>
+                                                    <Image HorizontalOptions="EndAndExpand">
+                                                        <Image.Source>
+                                                            <FontImageSource Glyph="" FontFamily="FontIconSolid" Color="Black" Size="20"></FontImageSource>
+                                                        </Image.Source>
+                                                    </Image>
+                                                    <StackLayout.GestureRecognizers>
+                                                        <TapGestureRecognizer Command="{Binding SelectedEmployeesWorkingPageCommand}"></TapGestureRecognizer>
+                                                    </StackLayout.GestureRecognizers>
+                                                </StackLayout>
+                                            </VerticalStackLayout>
+                                        </VerticalStackLayout>
+                                    </Border>
+                                    <!--logout-->
+                                    <Border StrokeThickness="1.5" StrokeShape="RoundRectangle 15" Padding="10" BackgroundColor="White">
+                                        <Border.Stroke>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                <GradientStop Color="#B36DFF" Offset="0.0" />
+                                                <GradientStop Color="#E06DFF" Offset="1.0" />
+                                            </LinearGradientBrush>
+                                        </Border.Stroke>
+                                        <!--logout-->
+                                        <VerticalStackLayout>
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label Text="Exit" FontAutoScalingEnabled="False" TextColor="Black" FontSize="14" 
+                                                   VerticalTextAlignment="Start" FontAttributes="Bold"></Label>
+                                                <Image HorizontalOptions="EndAndExpand">
+                                                    <Image.Source>
+                                                        <FontImageSource Glyph="" FontFamily="FontIconSolid" Color="Black" Size="20"></FontImageSource>
+                                                    </Image.Source>
+                                                    <Image.Triggers>
+                                                        <DataTrigger TargetType="Image" Binding="{Binding Lang}" Value="ar">
+                                                            <Setter Property="Rotation" Value="180"></Setter>
+                                                        </DataTrigger>
+                                                    </Image.Triggers>
+                                                </Image>
+                                                <StackLayout.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="ExitTapped"></TapGestureRecognizer>
+                                                </StackLayout.GestureRecognizers>
+                                            </StackLayout>
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </StackLayout>
+                            </ContentView>
+                        </tabView:SfTabItem.Content>
+                    </tabView:SfTabItem>
+                </tabView:SfTabView.Items>
+            </tabView:SfTabView>
+        </StackLayout>
+        <!--Notification Alert-->
+        <Grid x:Name="grdNotify" HorizontalOptions="Start" VerticalOptions="Start" Margin="10,20,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height=".5*"></RowDefinition>
+
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+
+            </Grid.ColumnDefinitions>
+
+            <Image Grid.Row="0" 
+                   Grid.RowSpan="5"
+                   Grid.Column="1"
+                   Grid.ColumnSpan="6" WidthRequest="20">
+                <Image.Source>
+                    <FontImageSource FontFamily="FontIcon" Glyph="" Color="Black" Size="20"></FontImageSource>
+                </Image.Source>
+            </Image>
+
+            <Border StrokeShape="RoundRectangle 20"  TranslationY="-10"
+                    BackgroundColor="#b66dff"
+                    HeightRequest="22"
+                    WidthRequest="22"
+                    Margin="0" 
+                    Padding="0"
+                    Grid.Column="4"
+                    Grid.ColumnSpan="4"
+                    Grid.Row="0"
+                    Grid.RowSpan="4">
+                <Label x:Name="lblBadge"
+                       Text="{Binding NumNotify}"
+                       FontSize="9" 
+                       VerticalTextAlignment="Center"
+                       WidthRequest="10" 
+                       HeightRequest="16" 
+                       HorizontalTextAlignment="Center" 
+                       TextColor="White" 
+                       BackgroundColor="#b66dff">
+                </Label>
+                <Border.Triggers>
+                    <DataTrigger TargetType="Border" Binding="{Binding Source={x:Reference lblBadge},Path=Text}" Value="0">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                </Border.Triggers>
+            </Border>
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding SelectedNotificationsPageCommand}"></TapGestureRecognizer>
+            </Grid.GestureRecognizers>
+        </Grid>
+    </Grid>
+
+
+</Controls:CustomsPage>

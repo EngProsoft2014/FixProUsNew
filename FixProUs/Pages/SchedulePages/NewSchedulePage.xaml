@@ -1,0 +1,811 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                     x:Class="FixProUs.Pages.SchedulePages.NewSchedulePage"
+                      xmlns:Controls="clr-namespace:FixProUs.Controls"
+                      xmlns:Helpers="clr-namespace:FixProUs.Helpers"
+                      xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                      xmlns:combobox="clr-namespace:Syncfusion.Maui.Inputs;assembly=Syncfusion.Maui.Inputs"
+                      xmlns:maps="http://schemas.microsoft.com/dotnet/2021/maui/maps"
+                      BackgroundColor="White"
+                      x:Name="page"
+                      IsEnabled="{Binding IsEnable}">
+
+    <StackLayout>
+
+        <!--Header-->
+        <StackLayout Orientation="Horizontal" Spacing="0">
+
+            <StackLayout Orientation="Horizontal" Spacing="0" Padding="{OnPlatform iOS='20,0,20,10', Android='15,10,15,10'}" HorizontalOptions="FillAndExpand">
+
+                <Image x:Name="imgBack">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="20"></FontImageSource>
+                    </Image.Source>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped1"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+                <StackLayout HeightRequest="30" Spacing="0" HorizontalOptions="CenterAndExpand" TranslationX="0">
+                    <Label x:Name="lblTitle"
+                        VerticalOptions="FillAndExpand" Style="{StaticResource lblHeaderText}"
+                        HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding SchedulePage}" Value="0">
+                                <Setter Property="Text" Value="New Schedule"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding SchedulePage}" Value="1">
+                                <Setter Property="Text" Value="{Binding ScheduleDetails.Title}"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="1">
+                                <Setter Property="TextColor" Value="#027db3"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="2">
+                                <Setter Property="TextColor" Value="#1b7302"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding ScheduleDetails.ShowCheckBtn}" Value="2">
+                                <Setter Property="TextColor" Value="#1b7302"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="0">
+                                <Setter Property="TextColor" Value="Red"></Setter>
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                    <Label FontSize="12" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="1">
+                                <Setter Property="Text" Value="Open"></Setter>
+                                <Setter Property="TextColor" Value="#027db3"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="2">
+                                <Setter Property="Text" Value="Completed"></Setter>
+                                <Setter Property="TextColor" Value="#1b7302"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="0">
+                                <Setter Property="Text" Value="Not Serviced"></Setter>
+                                <Setter Property="TextColor" Value="Red"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding ScheduleDetails.ShowCheckBtn}" Value="2">
+                                <Setter Property="Text" Value="Completed"></Setter>
+                                <Setter Property="TextColor" Value="#1b7302"></Setter>
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                    <StackLayout.Triggers>
+                        <DataTrigger TargetType="StackLayout" Binding="{Binding ScheduleDetails.Recurring}" Value="True">
+                            <Setter Property="TranslationX" Value="25"></Setter>
+                        </DataTrigger>
+                    </StackLayout.Triggers>
+                </StackLayout>
+
+            </StackLayout>
+            <Label Text="Recurring" IsVisible="False" 
+                    TextColor="#b66dff"
+                    BackgroundColor="Transparent"
+                    TextTransform="None"
+                    FontSize="12" 
+                    VerticalTextAlignment="Center"
+                    HorizontalOptions="End"
+                    Margin="{OnPlatform Android='0,0,10,0', iOS='0,40,10,0'}">
+                <Label.Triggers>
+                    <DataTrigger TargetType="Label" Binding="{Binding ScheduleDetails.Recurring}" Value="True">
+                        <Setter Property="IsVisible" Value="True"></Setter>
+                    </DataTrigger>
+                </Label.Triggers>
+            </Label>
+        </StackLayout>
+
+        <Grid VerticalOptions="FillAndExpand">
+            <ScrollView Padding="0,0,0,80">
+                <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+
+                    <!--<Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>-->
+
+                    <StackLayout Margin="0,5,0,5" Spacing="0" BackgroundColor="#faf5ff" HeightRequest="50">
+
+                        <Border BackgroundColor="#faf5ff" Padding="10" HorizontalOptions="FillAndExpand">
+
+                            <StackLayout>
+                                <Label Text="{Binding BranchName}" 
+                                      TextColor="#902cf5"
+                                      BackgroundColor="#faf5ff"
+                                      TextTransform="None"
+                                      FontSize="14" 
+                                      VerticalTextAlignment="Center"
+                                      HorizontalOptions="CenterAndExpand"
+                                      VerticalOptions="CenterAndExpand">
+                                </Label>
+                            </StackLayout>
+
+                            <Border.StrokeShape>
+                                <RoundRectangle Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                            </Border.StrokeShape>
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=2}"></Shadow>
+                            </Border.Shadow>
+                        </Border>
+
+                    </StackLayout>
+
+
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Padding="20,0,20,10" Spacing="20">
+                        <Label Text="Customer" FontSize="15" TextColor="#262626" FontAttributes="Bold" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                        <Image HorizontalOptions="End" VerticalOptions="Center">
+                            <Image.Source>
+                                <FontImageSource FontFamily="FontIconSolid" Color="#b66dff" Glyph="" Size="20"></FontImageSource>
+                            </Image.Source>
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OpenCustomerDetailsCommand}" CommandParameter="{Binding CustomerDetails}"></TapGestureRecognizer>
+                            </Image.GestureRecognizers>
+                        </Image>
+
+
+                    </StackLayout>
+
+
+                    <!--<Label Text="Customer" Padding="20,0,20,0" FontSize="15" TextColor="#262626" FontAttributes="Bold" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>-->
+
+                    <!--Customer Name-->
+                    <StackLayout  HorizontalOptions="FillAndExpand" Padding="20,0,20,10">
+
+
+                        <Border BackgroundColor="White">
+                            <StackLayout>
+                                <StackLayout Orientation="Horizontal" Spacing="10" Padding="15,10,15,0" >
+                                    <Image HorizontalOptions="Start" VerticalOptions="Center">
+                                        <Image.Source>
+                                            <FontImageSource FontFamily="FontIconSolid" Color="Black" Glyph="" Size="22"></FontImageSource>
+                                        </Image.Source>
+                                    </Image>
+                                    <Label  VerticalTextAlignment="Center"
+                                            FontAttributes="Bold"
+                                            FontSize="13" 
+                                            TextColor="#333" 
+                                            HorizontalOptions="FillAndExpand">
+                                        <Label.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding Path="CustomerDetails.FirstName" />
+                                                <Binding Path="CustomerDetails.LastName" />
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+                                </StackLayout>
+
+                                <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>
+
+                                <StackLayout Orientation="Horizontal" Padding="15,0,15,0" Spacing="5">
+                                    <Image HorizontalOptions="Start" VerticalOptions="Center">
+                                        <Image.Source>
+                                            <FontImageSource FontFamily="FontIconSolid" Color="Gray" Glyph="" Size="10"></FontImageSource>
+                                        </Image.Source>
+                                    </Image>
+                                    <Label  
+                                        Text="{Binding CustomerDetails.Address}"
+                                        FontSize="13" TextColor="Black"
+                                        VerticalTextAlignment="Center"
+                                        HorizontalOptions="FillAndExpand">
+                                    </Label>
+                                </StackLayout>
+
+
+                                <StackLayout Orientation="Horizontal" Margin="15,0,15,10">
+                                    <StackLayout Orientation="Vertical">
+                                        <Label Text="Year Built" TextColor="Black" FontSize="12" HorizontalOptions="StartAndExpand"></Label>
+                                        <Label 
+                                              Text="{Binding CustomerDetails.YearBuit}"      
+                                              HorizontalOptions="FillAndExpand"
+                                              FontSize="12" TextColor="Black"
+                                               HorizontalTextAlignment ="Center"
+                                              VerticalTextAlignment="Center">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding CustomerDetails.YearBuit}" Value="0">
+                                                    <Setter Property="Text" Value=""></Setter>
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                    </StackLayout>
+
+                                    <StackLayout Orientation="Vertical" HorizontalOptions="CenterAndExpand">
+                                        <Label Text="Estimate Value" TextColor="Black" FontSize="12" HorizontalOptions="StartAndExpand"></Label>
+                                        <Label 
+                                              Text="{Binding CustomerDetails.EstimedValue}"            
+                                              FontSize="12" TextColor="Black"
+                                              HorizontalTextAlignment ="Center"
+                                              HorizontalOptions="FillAndExpand"
+                                              VerticalTextAlignment="Center">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding CustomerDetails.EstimedValue}" Value="0">
+                                                    <Setter Property="Text" Value=""></Setter>
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                    </StackLayout>
+
+                                    <StackLayout Orientation="Vertical">
+                                        <Label Text="Square Footage" TextColor="Black" FontSize="12" HorizontalOptions="StartAndExpand"></Label>
+
+                                        <Label 
+                                                Text="{Binding CustomerDetails.Squirefootage}"               
+                                                FontSize="12" TextColor="Black"
+                                                HorizontalOptions="FillAndExpand"
+                                                HorizontalTextAlignment ="Center"
+                                                VerticalTextAlignment="Center">
+                                            <Label.Triggers>
+                                                <DataTrigger TargetType="Label" Binding="{Binding CustomerDetails.Squirefootage}" Value="0">
+                                                    <Setter Property="Text" Value=""></Setter>
+                                                </DataTrigger>
+                                            </Label.Triggers>
+                                        </Label>
+                                    </StackLayout>
+
+                                </StackLayout>
+
+
+                                <Grid HeightRequest="90" Padding="0" Margin="0">
+
+                                    <maps:Map x:Name="map" 
+                                               IsShowingUser="True"
+                                               IsZoomEnabled="True"
+                                              HorizontalOptions="FillAndExpand" 
+                                              VerticalOptions="FillAndExpand"
+                                              MapType="Street" 
+                                              MapClicked="map_MapClicked">
+                                        <maps:Map.ItemTemplate>
+                                            <DataTemplate>
+                                                <maps:Pin Type="Generic" Location="{Binding MPosition}" Label="{Binding Address}" MarkerId="{Binding Id}">
+
+                                                </maps:Pin>
+                                            </DataTemplate>
+                                        </maps:Map.ItemTemplate>
+                                    </maps:Map>
+
+                                    <Label x:Name="lbllocationlatitude" IsVisible="False" Text="{Binding CustomerDetails.locationlatitude}" TextColor="Black"></Label>
+                                    <Label x:Name="lbllocationlongitude" IsVisible="False" Text="{Binding CustomerDetails.locationlongitude}" TextColor="Black"></Label>
+
+                                </Grid>
+                            </StackLayout>
+
+
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                            </Border.StrokeShape>
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                            </Border.Shadow>
+                        </Border>
+                    </StackLayout>
+
+
+                    <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>
+
+                    <Label Text="Job Details" Padding="20,10,20,0" FontSize="15" TextColor="#262626" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="Center"></Label>
+
+                    <Grid HorizontalOptions="FillAndExpand">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"></RowDefinition>
+                            <RowDefinition Height="12"></RowDefinition>
+                            <RowDefinition Height="22"></RowDefinition>
+                            <RowDefinition Height="1*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="100"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <!--Title-->
+                        <StackLayout Grid.RowSpan="5" Grid.ColumnSpan="5" HorizontalOptions="FillAndExpand" Padding="20,0,20,10">
+                            <Label Text="Title" TextColor="#333" FontSize="13" FontAttributes="Bold" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                            <StackLayout>
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}" HorizontalOptions="FillAndExpand">
+                                    <Entry  Text="{Binding ScheduleDetails.Title}"
+                                            FontSize="13" TextColor="#333"
+                                            Placeholder="Enter Title"
+                                            HorizontalOptions="FillAndExpand">
+                                        <Entry.Triggers>
+                                            <DataTrigger TargetType="Entry" Binding="{Binding ScheduleDetails.IsStopUpdateSchedule}" Value="False">
+                                                <Setter Property="IsReadOnly" Value="True"></Setter>
+                                            </DataTrigger>
+                                        </Entry.Triggers>
+                                    </Entry>
+
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                </Border>
+                            </StackLayout>
+                        </StackLayout>
+                    </Grid>
+
+                    <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="FillAndExpand" Padding="20,0,20,10">
+
+                        <!--Priority-->
+                        <StackLayout HorizontalOptions="Start" WidthRequest="150">
+                            <Label Text="Priority" FontSize="13" TextColor="#333" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                            <Border BackgroundColor="White" Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}">
+                                <Picker ItemsSource="{Binding LstPriority}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding OnePriorityModel,Mode=TwoWay}"
+                                  Title="Priority" TitleColor="Gray"
+                                  FontSize="12" TextColor="#333"
+                                  HorizontalOptions="FillAndExpand">
+                                </Picker>
+
+                                <!--<combobox:SfComboBox x:Name="comboBox" 
+                                                     ItemsSource="{Binding LstPriority}"
+                                                     SelectedItem="{Binding OnePriorityModel,Mode=TwoWay}" 
+                                                     FontSize="12" HeightRequest="40"
+                                                     Placeholder="Priority" TextColor="#333" PlaceholderColor="Grey"
+                                                     MaxDropDownHeight="200" 
+                                                     IsFilteringEnabled="False"
+                                                     IsEditable="False"
+                                                     IsClearButtonVisible="False"
+                                                     FontAttributes="Bold"
+                                                     DisplayMemberPath="Name">
+
+                                </combobox:SfComboBox>-->
+
+
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                                <Border.Triggers>
+                                    <DataTrigger TargetType="Border" Binding="{Binding ScheduleDetails.IsStopUpdateSchedule}" Value="False">
+                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Border" Binding="{Binding ScheduleDetails.Recurring}" Value="True">
+                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Border" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="0">
+                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Border" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="2">
+                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Border" Binding="{Binding ScheduleDetails.ShowCheckBtn}" Value="2">
+                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                    </DataTrigger>
+                                </Border.Triggers>
+                            </Border>
+                        </StackLayout>
+
+                        <!--Job Date-->
+                        <StackLayout HorizontalOptions="EndAndExpand" WidthRequest="150">
+                            <Label Text="Job Date" FontSize="13" TextColor="#333" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                            <Border BackgroundColor="White" Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}">
+                                <DatePicker 
+                                     Date="{Binding ScheduleDate}"
+                                     FontSize="13" TextColor="Black"
+                                     HorizontalOptions="FillAndExpand">
+                                </DatePicker>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                            </Border>
+                        </StackLayout>
+
+                        <StackLayout.Triggers>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="0">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="2">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding ScheduleDetails.ShowCheckBtn}" Value="2">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                        </StackLayout.Triggers>
+                    </StackLayout>
+
+
+                    <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="FillAndExpand" Padding="20,0,20,10">
+
+                        <!--Start Time-->
+                        <StackLayout HorizontalOptions="StartAndExpand" WidthRequest="150">
+                            <Label Text="Start Time" FontSize="13" HorizontalOptions="Start" TextColor="#333" VerticalTextAlignment="Center"></Label>
+                            <Border BackgroundColor="White" Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}">
+                                <TimePicker 
+                                    Time="{Binding TimeFrom}"
+                                    FontSize="13" TextColor="Black"
+                                    HorizontalOptions="FillAndExpand">
+                                </TimePicker>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                            </Border>
+                        </StackLayout>
+
+                        <!--End Time-->
+                        <StackLayout HorizontalOptions="EndAndExpand" WidthRequest="150">
+                            <Label Text="End Time" FontSize="13" HorizontalOptions="Start" TextColor="#333" VerticalTextAlignment="Center"></Label>
+                            <Border BackgroundColor="White" Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}">
+                                <TimePicker 
+                                         Time="{Binding TimeTo}"
+                                         FontSize="13" TextColor="Black"
+                                         HorizontalOptions="FillAndExpand">
+                                </TimePicker>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                            </Border>
+                        </StackLayout>
+
+                        <StackLayout.Triggers>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="0">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="2">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding ScheduleDetails.ShowCheckBtn}" Value="2">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                        </StackLayout.Triggers>
+                    </StackLayout>
+
+
+                    <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>
+
+
+                    <Label Text="Assign" Padding="20,10,20,0" FontSize="15" TextColor="#262626" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="Center"></Label>
+
+                    <!--Assigned-->
+                    <StackLayout Spacing="20" HorizontalOptions="FillAndExpand" Padding="20,0,20,10">
+
+                        <StackLayout Spacing="15">
+
+                            <!--Services-->
+                            <StackLayout HorizontalOptions="FillAndExpand">
+                                <Label Text="Services" FontSize="13" HorizontalOptions="Start" TextColor="#333" VerticalTextAlignment="Center"></Label>
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}">
+
+                                    <!--<combobox:SfComboBox 
+                                                ItemsSource="{Binding LstServices}"
+                                                SelectedItem="{Binding SelectedService,Mode=TwoWay}" 
+                                                Placeholder="Service"            
+                                                FontSize="12" HeightRequest="40"
+                                                MaxDropDownHeight="200" 
+                                                IsFilteringEnabled="False"
+                                                IsEditable="False"
+                                                IsClearButtonVisible="False"
+                                                FontAttributes="Bold"
+                                                DisplayMemberPath="Name">
+
+                                    </combobox:SfComboBox>-->
+                                    <Picker ItemsSource="{Binding LstServices}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedService,Mode=TwoWay}"
+                                            TextColor="Black"          
+                                            Title="Service" TitleColor="Gray"
+                                            FontSize="14"
+                                            HorizontalOptions="FillAndExpand"
+                                            VerticalTextAlignment="Center">
+                                    </Picker>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                    <Border.Triggers>
+                                        <DataTrigger TargetType="Border" Binding="{Binding ScheduleDetails.IsStopUpdateSchedule}" Value="False">
+                                            <Setter Property="IsEnabled" Value="False"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Border" Binding="{Binding ScheduleDetails.Recurring}" Value="True">
+                                            <Setter Property="IsEnabled" Value="False"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Border" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="0">
+                                            <Setter Property="IsEnabled" Value="False"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Border" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="2">
+                                            <Setter Property="IsEnabled" Value="False"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Border" Binding="{Binding ScheduleDetails.ShowCheckBtn}" Value="2">
+                                            <Setter Property="IsEnabled" Value="False"></Setter>
+                                        </DataTrigger>
+                                    </Border.Triggers>
+                                </Border>
+                            </StackLayout>
+
+
+                            <!--Depatrment-->
+                            <StackLayout HorizontalOptions="FillAndExpand">
+                                <Label Text="Depatrment" FontSize="13" TextColor="#333" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}">
+
+
+                                    <!--<combobox:SfComboBox 
+                                            ItemsSource="{Binding LstEmpCategory}"
+                                            SelectedItem="{Binding SelectedCateory,Mode=TwoWay}"
+                                            SelectionChanged="SfComboBox_SelectionChanged"    
+                                            Placeholder="Depatrment"  
+                                            FontSize="13"  
+                                            HeightRequest="40" 
+                                            MaxDropDownHeight="200" 
+                                            IsFilteringEnabled="False"
+                                            IsEditable="False"
+                                            IsClearButtonVisible="False"
+                                            FontAttributes="Bold"
+                                            DisplayMemberPath="CategoryName">
+                                    </combobox:SfComboBox>-->
+
+                                    <Picker ItemsSource="{Binding LstEmpCategory}" ItemDisplayBinding="{Binding CategoryName}" SelectedItem="{Binding SelectedCateory,Mode=TwoWay}" SelectedIndexChanged="Picker_SelectedIndexChanged"
+                                            TextColor="Black"          
+                                            Title="Department" TitleColor="Gray"
+                                            FontSize="14"
+                                            HorizontalOptions="FillAndExpand"
+                                            VerticalTextAlignment="Center">
+                                    </Picker>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                </Border>
+                            </StackLayout>
+
+
+                            <!--Choose Employees-->
+                            <StackLayout Spacing="20">
+
+                                <StackLayout HorizontalOptions="FillAndExpand">
+                                    <StackLayout>
+                                        <Label Text="Choose Technicions" TextColor="Black" FontSize="13" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                                        <Border BackgroundColor="White" HeightRequest="40" Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}">
+                                            <StackLayout>
+                                                <Label 
+                                                        Padding="10,12,10,12"
+                                                        FontSize="13" TextColor="Black"
+                                                        Text="{Binding StrEmployees}"
+                                                    HorizontalOptions="FillAndExpand">
+                                                </Label>
+                                                <StackLayout>
+
+                                                    <StackLayout.Triggers>
+                                                        <DataTrigger TargetType="StackLayout" Binding="{Binding LstEmpInOneCategory.Count}" Value="0">
+                                                            <Setter Property="HeightRequest" Value="0"></Setter>
+                                                            <Setter Property="IsVisible" Value="False"></Setter>
+                                                        </DataTrigger>
+                                                    </StackLayout.Triggers>
+                                                </StackLayout>
+
+                                            </StackLayout>
+                                            <Border.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding OpenEmployeesInOneCategoryCommand}"></TapGestureRecognizer>
+                                            </Border.GestureRecognizers>
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                            </Border.StrokeShape>
+                                            <Border.Shadow>
+                                                <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                            </Border.Shadow>
+                                        </Border>
+                                    </StackLayout>
+                                </StackLayout>
+
+                                <Border BackgroundColor="White" Padding="0" Margin="0,0,0,10">
+
+
+                                    <ListView x:Name="lstEmps" SelectionMode="None"
+                                            ItemsSource="{Binding LstEmps}" 
+                                            HasUnevenRows="True" BackgroundColor="White" 
+                                            HeightRequest="140"
+                                            SeparatorVisibility="None"
+                                            VerticalScrollBarVisibility="Never">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <ViewCell>
+                                                    <StackLayout Spacing="0">
+                                                        <StackLayout Orientation="Horizontal" Spacing="0" Padding="15,0,10,0" HorizontalOptions="FillAndExpand">
+                                                            <Image HorizontalOptions="Start" VerticalOptions="Center" Margin="0,10,0,0">
+                                                                <Image.Source>
+                                                                    <FontImageSource FontFamily="FontIconSolid" Color="#b66dff" Glyph="" Size="8"></FontImageSource>
+                                                                </Image.Source>
+                                                            </Image>
+
+                                                            <Label Padding="10,10,10,0"
+                                                                    Text="{Binding EmpFullName}"
+                                                                    FontSize="14"
+                                                                    TextColor="#333"
+                                                                    HorizontalTextAlignment="Start"
+                                                                    VerticalTextAlignment="Center"
+                                                                    HorizontalOptions="FillAndExpand">
+                                                            </Label>
+
+                                                            <Label Padding="10,10,10,0"
+                                                                    FontSize="13" TextColor="Black" 
+                                                                    HorizontalTextAlignment="Start"
+                                                                    VerticalTextAlignment="Center"
+                                                                    HorizontalOptions="End">
+                                                                <Label.Triggers>
+                                                                    <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="1">
+                                                                        <Setter Property="Text" Value="Open"></Setter>
+                                                                        <Setter Property="TextColor" Value="#538dd4"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="Label" Binding="{Binding Status}" Value="2">
+                                                                        <Setter Property="Text" Value="Completed"></Setter>
+                                                                        <Setter Property="TextColor" Value="Green"></Setter>
+                                                                    </DataTrigger>
+                                                                </Label.Triggers>
+                                                            </Label>
+
+                                                            <Image HorizontalOptions="End" Margin="10,10,0,0" IsVisible="False">
+                                                                <Image.Source>
+                                                                    <FontImageSource FontFamily="FontIcon" Color="#b66dff" Glyph="" Size="18"></FontImageSource>
+                                                                </Image.Source>
+                                                                <Image.GestureRecognizers>
+                                                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AddScheduleViewModel}}, Path=RemoveEmployeeCommand}" CommandParameter="{Binding}"></TapGestureRecognizer>
+                                                                </Image.GestureRecognizers>
+                                                                <Image.Triggers>
+                                                                    <DataTrigger TargetType="Image" Binding="{Binding Status}" Value="2">
+                                                                        <Setter Property="IsVisible" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="Image" Binding="{Binding EmployeePermission.UserRole}" Value="1">
+                                                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="Image" Binding="{Binding ScheduleDetails.Recurring}" Value="True">
+                                                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="Image" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="0">
+                                                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="Image" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="2">
+                                                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                    <DataTrigger TargetType="Image" Binding="{Binding ScheduleDetails.ShowCheckBtn}" Value="2">
+                                                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                                                    </DataTrigger>
+                                                                </Image.Triggers>
+                                                            </Image>
+                                                        </StackLayout>
+
+                                                        <StackLayout Orientation="Horizontal" HeightRequest="20" Margin="33,0,0,0">
+                                                            <Label Text="{Binding ScheduleDate,StringFormat='{0MM-dd-yyyy} '}" FontSize="12" TextColor="Gray"></Label>
+
+                                                            <Label Text="{Binding StartTime,StringFormat='{0hh:mm tt} - '}" FontSize="12" TextColor="Gray"></Label>
+                                                            <Label Text="{Binding EndTime,StringFormat='{0hh:mm tt}'}" FontSize="12" TextColor="Gray"></Label>
+                                                        </StackLayout>
+                                                        <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>
+
+                                                    </StackLayout>
+
+                                                </ViewCell>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                        <ListView.Triggers>
+                                            <DataTrigger TargetType="ListView" Binding="{Binding LstEmps.Count}" Value="0">
+                                                <Setter Property="IsVisible" Value="False"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="ListView" Binding="{Binding LstEmps.Count}" Value="0">
+                                                <Setter Property="HeightRequest" Value="0"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="ListView" Binding="{Binding LstEmps.Count}" Value="1">
+                                                <Setter Property="HeightRequest" Value="55"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="ListView" Binding="{Binding LstEmps.Count}" Value="2">
+                                                <Setter Property="HeightRequest" Value="110"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="ListView" Binding="{Binding LstEmps.Count}" Value="3">
+                                                <Setter Property="HeightRequest" Value="150"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="ListView" Binding="{Binding LstEmps.Count}" Value="4">
+                                                <Setter Property="HeightRequest" Value="200"></Setter>
+                                            </DataTrigger>
+                                            <DataTrigger TargetType="ListView" Binding="{Binding LstEmps.Count}" Value="5">
+                                                <Setter Property="HeightRequest" Value="250"></Setter>
+                                            </DataTrigger>
+                                        </ListView.Triggers>
+                                    </ListView>
+
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                </Border>
+                            </StackLayout>
+
+                        </StackLayout>
+
+                        <StackLayout.Triggers>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="0">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="2">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding ScheduleDetails.ShowCheckBtn}" Value="2">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                        </StackLayout.Triggers>
+                    </StackLayout>
+
+                    <!--Note-->
+                    <Frame BorderColor="LightGray" BackgroundColor="White" HorizontalOptions="FillAndExpand" HasShadow="False" Padding="0" CornerRadius="15" Margin="20,20,20,50">
+                        <StackLayout Spacing="0">
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                                <Label Text="Note" FontSize="15" TextColor="#262626" Padding="5,10,5,5" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="Center"></Label>
+
+                                <Image HorizontalOptions="End" VerticalOptions="Center" Margin="0,0,20,0">
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="FontIconSolid" Color="Gray" Glyph="" Size="20"></FontImageSource>
+                                    </Image.Source>
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding FullScreenNoteCommand}" CommandParameter="{Binding Text, Source={x:Reference edtNote}}"></TapGestureRecognizer>
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </StackLayout>
+
+                            <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>
+
+                            <Editor x:Name="edtNote" Placeholder="Enter Note" AutoSize="TextChanges" BackgroundColor="White" TextColor="Black" Text="{Binding ScheduleDetails.Notes}" Margin="10,0,10,0"  FontSize="13">
+                                <Editor.Triggers>
+                                    <DataTrigger TargetType="Editor" Binding="{Binding EmployeePermission.UserRole}" Value="1">
+                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Editor" Binding="{Binding ScheduleDetails.Recurring}" Value="True">
+                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Editor" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="0">
+                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Editor" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="2">
+                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Editor" Binding="{Binding ScheduleDetails.ShowCheckBtn}" Value="2">
+                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                    </DataTrigger>
+                                </Editor.Triggers>
+                            </Editor>
+                        </StackLayout>
+
+                    </Frame>
+
+                </StackLayout>
+
+            </ScrollView>
+
+
+            <StackLayout VerticalOptions="EndAndExpand" BackgroundColor="White" Margin="0,0,0,0" Padding="{OnPlatform Android='20,10,20,10', iOS='20,10,20,50'}" HorizontalOptions="FillAndExpand">
+                <StackLayout Orientation="Horizontal" Spacing="20" HeightRequest="40" HorizontalOptions="FillAndExpand">
+                    <Button Text="Submit" HorizontalOptions="FillAndExpand"
+                             FontSize="16"
+                             FontAttributes="Bold"
+                             TextTransform="None"
+                             TextColor="White"
+                             CornerRadius="10"
+                             BackgroundColor="#b66dff"
+                             Command="{Binding SelectedSubmitScheduleCommand}" CommandParameter="{Binding ScheduleDetails}"></Button>
+                </StackLayout>
+
+                <StackLayout.Triggers>
+                    <DataTrigger TargetType="StackLayout" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="0">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                    <DataTrigger TargetType="StackLayout" Binding="{Binding ScheduleDetails.OneScheduleDate.Status}" Value="2">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                    <DataTrigger TargetType="StackLayout" Binding="{Binding ScheduleDetails.ShowCheckBtn}" Value="2">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                </StackLayout.Triggers>
+            </StackLayout>
+        </Grid>
+    </StackLayout>
+</Controls:CustomsPage>

@@ -1,0 +1,870 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                     x:Class="FixProUs.Pages.CustomerPages.InvoiceDetailsPage"
+                      xmlns:Controls="clr-namespace:FixProUs.Controls"
+                      xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+                      xmlns:Helpers="clr-namespace:FixProUs.Helpers"
+                      xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                      BackgroundColor="White"
+                      x:Name="page"
+                      IsEnabled="{Binding IsEnable}">
+
+    <StackLayout>
+        <!--Toolbar-->
+        <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand" Padding="{OnPlatform iOS='20,0,10,10', Android='20,10,10,10'}">
+
+            <StackLayout Orientation="Horizontal">
+                <Image x:Name="imgBack">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="20"></FontImageSource>
+                    </Image.Source>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Label x:Name="lblTitle" Text="Invoice Details" TextColor="Black" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"
+                       FontSize="16" Margin="0,0,0,10"/>
+
+            </StackLayout>
+
+            <Label 
+                   Text="{Binding BranchName}" 
+                   TextColor="#b66dff"
+                   FontSize="13"
+                   VerticalTextAlignment="Center"
+                   HorizontalOptions="End"></Label>
+        </StackLayout>
+
+        <Grid VerticalOptions="FillAndExpand">
+            <ScrollView Margin="0,0,0,100">
+                <StackLayout HorizontalOptions="FillAndExpand">
+                    <!--Customer Details-->
+                    <StackLayout HorizontalOptions="CenterAndExpand" Spacing="2" Margin="0,5,0,20">
+                        <Image>
+                            <Image.Source>
+                                <FontImageSource FontFamily="FontIconSolid" Color="#333333" Glyph="" Size="50"></FontImageSource>
+                            </Image.Source>
+                        </Image>
+                        <Label FontSize="14" TextColor="#333333" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0} {1}">
+                                    <Binding Path="CustomerDetails.FirstName" />
+                                    <Binding Path="CustomerDetails.LastName" />
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+                        <Label Text="{Binding CustomerDetails.Phone1}" FontSize="14" TextColor="#333333" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"></Label>
+                        <Label Text="{Binding CustomerDetails.Email}" FontSize="14" TextColor="#333333" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"></Label>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="5">
+                            <Image>
+                                <Image.Source>
+                                    <FontImageSource FontFamily="FontIconSolid" Color="Gray" Glyph="" Size="20"></FontImageSource>
+                                </Image.Source>
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"></TapGestureRecognizer>
+                                </Image.GestureRecognizers>
+                            </Image>
+
+                            <Label Text="Discount" FontSize="14" TextColor="#b66dff" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"></Label>
+
+                            <Border BackgroundColor="Gray" Padding="15,0,15,0" HorizontalOptions="End">
+
+                                <StackLayout Orientation="Horizontal">
+                                    <Label x:Name="lblDiscountPersnt" IsVisible="False" Text="{Binding Discount,StringFormat='%{0}'}" FontSize="14" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding AmountOrPersent}" Value="False">
+                                                <Setter Property="IsVisible" Value="True"></Setter>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+
+                                    <Label x:Name="lblDiscountMember" IsVisible="False" Text="{Binding Discount,StringFormat='${0}'}" FontSize="14" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding AmountOrPersent}" Value="True">
+                                                <Setter Property="IsVisible" Value="True"></Setter>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </StackLayout>
+
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="{OnPlatform Android=40,iOS=10}"></RoundRectangle>
+                                </Border.StrokeShape>
+                            </Border>
+
+                        </StackLayout>
+
+                        <StackLayout x:Name="stkEditDiscount" IsVisible="False" Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Margin="0,5,0,0" HeightRequest="35">
+                            <Border Padding="{OnPlatform Android='5,0,5,0', iOS='10,5,10,5'}">
+                                <Entry x:Name="entryDiscount"
+                                       Placeholder="Discount"
+                                       Keyboard="Numeric"
+                                       WidthRequest="70"
+                                       Text="{Binding CustomerDetails.Discount}"
+                                       FontSize="12" TextColor="#333"
+                                       TextChanged="entryDiscount_TextChanged">
+                                    <Entry.Triggers>
+                                        <DataTrigger TargetType="Entry" Binding="{Binding CustomerDetails.Discount}" Value="0">
+                                            <Setter Property="Text" Value=""></Setter>
+                                        </DataTrigger>
+                                    </Entry.Triggers>
+                                </Entry>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                            </Border>
+
+                            <Border x:Name="pnkSave"
+                                               IsVisible="False"
+                                                HeightRequest="30"
+                                                WidthRequest="50"
+                                                BackgroundColor="#b66dff">
+
+                                <Label x:Name="lblSave" Text="Save" FontSize="14" TextColor="White" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                                </Label>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_2"
+                                                  Command="{Binding EditDiscountForCustomerCommand}" CommandParameter="{Binding CustomerDetails}"></TapGestureRecognizer>
+                                </Border.GestureRecognizers>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="{OnPlatform Android=15,iOS=10}"></RoundRectangle>
+                                </Border.StrokeShape>
+                            </Border>
+                        </StackLayout>
+                        <StackLayout.Triggers>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding OneInvoice.Status}" Value="2">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding OneInvoice.Status}" Value="1">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.UserRole}" Value="1">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding WithContract}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveInvoice}" Value="False">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveEditEstimate_Invoice}" Value="False">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                        </StackLayout.Triggers>
+                    </StackLayout>
+
+                    <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray" Margin="0,0,0,10"></Line>
+
+                    <!--Send Email-->
+                    <Button Text="Send Email" TextColor="#b66dff" BackgroundColor="Transparent" Command="{Binding SelectSendEmailInvoiceCommand}" CommandParameter="{Binding OneInvoice}"></Button>
+
+                    <StackLayout Orientation="Horizontal" Spacing="10" HorizontalOptions="FillAndExpand" Padding="20,0,20,10">
+
+                        <!--Schedule Title-->
+                        <StackLayout HorizontalOptions="StartAndExpand" WidthRequest="150">
+                            <Label Text="Schedule Title" FontSize="13" TextColor="#b66dff" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                            <Border BackgroundColor="White" Padding="10,0,10,0">
+                                <StackLayout>
+                                    <Label IsVisible="False"
+                                          Padding="5,13,5,13"
+                                          Text="{Binding OneInvoice.ScheduleName}"
+                                          FontSize="13" TextColor="#333"
+                                          HorizontalOptions="FillAndExpand">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding ShowScheduleName}" Value="True">
+                                                <Setter Property="IsVisible" Value="True"></Setter>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                    <Label IsVisible="False"
+                                          Padding="5,13,5,13"
+                                          Text="Without Schedule"
+                                          FontSize="13" TextColor="#333"
+                                          HorizontalOptions="FillAndExpand">
+                                        <Label.Triggers>
+                                            <DataTrigger TargetType="Label" Binding="{Binding ShowScheduleName}" Value="False">
+                                                <Setter Property="IsVisible" Value="True"></Setter>
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
+                                </StackLayout>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                            </Border>
+                        </StackLayout>
+
+
+                        <!--Invoice Date-->
+                        <StackLayout HorizontalOptions="Start" WidthRequest="150">
+                            <Label Text="Invoice Date" FontSize="13" TextColor="#b66dff" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                            <Border BackgroundColor="White" Padding="10,0,10,0">
+                                <DatePicker 
+                                   Date="{Binding OneInvoice.InvoiceDate,StringFormat='{0:MM-dd-yyyy}'}"
+                                   FontSize="13" TextColor="#333"
+                                   HorizontalOptions="FillAndExpand">
+                                </DatePicker>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                            </Border>
+                        </StackLayout>
+                        <StackLayout.Triggers>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding OneInvoice.Status}" Value="2">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding OneInvoice.Status}" Value="1">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.UserRole}" Value="1">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding WithContract}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveInvoice}" Value="False">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveEditEstimate_Invoice}" Value="False">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                        </StackLayout.Triggers>
+                    </StackLayout>
+
+                    <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>
+
+                    <StackLayout IsVisible="{Binding ShowDropdownDatesInvoice}">
+                        <!--Choose Schedule Dates-->
+                        <StackLayout Spacing="20" Margin="20,20,20,0">
+
+                            <StackLayout HorizontalOptions="FillAndExpand">
+                                <StackLayout>
+                                    <Label Text="Schedule Dates" FontSize="15" TextColor="#262626" FontAttributes="Bold" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                                    <Border BackgroundColor="White" IsEnabled="{Binding IsShowScheduleDates}" Padding="10,0,10,0">
+                                        <StackLayout>
+                                            <Label 
+                                           Padding="10,12,10,12"
+                                           FontSize="13" TextColor="#333"
+                                           Text="{Binding StrInvoiceDates}"
+                                           HorizontalOptions="FillAndExpand">
+                                            </Label>
+
+
+                                            <!--<combobox:SfComboBox x:Name="comboBoxDates" Margin="20,0,20,0"
+                                                             DataSource="{Binding LstInvoiceSchaduleDates}"
+                                                             SelectedIndices="{Binding LstInvoiceSchaduleDatesActual,Mode=TwoWay}"
+                                                             MultiSelectMode="Token" 
+                                                             TokensWrapMode="Wrap" 
+                                                             Watermark="Select Dates"
+                                                             TextSize="14" 
+                                                             ItemPadding="5"
+                                                             MaximumDropDownHeight="200"
+                                                             AllowFiltering="False"
+                                                             IsEditableMode="False"
+                                                             ShowClearButton="False"
+                                                             TextHighlightMode="MultipleOccurrence"
+                                                             HighlightedTextColor="#b66dff"
+                                                             HighlightedTextFontAttributes="Bold"
+                                                             DisplayMemberPath="Date">
+                                            <combobox:SfComboBox.DropDownHeaderView>
+                                                <Label Text="Select Dates" Padding="5" TextColor="Gray"></Label>
+                                            </combobox:SfComboBox.DropDownHeaderView>
+                                        </combobox:SfComboBox>-->
+
+                                        </StackLayout>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding OpenInvoiceScheduleDatesCommand}"></TapGestureRecognizer>
+                                        </Border.GestureRecognizers>
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                        </Border.StrokeShape>
+                                        <Border.Shadow>
+                                            <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                        </Border.Shadow>
+                                    </Border>
+                                </StackLayout>
+                            </StackLayout>
+
+                            <Border BackgroundColor="White" Padding="0" Margin="0,0,0,10">
+
+
+                                <ListView x:Name="lstdts" SelectionMode="None"
+                                          ItemsSource="{Binding LstInvoiceDates}" 
+                                          HasUnevenRows="True" BackgroundColor="White" 
+                                          HeightRequest="140"
+                                          SeparatorVisibility="None"
+                                          VerticalScrollBarVisibility="Never">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <ViewCell>
+                                                <StackLayout Spacing="0">
+                                                    <StackLayout Orientation="Horizontal" Spacing="0" Padding="15,5,10,5" HorizontalOptions="FillAndExpand">
+                                                        <Image HorizontalOptions="Start" VerticalOptions="Center" Margin="0,10,0,10">
+                                                            <Image.Source>
+                                                                <FontImageSource FontFamily="FontIconSolid" Color="#b66dff" Glyph="" Size="8"></FontImageSource>
+                                                            </Image.Source>
+                                                        </Image>
+
+                                                        <Label Padding="10,10,10,10"
+                                                                Text="{Binding Id,StringFormat='#{0}'}"
+                                                                FontSize="14"
+                                                               TextColor="#333"
+                                                               HorizontalTextAlignment="Start"
+                                                               VerticalTextAlignment="Center"
+                                                                HorizontalOptions="FillAndExpand">
+                                                        </Label>
+
+                                                        <Label Padding="10,10,10,10"
+                                                                Text="{Binding Date}"
+                                                                FontSize="14"
+                                                               TextColor="#333"
+                                                               HorizontalTextAlignment="Start"
+                                                               VerticalTextAlignment="Center"
+                                                                HorizontalOptions="End">
+                                                        </Label>
+
+                                                        <Image HorizontalOptions="End" Margin="10,10,0,10">
+                                                            <Image.Source>
+                                                                <FontImageSource FontFamily="FontIcon" Color="#b66dff" Glyph="" Size="18"></FontImageSource>
+                                                            </Image.Source>
+                                                            <Image.GestureRecognizers>
+                                                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CustInvoicesViewModel}}, Path=RemoveInvoiceDateCommand}" CommandParameter="{Binding}"></TapGestureRecognizer>
+                                                            </Image.GestureRecognizers>
+                                                        </Image>
+                                                    </StackLayout>
+
+                                                    <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>
+
+                                                </StackLayout>
+
+                                            </ViewCell>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                    <ListView.Triggers>
+                                        <DataTrigger TargetType="ListView" Binding="{Binding LstInvoiceDates.Count}" Value="0">
+                                            <Setter Property="IsVisible" Value="False"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="ListView" Binding="{Binding LstInvoiceDates.Count}" Value="0">
+                                            <Setter Property="HeightRequest" Value="0"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="ListView" Binding="{Binding LstInvoiceDates.Count}" Value="1">
+                                            <Setter Property="HeightRequest" Value="55"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="ListView" Binding="{Binding LstInvoiceDates.Count}" Value="2">
+                                            <Setter Property="HeightRequest" Value="110"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="ListView" Binding="{Binding LstInvoiceDates.Count}" Value="3">
+                                            <Setter Property="HeightRequest" Value="150"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="ListView" Binding="{Binding LstInvoiceDates.Count}" Value="4">
+                                            <Setter Property="HeightRequest" Value="200"></Setter>
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="ListView" Binding="{Binding LstInvoiceDates.Count}" Value="5">
+                                            <Setter Property="HeightRequest" Value="250"></Setter>
+                                        </DataTrigger>
+                                    </ListView.Triggers>
+                                </ListView>
+
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                            </Border>
+                        </StackLayout>
+
+                        <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>
+                    </StackLayout>
+
+
+                    <StackLayout Orientation="Horizontal" Padding="20,10,20,10" Spacing="20">
+                        <Label Text="Items / Services" FontSize="15" TextColor="#262626" FontAttributes="Bold" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                        <StackLayout HorizontalOptions="Start">
+                            <Image>
+                                <Image.Source>
+                                    <FontImageSource FontFamily="FontIconSolid" Color="#8f1fff" Glyph="" Size="25"></FontImageSource>
+                                </Image.Source>
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SelecteNewItemsCommand}" CommandParameter="{Binding OneInvoice}"></TapGestureRecognizer>
+                                </Image.GestureRecognizers>
+                            </Image>
+
+                        </StackLayout>
+                        <StackLayout.Triggers>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding OneInvoice.Status}" Value="2">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding OneInvoice.Status}" Value="1">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.UserRole}" Value="1">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding WithContract}" Value="True">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveInvoice}" Value="False">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveEditEstimate_Invoice}" Value="False">
+                                <Setter Property="IsEnabled" Value="False"></Setter>
+                            </DataTrigger>
+                        </StackLayout.Triggers>
+                    </StackLayout>
+
+
+                    <StackLayout x:Name="stkItemsServices">
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="25" Padding="20,0,20,0">
+                            <Label Text="Item/Service" TextColor="#b66dff" WidthRequest="120" FontSize="13" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="40">
+                                <Label Text="Qty" TextColor="#b66dff" FontSize="13" VerticalTextAlignment="Center"></Label>
+                                <Label Text="Out" TextColor="#b66dff" FontSize="13" VerticalTextAlignment="Center"></Label>
+                            </StackLayout>
+                            <Label Text="Cost" TextColor="#b66dff" FontSize="13" HorizontalOptions="CenterAndExpand" VerticalTextAlignment="Center"></Label>
+                        </StackLayout>
+                        <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>
+
+                        <ListView x:Name="lstItemsServices" SelectionMode="None"
+                                  ItemsSource="{Binding LstItemsInvoice}" 
+                                  HasUnevenRows="True" BackgroundColor="White" 
+                                  SeparatorVisibility="None"
+                                  VerticalScrollBarVisibility="Never">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ViewCell>
+                                        <StackLayout>
+
+                                            <StackLayout Orientation="Horizontal" Spacing="0" Padding="20,0,5,0" HorizontalOptions="FillAndExpand">
+
+                                                <StackLayout HorizontalOptions="StartAndExpand" WidthRequest="120">
+                                                    <Label Padding="10" VerticalTextAlignment="Center"
+                                                           FontSize="14" TextColor="#333" 
+                                                           Text="{Binding ItemsServicesName}"
+                                                           HorizontalOptions="FillAndExpand">
+                                                    </Label>
+                                                </StackLayout>
+
+                                                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Spacing="15">
+                                                    <StackLayout>
+                                                        <Label Padding="10" 
+                                                               HorizontalTextAlignment="Start"
+                                                               WidthRequest="50"
+                                                               Text="{Binding Quantity}" VerticalTextAlignment="Center"
+                                                               FontSize="14" TextColor="#333" 
+                                                               HorizontalOptions="FillAndExpand">
+                                                        </Label>
+                                                    </StackLayout>
+
+                                                    <StackLayout>
+                                                        <CheckBox IsChecked="{Binding SkipOfTotal}" VerticalOptions="CenterAndExpand" CheckedChanged="CheckBox_CheckedChanged" Color="Gray" Scale=".9"></CheckBox>
+                                                    </StackLayout>
+                                                </StackLayout>
+
+                                                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                                                    <Label Padding="10,10,2,10"
+                                                           Text="{Binding Price,StringFormat='${0}'}"
+                                                           FontSize="14" TextColor="#333" 
+                                                           HorizontalTextAlignment="Center" 
+                                                           VerticalTextAlignment="Center"
+                                                           HorizontalOptions="FillAndExpand">
+                                                    </Label>
+
+                                                    <Image HorizontalOptions="End">
+                                                        <Image.Source>
+                                                            <FontImageSource FontFamily="FontIcon" Color="#b66dff" Glyph="" Size="18"></FontImageSource>
+                                                        </Image.Source>
+                                                        <Image.GestureRecognizers>
+                                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CustInvoicesViewModel}}, Path=RemoveItemCommand}" CommandParameter="{Binding}"></TapGestureRecognizer>
+                                                        </Image.GestureRecognizers>
+                                                    </Image>
+                                                </StackLayout>
+
+                                            </StackLayout>
+
+                                            <Line  X1="400" HorizontalOptions="CenterAndExpand" Margin="0,10,0,5" BackgroundColor="LightGray"></Line>
+
+                                            <StackLayout.Triggers>
+                                                <DataTrigger TargetType="StackLayout" Binding="{Binding OneInvoice.Status}" Value="2">
+                                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="StackLayout" Binding="{Binding OneInvoice.Status}" Value="1">
+                                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.UserRole}" Value="1">
+                                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="StackLayout" Binding="{Binding WithContract}" Value="True">
+                                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveInvoice}" Value="False">
+                                                    <Setter Property="IsVisible" Value="False"></Setter>
+                                                </DataTrigger>
+                                                <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveEditEstimate_Invoice}" Value="False">
+                                                    <Setter Property="IsVisible" Value="False"></Setter>
+                                                </DataTrigger>
+                                            </StackLayout.Triggers>
+                                        </StackLayout>
+
+                                    </ViewCell>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.Triggers>
+                                <DataTrigger TargetType="ListView" Binding="{Binding LstItemsInvoice.Count}" Value="0">
+                                    <Setter Property="IsVisible" Value="False"></Setter>
+                                </DataTrigger>
+                            </ListView.Triggers>
+                        </ListView>
+
+
+                        <StackLayout.Triggers>
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding LstItemsInvoice.Count}" Value="0">
+                                <Setter Property="HeightRequest" Value="0"></Setter>
+                                <Setter Property="IsVisible" Value="False"></Setter>
+                            </DataTrigger>
+
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding LstItemsInvoice.Count}" Value="1">
+                                <Setter Property="HeightRequest" Value="85"></Setter>
+                            </DataTrigger>
+
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding LstItemsInvoice.Count}" Value="2">
+                                <Setter Property="HeightRequest" Value="140"></Setter>
+                            </DataTrigger>
+
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding LstItemsInvoice.Count}" Value="3">
+                                <Setter Property="HeightRequest" Value="190"></Setter>
+                            </DataTrigger>
+
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding LstItemsInvoice.Count}" Value="4">
+                                <Setter Property="HeightRequest" Value="250"></Setter>
+                            </DataTrigger>
+
+                            <DataTrigger TargetType="StackLayout" Binding="{Binding LstHeight}" Value="1">
+                                <Setter Property="HeightRequest" Value="250"></Setter>
+                            </DataTrigger>
+                        </StackLayout.Triggers>
+                    </StackLayout>
+
+                    <Label Text="Total Prices" FontSize="15" Padding="20,5,20,0" TextColor="#262626" FontAttributes="Bold" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                    <!--Prices-->
+                    <StackLayout Spacing="0" Padding="0,5,0,10">
+
+                        <StackLayout Orientation="Horizontal" Spacing="0" Margin="20,0,20,0">
+                            <!--Sub Total-->
+                            <Border BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
+
+                                <StackLayout Margin="10" WidthRequest="100">
+                                    <Label Text="Sub Total" 
+                                             FontSize="14" 
+                                             FontAttributes="Bold" 
+                                             TextColor="#b66dff"
+                                             HorizontalOptions="StartAndExpand" 
+                                             VerticalTextAlignment="Center"></Label>
+
+                                    <Label 
+                                          HorizontalOptions="EndAndExpand"
+                                          Text="{Binding SubTotal,StringFormat='${0}'}"
+                                          FontSize="15" TextColor="Black">
+                                    </Label>
+                                </StackLayout>
+
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="0" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                            </Border>
+
+
+                            <!--% Tax-->
+                            <Border BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
+
+                                <StackLayout Margin="10" WidthRequest="100">
+                                    <Label Text="% Tax" 
+                                             FontSize="14" 
+                                             TextColor="#b66dff"
+                                             FontAttributes="Bold"
+                                             HorizontalOptions="Start"
+                                             VerticalTextAlignment="Center"></Label>
+
+                                    <Label 
+                                         HorizontalOptions="EndAndExpand"
+                                         TextColor="Black"
+                                         Text="{Binding ScheduleDetails.CustomerDTO.TaxDTO.Rate,StringFormat='%{0}'}"
+                                         FontSize="15">
+                                    </Label>
+                                </StackLayout>
+
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="0" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                            </Border>
+
+
+                        </StackLayout>
+
+
+                        <StackLayout Orientation="Horizontal" Spacing="0" Margin="20,0,20,0">
+                            <!--$ Net-->
+                            <Border BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
+
+                                <StackLayout Margin="10" WidthRequest="100">
+                                    <Label Text="$ Net" 
+                                             FontSize="14" 
+                                             FontAttributes="Bold" 
+                                             TextColor="#b66dff"
+                                             HorizontalOptions="StartAndExpand" 
+                                             VerticalTextAlignment="Center"></Label>
+
+                                    <Label 
+                                          HorizontalOptions="EndAndExpand"
+                                          Text="{Binding Net,StringFormat='${0}'}"
+                                          FontSize="15" TextColor="Black">
+                                    </Label>
+                                </StackLayout>
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="0" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                            </Border>
+
+
+                            <!--$ Paid-->
+                            <Border BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
+
+                                <StackLayout Margin="10" WidthRequest="100">
+                                    <Label Text="$ Paid" 
+                                             FontSize="14" 
+                                             TextColor="#b66dff"
+                                             FontAttributes="Bold"
+                                             HorizontalOptions="Start"
+                                             VerticalTextAlignment="Center"></Label>
+
+                                    <Label 
+                                         HorizontalOptions="EndAndExpand"
+                                         TextColor="Black"
+                                         Text="{Binding Paid,StringFormat='${0}'}"
+                                         FontSize="15">
+                                    </Label>
+                                </StackLayout>
+
+                                <Border.Shadow>
+                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                </Border.Shadow>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="0" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                </Border.StrokeShape>
+                            </Border>
+                        </StackLayout>
+
+                        <!--$ Total Due-->
+                        <Border BackgroundColor="White" Margin="20,0,20,0" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
+
+                            <StackLayout Margin="10" WidthRequest="100">
+                                <Label Text="$ Total Due" 
+                                         FontSize="14" 
+                                         TextColor="#b66dff"
+                                         FontAttributes="Bold"
+                                         HorizontalOptions="Start"
+                                         VerticalTextAlignment="Center"></Label>
+
+                                <Label 
+                                     HorizontalOptions="EndAndExpand"
+                                     TextColor="Black"
+                                     Text="{Binding TotalDue,StringFormat='${0}'}"
+                                     FontSize="15">
+                                </Label>
+                            </StackLayout>
+
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="0" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                            </Border.StrokeShape>
+                        </Border>
+
+                    </StackLayout>
+
+
+                    <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray"></Line>
+
+                    <Label Text="Note" FontSize="15" TextColor="#262626" Padding="20,0,20,10" FontAttributes="Bold" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                    <Frame BorderColor="LightGray" BackgroundColor="White" HorizontalOptions="FillAndExpand" Padding="10" Margin="20,0,20,20">
+                        <Editor Placeholder="Enter Note" Text="{Binding OneInvoice.Notes}" AutoSize="TextChanges" FontSize="13" BackgroundColor="White" TextColor="#333">
+                            <Editor.Triggers>
+                                <DataTrigger TargetType="Editor" Binding="{Binding OneInvoice.Status}" Value="2">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                                <DataTrigger TargetType="Editor" Binding="{Binding OneInvoice.Status}" Value="1">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                                <DataTrigger TargetType="Editor" Binding="{Binding EmployeePermission.UserRole}" Value="1">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                                <DataTrigger TargetType="Editor" Binding="{Binding WithContract}" Value="True">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                                <DataTrigger TargetType="Editor" Binding="{Binding EmployeePermission.ActiveInvoice}" Value="False">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                                <DataTrigger TargetType="Editor" Binding="{Binding EmployeePermission.ActiveEditEstimate_Invoice}" Value="False">
+                                    <Setter Property="IsEnabled" Value="False"></Setter>
+                                </DataTrigger>
+                            </Editor.Triggers>
+                        </Editor>
+                    </Frame>
+
+                </StackLayout>
+                <ScrollView.Triggers>
+                    <DataTrigger TargetType="ScrollView" Binding="{Binding Source={x:Reference stkResponButtons},Path=IsVisible}" Value="False">
+                        <Setter Property="Padding" Value="0,0,0,20"></Setter>
+                        <Setter Property="Margin" Value="0"></Setter>
+                    </DataTrigger>
+                </ScrollView.Triggers>
+            </ScrollView>
+
+
+
+            <StackLayout x:Name="stkResponButtons" BackgroundColor="White" HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Padding="{OnPlatform Android=10,iOS='10,10,10,50'}">
+
+                <StackLayout Spacing="20" HorizontalOptions="FillAndExpand">
+
+                    <Button Text="Submit" 
+                            HeightRequest="40"
+                            BackgroundColor="#8f1fff"
+                            FontAttributes="Bold"
+                            HorizontalOptions="FillAndExpand"
+                            FontSize="16" 
+                            CornerRadius="10"
+                            TextTransform="None"
+                            TextColor="White"
+                            Command="{Binding SubmitInvoiceCommand}" CommandParameter="{Binding OneInvoice}"></Button>
+                </StackLayout>
+                <StackLayout.Triggers>
+                    <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.UserRole}" Value="1">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                    <DataTrigger TargetType="StackLayout" Binding="{Binding OneInvoice.Status}" Value="2">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                    <DataTrigger TargetType="StackLayout" Binding="{Binding OneInvoice.Status}" Value="1">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                    <DataTrigger TargetType="StackLayout" Binding="{Binding WithContract}" Value="True">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                    <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveInvoice}" Value="False">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                    <DataTrigger TargetType="StackLayout" Binding="{Binding EmployeePermission.ActiveEditEstimate_Invoice}" Value="False">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                </StackLayout.Triggers>
+            </StackLayout>
+
+            <Border
+                               BackgroundColor="#b66dff" 
+                               Padding="5" 
+                               VerticalOptions="End"
+                               HorizontalOptions="End" 
+                               Margin="30,30,20,60">
+                <xct:Expander>
+                    <xct:Expander.Header>
+                        <Image Margin="8">
+                            <Image.Source>
+                                <FontImageSource FontFamily="FontIconSolid" Color="White" Glyph="" Size="20"></FontImageSource>
+                            </Image.Source>
+                        </Image>
+                    </xct:Expander.Header>
+                    <StackLayout Spacing="30" Margin="0,8">
+                        <!--Delete-->
+                        <Image IsVisible="False">
+                            <Image.Source>
+                                <FontImageSource FontFamily="FontIconSolid" Color="White" Glyph="" Size="20"></FontImageSource>
+                            </Image.Source>
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding DeleteInvoiceCommand}" CommandParameter="{Binding OneInvoice.Id}"></TapGestureRecognizer>
+                            </Image.GestureRecognizers>
+                            <Image.Triggers>
+                                <DataTrigger TargetType="Image" Binding="{Binding OneInvoice.Status}" Value="0">
+                                    <Setter Property="IsVisible" Value="True"></Setter>
+                                </DataTrigger>
+                            </Image.Triggers>
+                        </Image>
+
+                        <!--Credit-->
+                        <Image>
+                            <Image.Source>
+                                <FontImageSource FontFamily="FontIconSolid" Color="White" Glyph="" Size="20"></FontImageSource>
+                            </Image.Source>
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CreditPaymentCommand}" CommandParameter="{Binding OneInvoice}"></TapGestureRecognizer>
+                            </Image.GestureRecognizers>
+                        </Image>
+
+                        <!--Cash-->
+                        <Image>
+                            <Image.Source>
+                                <FontImageSource FontFamily="FontIconSolid" Color="White" Glyph="" Size="20"></FontImageSource>
+                            </Image.Source>
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding CashPaymentCommand}" CommandParameter="{Binding OneInvoice}"></TapGestureRecognizer>
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </StackLayout>
+                </xct:Expander>
+
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="{OnPlatform Android=100, iOS=23}"></RoundRectangle>
+                </Border.StrokeShape>
+                <Border.Shadow>
+                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                </Border.Shadow>
+                <Border.Triggers>
+                    <DataTrigger TargetType="Border" Binding="{Binding EmployeePermission.UserRole}" Value="1">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                    <DataTrigger TargetType="Border" Binding="{Binding OneInvoice.Status}" Value="2">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                    <DataTrigger TargetType="Border" Binding="{Binding OneInvoice.Status}" Value="1">
+                        <Setter Property="IsVisible" Value="True"></Setter>
+                    </DataTrigger>
+                    <DataTrigger TargetType="Border" Binding="{Binding WithContract}" Value="True">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                    <DataTrigger TargetType="Border" Binding="{Binding EmployeePermission.ActiveInvoice}" Value="False">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                    <DataTrigger TargetType="Border" Binding="{Binding EmployeePermission.ActiveEditEstimate_Invoice}" Value="False">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                </Border.Triggers>
+            </Border>
+
+
+        </Grid>
+    </StackLayout>
+</Controls:CustomsPage>

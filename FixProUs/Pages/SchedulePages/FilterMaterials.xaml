@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                     x:Class="FixProUs.Pages.SchedulePages.FilterMaterials"
+                      xmlns:Controls="clr-namespace:FixProUs.Controls"
+                      xmlns:Helpers="clr-namespace:FixProUs.Helpers"
+                      xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                      BackgroundColor="White"
+                      x:Name="page"
+                      IsEnabled="{Binding IsEnable}">
+
+
+    <Controls:CustomsPage.BindingContext>
+        <vm:ScheduleItemsServicesViewModel></vm:ScheduleItemsServicesViewModel>
+    </Controls:CustomsPage.BindingContext>
+
+    <Border Margin="{OnPlatform iOS='0,0,0,0'}" BackgroundColor="#FFFFFF" VerticalOptions="FillAndExpand">
+        <StackLayout>
+            <StackLayout Orientation="Horizontal" VerticalOptions="Center" Padding="20">
+                <Image HorizontalOptions="End" VerticalOptions="Center">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontIconSolid" Glyph="" Color="#b66dff"></FontImageSource>
+                    </Image.Source>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" NumberOfTapsRequired="1"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>
+
+            <StackLayout Padding="20,0,20,0">
+                <Entry x:Name="searchBar" 
+                       Placeholder="Search"
+                       FontFamily="AlmaraiRegular" 
+                       Keyboard="Text" TextColor="#333"
+                       ClearButtonVisibility="WhileEditing" 
+                       TextChanged="searchBar_TextChanged"></Entry>
+                <ListView x:Name="lstMaterials" 
+                          SelectionMode="None" BackgroundColor="White"
+                          HorizontalOptions="FillAndExpand" 
+                          CachingStrategy="RecycleElement" 
+                          ItemTapped="lstMaterials_ItemTapped">
+                    <ListView.RowHeight>
+                        70
+                    </ListView.RowHeight>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"></RowDefinition>
+                                        <RowDefinition Height="auto"></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <StackLayout Orientation="Horizontal" Spacing="5" Margin="0,15,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
+                                        <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="CenterAndExpand">
+                                            <Image.Source>
+                                                <FontImageSource FontFamily="FontIconSolid" Glyph="" Size="15" Color="#b66dff"></FontImageSource>
+                                            </Image.Source>
+                                        </Image>
+                                        <StackLayout Grid.Column="1" Grid.RowSpan="2" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Spacing="10">
+                                            <StackLayout Spacing="0">
+                                                <Label Text="{Binding Name}" FontSize="16" FontFamily="AlmaraiRegular" TextColor="Black"/>
+                                                <StackLayout Orientation="Horizontal">
+                                                    <Label Text="{Binding Details}" FontSize="14" HorizontalOptions="StartAndExpand" FontFamily="AlmaraiRegular" TextColor="#FF464859"/>
+                                                    <Label Text="{Binding CostperUnit,StringFormat='${0}'}" FontSize="14" HorizontalOptions="End" FontFamily="AlmaraiRegular" TextColor="#FF464859"/>
+                                                </StackLayout>
+
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+            </StackLayout>
+
+        </StackLayout>
+    </Border>
+
+</Controls:CustomsPage>

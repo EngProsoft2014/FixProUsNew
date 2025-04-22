@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="FixProUs.Pages.MenuPages.AccountPage"
+                      xmlns:Controls="clr-namespace:FixProUs.Controls"
+                      xmlns:Helpers="clr-namespace:FixProUs.Helpers"
+                      xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                      xmlns:ff="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
+                      BackgroundColor="White"
+                      x:Name="page" IsEnabled="{Binding IsEnable}">
+
+    <ContentPage.Content>
+        <StackLayout>
+            <!--Toolbar-->
+            <StackLayout>
+
+                <StackLayout Orientation="Horizontal" Spacing="0" Margin="0,0,0,20" Padding="{OnPlatform iOS='20,0,20,10', Android='15,15,15,10'}" VerticalOptions="FillAndExpand">
+                    <Image x:Name="imgBack" HorizontalOptions="Start">
+                        <Image.Source>
+                            <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="20"></FontImageSource>
+                        </Image.Source>
+                        <Image.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_2"></TapGestureRecognizer>
+                        </Image.GestureRecognizers>
+                    </Image>
+
+                    <Label x:Name="lblTitle" Text="Account" TextColor="Black" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" FontSize="16"/>
+
+                </StackLayout>
+            </StackLayout>
+
+            <ScrollView>
+                <StackLayout>
+                    <Grid ColumnSpacing="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="58"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+                            <ColumnDefinition Width="70"></ColumnDefinition>
+                            <ColumnDefinition Width="1*"></ColumnDefinition>
+
+                        </Grid.ColumnDefinitions>
+                        <Image HorizontalOptions="End" VerticalOptions="Center" TranslationX="-4" Grid.Column="1">
+                            <Image.Source>
+                                <FontImageSource FontFamily="FontIcon" Color="#debdff" Glyph="" Size="25"></FontImageSource>
+                            </Image.Source>
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"></TapGestureRecognizer>
+                            </Image.GestureRecognizers>
+                        </Image>
+                        <Border StrokeShape="RoundRectangle 100"  Grid.Column="1" Grid.ColumnSpan="3"
+                               HeightRequest="107" 
+                               WidthRequest="107"
+                               BackgroundColor="Transparent"
+                               HorizontalOptions="Center"
+                               Padding="0"
+                               VerticalOptions="Start">
+                            <Border StrokeShape="RoundRectangle 100"  BackgroundColor="White" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Padding="0" Margin="0">
+                                <ff:CachedImage x:Name="imgAccount" Source="{Binding AccountPhoto}" Aspect="Fill" LoadingPlaceholder="avatar.png" ErrorPlaceholder="avatar.png" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                                    <ff:CachedImage.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding OpenFullScreenPhotoCommand}" CommandParameter="{Binding AccountPhoto}"></TapGestureRecognizer>
+                                    </ff:CachedImage.GestureRecognizers>
+                                </ff:CachedImage>
+                            </Border>
+                        </Border>
+
+                    </Grid>
+
+                    <StackLayout Spacing="0" Margin="0,10,0,0">
+                        <Label TextColor="#b66dff" FontAttributes="Bold" FontSize="15" HorizontalOptions="Center">
+                            <Label.Text>
+                                <MultiBinding StringFormat="{}{0} {1}">
+                                    <Binding Path="LoginModel.FirstName" />
+                                    <Binding Path="LoginModel.LastName" />
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+
+                        <Label Text="{Binding LoginModel.CreateDate, StringFormat='Create : {0:MM-dd-yyyy}'}" 
+                               TextColor="#333333" 
+                               FontSize="12"
+                               Margin="0,0,0,10"
+                               HorizontalOptions="Center">
+                        </Label>
+                    </StackLayout>
+
+                    <Border   StrokeShape="RoundRectangle 20"
+                               VerticalOptions="FillAndExpand"    
+                               Margin="20,20,20,10"
+                               BackgroundColor="White" 
+                               HorizontalOptions="FillAndExpand">
+
+                        <StackLayout Padding="0,20,0,20" Spacing="0">
+                            <StackLayout Spacing="0" Padding="20,0,20,0">
+                                <Label Text="User Name" FontSize="13" FontAttributes="Bold" TextColor="#333333"></Label>
+                                <Label Text="{Binding LoginModel.UserName}" FontSize="15" FontAttributes="Italic" Padding="10,0,0,0" TextColor="#b66dff">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding LoginModel.UserName}" Value="">
+                                            <Setter Property="Text" Value="None"></Setter>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </StackLayout>
+
+                            <Line  X1="400" HorizontalOptions="CenterAndExpand" Margin="0,10,0,10" BackgroundColor="LightGray"></Line>
+
+                            <StackLayout Spacing="0" Padding="20,0,20,0">
+                                <Label Text="Email" FontSize="13" FontAttributes="Bold" TextColor="#333333"></Label>
+                                <Label Text="{Binding LoginModel.EmailUserName}" FontSize="15" FontAttributes="Italic" Padding="10,0,0,0" TextColor="#b66dff">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding LoginModel.EmailUserName}" Value="">
+                                            <Setter Property="Text" Value="None"></Setter>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </StackLayout>
+
+                            <Line  X1="400" HorizontalOptions="CenterAndExpand" Margin="0,10,0,10" BackgroundColor="LightGray"></Line>
+
+                            <StackLayout Spacing="0" Padding="20,0,20,0">
+                                <Label Text="Phone Number" FontSize="13" FontAttributes="Bold" TextColor="#333333"></Label>
+                                <Label Text="{Binding LoginModel.Phone1}" FontSize="15" FontAttributes="Italic" Padding="10,0,0,0" TextColor="#b66dff">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding LoginModel.Phone1}" Value="">
+                                            <Setter Property="Text" Value="None"></Setter>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </StackLayout>
+
+                            <Line  X1="400" HorizontalOptions="CenterAndExpand" Margin="0,10,0,10" BackgroundColor="LightGray"></Line>
+
+                            <StackLayout Spacing="0" Padding="20,0,20,0">
+                                <Label Text="Branch" FontSize="13" FontAttributes="Bold" TextColor="#333333"></Label>
+                                <Picker ItemsSource="{Binding LstBranches}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding OneBranches}" SelectedIndexChanged="Picker_SelectedIndexChanged"
+                                        Title="Choose Branches"
+                                        FontAttributes="Italic"
+                                        TextColor="#b66dff"
+                                        FontSize="15"
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalTextAlignment="Center">
+                                </Picker>
+                            </StackLayout>
+
+                        </StackLayout>
+
+                        <Border.Shadow>
+                            <Shadow Brush="{OnPlatform Android=LightBlue, iOS=LightBlue}" Radius="{OnPlatform Android=15,iOS=20}"></Shadow>
+                        </Border.Shadow>
+                    </Border>
+
+                </StackLayout>
+
+            </ScrollView>
+
+        </StackLayout>
+    </ContentPage.Content>
+</Controls:CustomsPage>

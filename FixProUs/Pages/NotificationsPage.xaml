@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FixProUs.Pages.NotificationsPage"
+             xmlns:Controls="clr-namespace:FixProUs.Controls"
+             xmlns:Helpers="clr-namespace:FixProUs.Helpers" 
+             xmlns:vm="clr-namespace:FixProUs.ViewModels"
+             BackgroundColor="White"
+             IsEnabled="{Binding IsEnable}"
+             x:Name="page">
+
+
+    <StackLayout>
+
+        <!--Toolbar-->
+        <StackLayout>
+
+            <StackLayout Orientation="Horizontal" Spacing="0" Padding="{OnPlatform iOS='20,0,20,10', Android='15,15,15,10'}" VerticalOptions="FillAndExpand">
+                <Image x:Name="imgBack" HorizontalOptions="Start">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="20"></FontImageSource>
+                    </Image.Source>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+
+                <Label x:Name="lblTitle" Text="Notifications" HeightRequest="30"
+                      VerticalOptions="FillAndExpand" Style="{StaticResource lblHeaderText}"
+                      HorizontalOptions="CenterAndExpand" HorizontalTextAlignment="Center" VerticalTextAlignment="Center"/>
+
+
+                <Image x:Name="imgAdd" HorizontalOptions="End" IsVisible="False" Margin="0,0,10,0">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontIconSolid" Color="#878686" Glyph="" Size="22"></FontImageSource>
+                    </Image.Source>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SelectedCreateNotificationsPageCommand}"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                    <Image.Triggers>
+                        <DataTrigger TargetType="Image" Binding="{Binding UserRole}" Value="3">
+                            <Setter Property="IsVisible" Value="True"></Setter>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Image" Binding="{Binding UserRole}" Value="4">
+                            <Setter Property="IsVisible" Value="True"></Setter>
+                        </DataTrigger>
+                    </Image.Triggers>
+                </Image>
+            </StackLayout>
+        </StackLayout>
+
+        <StackLayout VerticalOptions="FillAndExpand">
+            <StackLayout VerticalOptions="FillAndExpand">
+                <CollectionView x:Name="LstMassages" ItemsSource="{Binding LstMessages}" Margin="10,0,10,0" HorizontalOptions="CenterAndExpand"
+                                VerticalOptions="FillAndExpand">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Orientation="Horizontal" Padding="10" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand">
+                                <Border HorizontalOptions="FillAndExpand">
+                                    <Border.Background>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                            <GradientStop Color="#B36DFF" Offset="0.0" />
+                                            <GradientStop Color="#E06DFF" Offset="1.0" />
+                                        </LinearGradientBrush>
+                                    </Border.Background>
+
+                                    <StackLayout Orientation="Horizontal" Spacing="0">
+                                        <StackLayout HorizontalOptions="Start" VerticalOptions="Center">
+                                            <Border Margin="15" Padding="8" HeightRequest="35" WidthRequest="35" BackgroundColor="white">
+                                                <Image>
+                                                    <Image.Source>
+                                                        <FontImageSource FontFamily="FontIconSolid" Glyph="" Size="30" Color="#8f1fff"></FontImageSource>
+                                                    </Image.Source>
+                                                </Image>
+
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="{OnPlatform Android=50,iOS=18}"></RoundRectangle>
+                                                </Border.StrokeShape>
+                                            </Border>
+                                        </StackLayout>
+
+                                        <StackLayout Padding="0,5,20,5" HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand">
+                                            <StackLayout>
+                                                <StackLayout Orientation="Horizontal">
+                                                    <Label Text="{Binding NotificationHeader}" HorizontalOptions="StartAndExpand" FontSize="14" FontAttributes="Bold" TextDecorations="Underline" FontFamily="InterMedium" TextColor="#FFFFFF"></Label>
+
+                                                    <Image HorizontalOptions="End" IsVisible="False">
+                                                        <Image.Source>
+                                                            <FontImageSource FontFamily="FontIcon" Color="DarkRed" Glyph="" Size="20"></FontImageSource>
+                                                        </Image.Source>
+                                                        <Image.GestureRecognizers>
+                                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SchedulesViewModel}}, Path=DeactiveNotifyCommand}" CommandParameter="{Binding}"></TapGestureRecognizer>
+                                                        </Image.GestureRecognizers>
+                                                        <Image.Triggers>
+                                                            <DataTrigger TargetType="Image" Binding="{Binding NotificationType}" Value="3">
+                                                                <Setter Property="IsVisible" Value="True"></Setter>
+                                                            </DataTrigger>
+                                                            <DataTrigger TargetType="Image" Binding="{Binding NotificationType}" Value="4">
+                                                                <Setter Property="IsVisible" Value="True"></Setter>
+                                                            </DataTrigger>
+                                                        </Image.Triggers>
+                                                    </Image>
+                                                </StackLayout>
+                                                <Label Text="{Binding NotificationContent}" HorizontalOptions="Start" FontSize="13" LineHeight="1.2" FontFamily="AlmaraiRegular" TextColor="#FFFFFF">
+                                                    <!--<Label.Triggers>
+                                                        <DataTrigger TargetType="Label" Binding="{Binding NotificationType}" Value="4">
+                                                            <Setter Property="IsVisible" Value="False"></Setter>
+                                                        </DataTrigger>
+                                                    </Label.Triggers>-->
+                                                </Label>
+                                            </StackLayout>
+
+                                        </StackLayout>
+                                    </StackLayout>
+
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="20"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                </Border>
+                                <StackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SchedulesViewModel}}, Path=SelectedNotificationDetailsCommand}" CommandParameter="{Binding}"></TapGestureRecognizer>
+                                </StackLayout.GestureRecognizers>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <StackLayout.Triggers>
+                    <DataTrigger TargetType="StackLayout" Binding="{Binding LstMessages.Count}" Value="0">
+                        <Setter Property="IsVisible" Value="False"></Setter>
+                    </DataTrigger>
+                </StackLayout.Triggers>
+            </StackLayout>
+
+            <StackLayout IsVisible="False" Margin="0,200,0,300" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <Image Source="noresult.png" Aspect="AspectFill" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" ></Image>
+                <StackLayout.Triggers>
+                    <DataTrigger TargetType="StackLayout" Binding="{Binding LstMessages.Count}" Value="0">
+                        <Setter Property="IsVisible" Value="True"></Setter>
+                    </DataTrigger>
+                </StackLayout.Triggers>
+            </StackLayout>
+        </StackLayout>
+    </StackLayout>
+
+</Controls:CustomsPage>

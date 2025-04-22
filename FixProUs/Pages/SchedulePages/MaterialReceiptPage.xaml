@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                     x:Class="FixProUs.Pages.SchedulePages.MaterialReceiptPage"
+                      xmlns:Controls="clr-namespace:FixProUs.Controls"
+                      xmlns:Helpers="clr-namespace:FixProUs.Helpers"
+                      xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                      xmlns:ff="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
+                      BackgroundColor="White"  
+                      x:Name="page"
+                      IsEnabled="{Binding IsEnable}">
+
+    <Controls:CustomsPage.BindingContext>
+        <vm:ScheduleMaterialReceiptViewModel></vm:ScheduleMaterialReceiptViewModel>
+    </Controls:CustomsPage.BindingContext>
+
+    <ScrollView>
+        <Grid Padding="0" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <Border x:Name="yummyAddItems" Margin="0" BackgroundColor="White" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                <StackLayout Padding="{OnPlatform iOS='20,0,20,10', Android='20,20,20,0'}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                    <!--Header-->
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <Image>
+                            <Image.Source>
+                                <FontImageSource FontFamily="FontIconSolid" Color="Gray" Glyph="" Size="20"></FontImageSource>
+                            </Image.Source>
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                            </Image.GestureRecognizers>
+                        </Image>
+
+                        <Label Text="Materials Receipt" TextColor="Black" FontAttributes="Bold" HorizontalOptions="CenterAndExpand" FontSize="16"></Label>
+
+                    </StackLayout>
+
+                    <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray" Margin="0,0,0,20"></Line>
+
+
+                    <StackLayout Margin="0,10,0,0">
+
+                        <StackLayout Spacing="25">
+
+                            <!--Materials Receipt-->
+                            <StackLayout  HorizontalOptions="FillAndExpand">
+
+                                <Label Text="Supplier" FontSize="15" TextColor="#333" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='10,0,0,0', iOS='10,0,0,0'}" HorizontalOptions="FillAndExpand">
+
+                                    <Picker x:Name="comxLstSuppliers" ItemsSource="{Binding LstSuppliers}" ItemDisplayBinding="{Binding FullName}" SelectedItem="{Binding OneSupplier,Mode=TwoWay}" SelectedIndexChanged="comxLstSuppliers_SelectedIndexChanged"
+                                            Title="Select Supplier" TitleColor="Gray" TextColor="#333"
+                                            FontSize="12"
+                                            HorizontalOptions="FillAndExpand">
+                                    </Picker>
+
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="Gray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                </Border>
+                            </StackLayout>
+
+
+                            <!--Cost-->
+                            <StackLayout HorizontalOptions="FillAndExpand" >
+                                <Label Text="Price" FontSize="15" TextColor="#333" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}">
+                                    <Entry x:Name="entryCost"
+                                         Text="{Binding MaterialReceipt.Cost}"
+                                         FontSize="15"
+                                         TextColor="#333"
+                                         Keyboard="Numeric"
+                                         Placeholder="Enter Price"
+                                         HorizontalOptions="FillAndExpand">
+                                    </Entry>
+
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                </Border>
+                            </StackLayout>
+
+                            <!--Note-->
+                            <StackLayout  HorizontalOptions="FillAndExpand">
+                                <Label Text="Note" FontSize="15" TextColor="#333" HorizontalOptions="Start" VerticalTextAlignment="Center"></Label>
+
+                                <Border BackgroundColor="White" Padding="{OnPlatform Android='10,0,10,0', iOS='10,5,10,5'}" Margin="0,0,0,5">
+                                    <Editor x:Name="edtNotes"
+                                            Text="{Binding MaterialReceipt.Notes}"
+                                            Placeholder="Enter Description"
+                                            TextColor="#333" BackgroundColor="White"
+                                            FontSize="15" 
+                                            AutoSize="TextChanges"
+                                            HorizontalOptions="FillAndExpand">
+                                    </Editor>
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                </Border>
+                            </StackLayout>
+
+
+                            <!--Photos-->
+                            <StackLayout HorizontalOptions="FillAndExpand" Margin="30,0,30,0">
+                                <Label Text="Receipt Photo" FontSize="15" TextColor="#333" HorizontalOptions="Center" VerticalTextAlignment="Center"></Label>
+
+                                <Border BackgroundColor="White" Padding="0" Margin="0,0,0,10">
+
+                                    <StackLayout>
+
+                                        <ff:CachedImage Source="{Binding ReceiptImage}" x:Name="imgReceipt"
+                                                        HeightRequest="210" 
+                                                        HorizontalOptions="FillAndExpand" 
+                                                        Aspect="AspectFill"
+                                                        LoadingPlaceholder="photodef.png"
+                                                        ErrorPlaceholder="photodef.png">
+                                        </ff:CachedImage>
+
+                                        <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray" Margin="0,0,0,0"></Line>
+
+                                        <StackLayout x:Name="stkImgBtns" Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="30" Margin="5,5,5,10">
+                                            <!--<Button Text="Add Photo"
+                                                 Margin="2,5,2,0"
+                                                 HorizontalOptions="FillAndExpand"
+                                                 FontSize="14"
+                                                 FontAttributes="Bold"
+                                                 TextTransform="None"
+                                                 TextColor="#b66dff"
+                                                 CornerRadius="10" BorderColor="#b66dff" BorderWidth="1"
+                                                 BackgroundColor="White"
+                                                 Clicked="Button_Clicked_1">
+                                            </Button>-->
+
+                                            <Image HorizontalOptions="Start">
+                                                <Image.Source>
+                                                    <FontImageSource FontFamily="FontIconSolid" Color="#b66dff" Glyph="" Size="20"></FontImageSource>
+                                                </Image.Source>
+                                                <Image.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding SelecteCamSchedulePhotoCommand}"></TapGestureRecognizer>
+                                                </Image.GestureRecognizers>
+                                            </Image>
+
+                                            <Image HorizontalOptions="EndAndExpand">
+                                                <Image.Source>
+                                                    <FontImageSource FontFamily="FontIcon" Color="#b66dff" Glyph="" Size="20"></FontImageSource>
+                                                </Image.Source>
+                                                <Image.GestureRecognizers>
+                                                    <TapGestureRecognizer Command="{Binding SelectePickSchedulePhotoCommand}"></TapGestureRecognizer>
+                                                </Image.GestureRecognizers>
+                                            </Image>
+
+                                        </StackLayout>
+
+                                    </StackLayout>
+
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                                    </Border.StrokeShape>
+                                    <Border.Shadow>
+                                        <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                    </Border.Shadow>
+                                </Border>
+                            </StackLayout>
+
+                        </StackLayout>
+
+                    </StackLayout>
+
+                    <StackLayout x:Name="stkBtns" Orientation="Horizontal" Spacing="20" HorizontalOptions="FillAndExpand" VerticalOptions="EndAndExpand" Padding="{OnPlatform Android='10,10,10,20',iOS='10,10,10,80'}">
+
+                        <Button Text="Add"
+                                BackgroundColor="#b66dff"
+                                FontAttributes="Bold"
+                                FontSize="16" 
+                                CornerRadius="10"
+                                HeightRequest="40"
+                                HorizontalOptions="FillAndExpand"
+                                TextColor="White" 
+                                x:Name="btnOk"
+                                Command="{Binding ApplyCommand}" CommandParameter="{Binding MaterialReceipt}"></Button>
+                    </StackLayout>
+                </StackLayout>
+            </Border>
+
+        </Grid>
+    </ScrollView>
+</Controls:CustomsPage>

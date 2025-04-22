@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 x:Class="FixProUs.Pages.PopupPages.AddressPupop"
+                  xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+                  xmlns:mopupsanim="clr-namespace:Mopups.Animations;assembly=Mopups"
+                  xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                  BackgroundColor="#FFFFFF"
+                  IsEnabled="{Binding IsEnable}">
+
+
+    <Border BackgroundColor="#FFFFFF" VerticalOptions="FillAndExpand">
+        <StackLayout VerticalOptions="FillAndExpand">
+
+            <HorizontalStackLayout Padding="20">
+                <Image x:Name="imgBack" VerticalOptions="Center">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontIconSolid" Glyph="" Color="#b66dff"></FontImageSource>
+                    </Image.Source>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+            </HorizontalStackLayout>
+            <StackLayout Padding="20,0,20,0" VerticalOptions="FillAndExpand">
+                <Entry x:Name="searchBar" Placeholder="Enter Address" TextColor="#333" FontFamily="AlmaraiRegular" Keyboard="Text" ClearButtonVisibility="WhileEditing" TextChanged="SearchBar_OnTextChanged"></Entry>
+                <ListView x:Name="countryListView" BackgroundColor="White" HorizontalOptions="FillAndExpand" IsVisible="{OnPlatform Android=False,iOS=True}" 
+                          VerticalOptions="FillAndExpand" CachingStrategy="RecycleElement" ItemTapped="ListView_OnItemTapped">
+                    <ListView.RowHeight>
+                        70
+                    </ListView.RowHeight>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Orientation="Horizontal" Spacing="5" Padding="0,15,0,10" HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                                    <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" VerticalOptions="CenterAndExpand">
+                                        <Image.Source>
+                                            <FontImageSource FontFamily="FontIconSolid" Glyph="" Size="20" Color="#b66dff"></FontImageSource>
+                                        </Image.Source>
+                                    </Image>
+                                    <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" Spacing="10">
+                                        <StackLayout Spacing="0" VerticalOptions="FillAndExpand">
+                                            <Label Text="{Binding MainAddress}" FontSize="16" FontFamily="AlmaraiRegular" TextColor="Black"/>
+                                            <Label Text="{Binding SubAddress}" FontSize="14" FontFamily="AlmaraiRegular" TextColor="#FF464859"/>
+                                        </StackLayout>
+                                    </StackLayout>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+
+                <StackLayout Margin="0,0,0,40">
+                    <StackLayout Padding="0,10,0,0" Orientation="Horizontal" Spacing="20">
+                        <Label Text="Manually enter address" FontSize="15" TextColor="#b66dff">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference stkManuallyAddress},Path=IsVisible}" Value="True">
+                                    <Setter Property="TextColor" Value="#3680f7"></Setter>
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                        <Image>
+                            <Image.Source>
+                                <FontImageSource FontFamily="FontIconSolid" Color="#b66dff" Glyph="" Size="15"></FontImageSource>
+                            </Image.Source>
+
+                            <Image.Triggers>
+                                <DataTrigger TargetType="Image" Binding="{Binding Source={x:Reference stkManuallyAddress},Path=IsVisible}" Value="True">
+                                    <Setter Property="Source">
+                                        <Setter.Value>
+                                            <FontImageSource FontFamily="FontIconSolid" Color="#3680f7" Glyph="" Size="15"></FontImageSource>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
+                            </Image.Triggers>
+                        </Image>
+                        <StackLayout.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"></TapGestureRecognizer>
+                        </StackLayout.GestureRecognizers>
+                    </StackLayout>
+
+                    <StackLayout x:Name="stkManuallyAddress" IsVisible="False">
+                        <Border 
+                               VerticalOptions="FillAndExpand"    
+                               Padding="20" 
+                               Margin="10"
+                               BackgroundColor="White" 
+                               HorizontalOptions="FillAndExpand">
+                            <StackLayout Spacing="20">
+
+                                <StackLayout Spacing="0">
+                                    <Label Text="Street" TextTransform="Uppercase" TextColor="#b66dff" FontSize="13"></Label>
+                                    <Border>
+                                        <Entry x:Name="entryStreet"
+                                        FontSize="14"
+                                        Placeholder="Enter Street"
+                                        TextColor="Black"
+                                        Keyboard="Text">
+                                        </Entry>
+                                    </Border>
+
+                                </StackLayout>
+
+                                <StackLayout Spacing="0">
+                                    <Label Text="City" TextTransform="Uppercase" TextColor="#b66dff" FontSize="13"></Label>
+                                    <Border>
+                                        <Entry x:Name="entryCity" 
+                                       FontSize="14"
+                                       Placeholder="Enter City"
+                                       TextColor="Black"
+                                       Keyboard="Text"
+                                       >
+                                        </Entry>
+                                    </Border>
+
+                                </StackLayout>
+
+                                <StackLayout Spacing="0">
+                                    <Label Text="State/Province" TextTransform="Uppercase" TextColor="#b66dff" FontSize="13"></Label>
+                                    <Border>
+                                        <Entry x:Name="entryState"  
+                                       FontSize="14"
+                                       Placeholder="Enter State"
+                                       TextColor="Black"
+                                       Keyboard="Text"
+                                       >
+                                        </Entry>
+                                    </Border>
+
+                                </StackLayout>
+
+                                <StackLayout Spacing="0">
+                                    <Label Text="Postal Code" TextTransform="Uppercase" TextColor="#b66dff" FontSize="13"></Label>
+                                    <Border>
+                                        <Entry x:Name="entryPostalCode" 
+                                       Placeholder="Enter Postal Code"
+                                       FontSize="14"
+                                       Keyboard="Numeric"
+                                       TextColor="#333">
+                                        </Entry>
+                                    </Border>
+
+                                </StackLayout>
+
+                                <StackLayout Spacing="0">
+                                    <Label Text="Country" TextTransform="Uppercase" TextColor="#b66dff" FontSize="13"></Label>
+                                    <Border>
+                                        <Entry x:Name="entryCountry"
+                                               Placeholder="Enter Country"
+                                               FontSize="14"
+                                               Keyboard="Text"
+                                               TextColor="#333">
+                                        </Entry>
+                                    </Border>
+
+                                </StackLayout>
+
+                                <Button Text="Apply" 
+                                    HeightRequest="45" Margin="0,20,0,0"
+                                    HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="EndAndExpand"
+                                    TextColor="White"
+                                    CornerRadius="10"
+                                    BackgroundColor="#b66dff"
+                                    Clicked="Button_Clicked">
+                                </Button>
+
+                            </StackLayout>
+
+                            <Border.Shadow>
+                                <Shadow Brush="{OnPlatform Android=Gray, iOS=Gray}" Radius="{OnPlatform Android=15,iOS=15}"></Shadow>
+                            </Border.Shadow>
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
+                            </Border.StrokeShape>
+                        </Border>
+
+                    </StackLayout>
+
+                </StackLayout>
+
+
+            </StackLayout>
+
+        </StackLayout>
+    </Border>
+</mopups:PopupPage>

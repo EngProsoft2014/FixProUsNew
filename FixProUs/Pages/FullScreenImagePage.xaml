@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Controls:CustomsPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                 x:Class="FixProUs.Pages.FullScreenImagePage"
+                  xmlns:Controls="clr-namespace:FixProUs.Controls"
+                  xmlns:vm="clr-namespace:FixProUs.ViewModels"
+                  xmlns:local="clr-namespace:FixProUs"
+                  BackgroundColor="#FFFFFF"
+                  IsEnabled="{Binding IsEnable}">
+
+    <Border BackgroundColor="#FFFFFF" VerticalOptions="FillAndExpand">
+        <StackLayout>
+            <StackLayout Orientation="Horizontal" VerticalOptions="Center" Padding="20">
+
+                <Image HorizontalOptions="End" VerticalOptions="Center">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontIconSolid" Glyph="" Color="#b66dff" Size="25"></FontImageSource>
+                    </Image.Source>
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                    </Image.GestureRecognizers>
+                </Image>
+            </StackLayout>
+
+            <Border VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                <Grid>
+                    <local:PinchToZoomContainer>
+                        <local:PinchToZoomContainer.Content>
+                            <Image x:Name="imgFullScreen" VerticalOptions="FillAndExpand"></Image>
+                        </local:PinchToZoomContainer.Content>
+                    </local:PinchToZoomContainer>
+                </Grid>
+            </Border>
+
+
+        </StackLayout>
+    </Border>
+</Controls:CustomsPage>

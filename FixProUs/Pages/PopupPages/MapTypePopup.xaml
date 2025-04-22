@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mopups:PopupPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FixProUs.Pages.PopupPages.MapTypePopup"
+             xmlns:mopups="clr-namespace:Mopups.Pages;assembly=Mopups"
+               xmlns:mopupsanim="clr-namespace:Mopups.Animations;assembly=Mopups"
+               xmlns:vm="clr-namespace:FixProUs.ViewModels"
+             BackgroundColor="#80000000"
+                  IsEnabled="{Binding IsEnable}">
+
+    <mopups:PopupPage.Animation>
+        <mopupsanim:MoveAnimation
+           DurationIn="700"
+           EasingIn="BounceOut"
+           PositionIn="Bottom"
+           PositionOut="Center" />
+    </mopups:PopupPage.Animation>
+
+    <Border HeightRequest="150"
+                   BackgroundColor="White"
+                   HorizontalOptions="FillAndExpand"
+                   VerticalOptions="EndAndExpand">
+
+        <StackLayout VerticalOptions="Start" Padding="20">
+
+            <!--Title-->
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Select Map Type : "
+                           TextColor="Black" 
+                           FontSize="15"
+                           FontAttributes="Bold" 
+                           HorizontalTextAlignment="Start"
+                           VerticalTextAlignment="Center"
+                           HorizontalOptions="FillAndExpand"></Label>
+            </StackLayout>
+
+            <!--Apple map-->
+            <StackLayout Orientation="Horizontal" Spacing="10" Margin="0,20,0,15">
+                <Image HorizontalOptions="End" VerticalOptions="Center">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontIconSolid" Color="#333" Glyph="" Size="20"></FontImageSource>
+                    </Image.Source>
+                </Image>
+                <Label Text="Open in Apple Maps" TextColor="#333" FontSize="14"></Label>
+                <Image Margin="20,0,0,0">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontIconSolid" Color="Black" Glyph="" Size="15"></FontImageSource>
+                    </Image.Source>
+                </Image>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+
+            <!--Google map-->
+            <StackLayout Orientation="Horizontal" Spacing="10">
+                <Image HorizontalOptions="End" VerticalOptions="Center">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontIconSolid" Color="#333" Glyph="" Size="20"></FontImageSource>
+                    </Image.Source>
+                </Image>
+                <Label Text="Open in Google Maps" TextColor="#333" FontSize="14"></Label>
+
+                <Image Margin="20,0,0,0">
+                    <Image.Source>
+                        <FontImageSource FontFamily="FontIconSolid" Color="Black" Glyph="" Size="15"></FontImageSource>
+                    </Image.Source>
+                </Image>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"></TapGestureRecognizer>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+
+        </StackLayout>
+
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="20,20,0,0"></RoundRectangle>
+        </Border.StrokeShape>
+    </Border>
+</mopups:PopupPage>
