@@ -34,7 +34,7 @@
                    TextColor="#b66dff"
                    FontSize="13"
                    VerticalTextAlignment="Center"
-                   HorizontalOptions="End"></Label>
+                   HorizontalOptions="CenterAndExpand"></Label>
         </StackLayout>
 
         <Grid VerticalOptions="FillAndExpand">

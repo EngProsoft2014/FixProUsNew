@@ -6,6 +6,7 @@
                       xmlns:Helpers="clr-namespace:FixProUs.Helpers"
                       xmlns:vm="clr-namespace:FixProUs.ViewModels"
                       xmlns:tabView="clr-namespace:Syncfusion.Maui.TabView;assembly=Syncfusion.Maui.TabView"
+                      xmlns:core="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
                       xmlns:ff="clr-namespace:FFImageLoading.Maui;assembly=FFImageLoading.Maui"
                       xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
                       xmlns:schedule="clr-namespace:Syncfusion.Maui.Scheduler;assembly=Syncfusion.Maui.Scheduler"
@@ -193,10 +194,10 @@
                                                 </StackLayout>
 
                                                 <Border.StrokeShape>
-                                                    <RoundRectangle CornerRadius="{OnPlatform Android=25,iOS=20}" Stroke="Gray" StrokeThickness="1"></RoundRectangle>
+                                                    <RoundRectangle CornerRadius="{OnPlatform Android=20,iOS=20}" Stroke="Gray" StrokeThickness="1"></RoundRectangle>
                                                 </Border.StrokeShape>
                                                 <Border.Shadow>
-                                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                                    <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
                                                 </Border.Shadow>
                                             </Border>
 
@@ -618,7 +619,7 @@
                                         <StackLayout>
                                             <StackLayout>
                                                 <!--search bar Phone or Address-->
-                                                <Border BackgroundColor="White" HeightRequest="45" HorizontalOptions="FillAndExpand">
+                                                <Border BackgroundColor="White" HeightRequest="{OnPlatform Android=42, iOS=55}" HorizontalOptions="FillAndExpand">
                                                     <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                                                         <SearchBar x:Name="srchPhoneOrAddress" 
                                                            Text="{Binding PhoneView}" BackgroundColor="White"
@@ -630,7 +631,7 @@
                                                     </StackLayout>
 
                                                     <Border.Shadow>
-                                                        <Shadow Brush="{OnPlatform Android=Gray, iOS=Gray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                                        <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
                                                     </Border.Shadow>
                                                     <Border.StrokeShape>
                                                         <RoundRectangle CornerRadius="{OnPlatform Android=25,iOS=20}" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
@@ -994,7 +995,7 @@
                                                     </StackLayout.GestureRecognizers>
                                                 </StackLayout>
                                                 <Border.Shadow>
-                                                    <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                                    <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
                                                 </Border.Shadow>
                                                 <Border.StrokeShape>
                                                     <RoundRectangle CornerRadius="{OnPlatform Android=50,iOS=25}"></RoundRectangle>
@@ -1013,7 +1014,7 @@
                                         </StackLayout>
                                     </Border>
                                     <!--Search Bar-->
-                                    <Border BackgroundColor="White" HeightRequest="45" Margin="0,10,0,10" HorizontalOptions="FillAndExpand">
+                                    <Border BackgroundColor="White" HeightRequest="{OnPlatform Android=42, iOS=55}" Margin="0,10,0,10" HorizontalOptions="FillAndExpand">
                                         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                                             <SearchBar x:Name="srcBarEmployee"
                                                        Placeholder="Search" TextColor="#333"
@@ -1023,18 +1024,28 @@
                                         </StackLayout>
 
                                         <Border.Shadow>
-                                            <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                                            <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
                                         </Border.Shadow>
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="{OnPlatform Android=20,iOS=20}" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>
                                         </Border.StrokeShape>
                                     </Border>
-                                    <tabView:SfTabView IndicatorBackground="#9b5ff5" IndicatorPlacement="Top" FlowDirection="LeftToRight"
-                                                       TabBarHeight="60" VerticalOptions="EndAndExpand" TabBarPlacement="Bottom" Margin="-20,0,-20,-20"
+                                    <tabView:SfTabView IndicatorBackground="#f6edff" IndicatorPlacement="Fill" FlowDirection="LeftToRight" Padding="0"
+                                                       TabBarHeight="50" VerticalOptions="EndAndExpand" TabBarPlacement="Bottom" Margin="-20,0,-20,-10"
                                                        SelectionChanged="TimeSheet_SelectionChanged">
                                         <!--Check In-->
-                                        <tabView:SfTabItem Header="Check In" TextColor="Black" BadgeText="{Binding NumIn}" FontSize="14" FontFamily="Almarai-Regular" 
-                                                           BackgroundColor="#f7f5fa" FontAttributes="Bold">
+                                        <tabView:SfTabItem Header="Check In" TextColor="Black" BadgeText="{Binding NumIn}" FontSize="15" FontFamily="Almarai-Regular" 
+                                                           BackgroundColor="Transparent" FontAttributes="Bold">
+                                            
+                                            <tabView:SfTabItem.BadgeSettings >
+                                                <core:BadgeSettings FontSize="12" 
+                                                                    TextPadding="3"
+                                                                    Position="TopRight" 
+                                                                    Background="#b66dff"
+                                                                    FontAttributes="Bold">
+                                                </core:BadgeSettings>
+                                            </tabView:SfTabItem.BadgeSettings>
+                                            
                                             <tabView:SfTabItem.Content>
                                                 <ContentView Margin="10,0,10,0">
                                                     <!--Clock IN-->
@@ -1242,8 +1253,16 @@
                                             </tabView:SfTabItem.Content>
                                         </tabView:SfTabItem>
                                         <!--Check Out-->
-                                        <tabView:SfTabItem Header="Check Out" BadgeText="{Binding NumOut}" TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" 
-                                                           BackgroundColor="#f7f5fa" FontAttributes="Bold">
+                                        <tabView:SfTabItem Header="Check Out" BadgeText="{Binding NumOut}" TextColor="Black" FontSize="15" FontFamily="Almarai-Regular" 
+                                                           BackgroundColor="Transparent" FontAttributes="Bold">
+                                            <tabView:SfTabItem.BadgeSettings >
+                                                <core:BadgeSettings FontSize="12" 
+                                                                    TextPadding="3"
+                                                                    Position="TopRight"
+                                                                    Background="#b66dff"
+                                                                    FontAttributes="Bold">
+                                                </core:BadgeSettings>
+                                            </tabView:SfTabItem.BadgeSettings>
                                             <tabView:SfTabItem.Content>
                                                 <ContentView Margin="10,0,10,0">
                                                     <!--Clock OUT-->
@@ -1366,7 +1385,7 @@
                                                 <GradientStop Color="#E06DFF" Offset="1.0" />
                                             </LinearGradientBrush>
                                         </Border.Stroke>
-                                        <VerticalStackLayout Spacing="15">
+                                        <VerticalStackLayout Spacing="22">
                                             <!--Account-->
                                             <VerticalStackLayout>
                                                 <StackLayout Orientation="Horizontal">
@@ -1399,7 +1418,7 @@
                                             </VerticalStackLayout>
 
                                             <!--Tracking--> 
-                                            <VerticalStackLayout IsVisible="False">
+                                            <VerticalStackLayout IsVisible="True">
                                                 <StackLayout Orientation="Horizontal">
                                                     <Label Text="Tracking" FontAutoScalingEnabled="False" TextColor="Black" FontSize="14" VerticalTextAlignment="Start" FontAttributes="Bold"></Label>
                                                     <Image HorizontalOptions="EndAndExpand">

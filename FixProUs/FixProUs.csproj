@@ -97,7 +97,7 @@
 		<PackageReference Include="Controls.UserDialogs.Maui" Version="1.7.0" />
 		<PackageReference Include="FFImageLoading.Maui" Version="1.2.7" />
 		<PackageReference Include="GoogleApi" Version="5.5.5" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.12" />
+		<PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.3" />
 		<PackageReference Include="Microsoft.Identity.Client.Extensions.Msal" Version="4.66.1" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.93" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.93" />

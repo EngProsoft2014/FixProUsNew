@@ -7,6 +7,7 @@ using FixProUs.Helpers;
 using FixProUs.Models;
 using FixProUs.Pages.SchedulePages;
 using FixProUs.ViewModels;
+using Microsoft.AspNet.SignalR.Client;
 using Syncfusion.Maui.Calendar;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
@@ -28,8 +29,6 @@ namespace FixProUs.Pages
         MoreViewModel moreViewModel;
 
         private readonly bool stopping = false;
-        //private readonly HubConnection _hubConnection;
-        //public event Action<DataMapsModel> OnMessageReceivedLocation;
 
         private SignalRService _signalRService;
 
@@ -45,6 +44,7 @@ namespace FixProUs.Pages
 
             tabMain.SelectedIndex = Controls.StaticMembers.TabSelected;
         }
+
 
         async void Init()
         {
@@ -90,8 +90,8 @@ namespace FixProUs.Pages
                 Init();
             }
             //==========================================
-            //await SignalRservice();
-            //await StartGetLocation();
+            await SignalRservice();
+            await StartGetLocation();
             //==========================================
 
             //await Animation();
@@ -134,9 +134,46 @@ namespace FixProUs.Pages
         {
             _signalRService = new SignalRService();
 
+            _signalRService.OnMessageReceived += _signalRService_OnMessageReceived;
+            _signalRService.OnMessageReceivedUserData += _signalRService_OnMessageReceivedChangeUserData;
+
             await _signalRService.StartAsync();
         }
 
+        private async void _signalRService_OnMessageReceived(string arg1, string arg2, string arg3, string arg4)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                if (!string.IsNullOrEmpty(Preferences.Default.Get(Settings.UserName,"")) && !string.IsNullOrEmpty(Preferences.Default.Get(Settings.Password, "")))
+                {
+                    if (!string.IsNullOrEmpty(arg1) && arg1 != Helpers.Settings.PlayerIdGet && arg2.ToLower() == (Helpers.Settings.UserNameGet).ToLower())
+                    {
+                        Preferences.Default.Clear();
+                        Helpers.Utility.ServerUrl = Helpers.Utility.ServerUrlStatic;
+                        await App.Current!.MainPage!.Navigation.PushAsync(new LoginPage(new LoginViewModel(ORep, _service), ORep, _service));
+                        Controls.StartData.IsRunning = false;
+                        await App.Current!.MainPage!.DisplayAlert("Alert", "You’ve been logged out.\r\n(account is opened on another device)\r\n", "Ok");
+                    }
+                }
+            });
+
+        }
+
+        private async void _signalRService_OnMessageReceivedChangeUserData(string arg1, string arg2, string arg3, string arg4)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                if (Helpers.Settings.AccountIdGet == arg1 && Preferences.Default.Get(Settings.UserId, "") == arg2 && (Preferences.Default.Get(Settings.UserName, "") != arg3 || Preferences.Default.Get(Settings.Password, "") != arg4))
+                {
+
+                    Preferences.Default.Clear();
+                    Helpers.Utility.ServerUrl = Helpers.Utility.ServerUrlStatic;
+                    await App.Current!.MainPage!.Navigation.PushAsync(new LoginPage(new LoginViewModel(ORep, _service), ORep, _service));
+                    Controls.StartData.IsRunning = false;
+                    await App.Current!.MainPage!.DisplayAlert("Alert", "You’ve been logged out.\r\n(account is changed username or password)\r\n", "Ok");
+                }
+            });
+        }
 
         async Task StartGetLocation()
         {
@@ -148,41 +185,42 @@ namespace FixProUs.Pages
                 return;
             }
 
-            if (Device.RuntimePlatform == Device.iOS)
+            if (Helpers.Settings.UserRoleGet != "4")
             {
-                if (Geolocation.Default.IsListeningForeground)
+                if (Device.RuntimePlatform == Device.iOS)
                 {
-                    Geolocation.Default.StopListeningForeground();
-                    Geolocation.Default.LocationChanged -= Default_LocationChanged;
-                    return;
+
+                    if (Geolocation.Default.IsListeningForeground)
+                    {
+                        Geolocation.Default.StopListeningForeground();
+                        Geolocation.Default.LocationChanged -= Default_LocationChanged;
+                        return;
+                    }
+
+                    await Geolocation.Default.StartListeningForegroundAsync(new GeolocationListeningRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(5)));
+
+
+                    //await Geolocation.Default.StartListeningForegroundAsync(TimeSpan.FromSeconds(3), 10, false, new Plugin.Geolocator.Abstractions.ListenerSettings
+                    //{
+                    //    ActivityType = Plugin.Geolocator.Abstractions.ActivityType.AutomotiveNavigation,
+                    //    AllowBackgroundUpdates = true,
+                    //    DeferLocationUpdates = false,
+                    //    DeferralDistanceMeters = 10,
+                    //    DeferralTime = TimeSpan.FromSeconds(5),
+                    //    ListenForSignificantChanges = true,
+                    //    PauseLocationUpdatesAutomatically = true
+                    //});
+
+                    Geolocation.Default.LocationChanged += Default_LocationChanged;
+
                 }
-
-                await Geolocation.Default.StartListeningForegroundAsync(new GeolocationListeningRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(5)));
-
-
-                //await Geolocation.Default.StartListeningForegroundAsync(TimeSpan.FromSeconds(3), 10, false, new Plugin.Geolocator.Abstractions.ListenerSettings
-                //{
-                //    ActivityType = Plugin.Geolocator.Abstractions.ActivityType.AutomotiveNavigation,
-                //    AllowBackgroundUpdates = true,
-                //    DeferLocationUpdates = false,
-                //    DeferralDistanceMeters = 10,
-                //    DeferralTime = TimeSpan.FromSeconds(5),
-                //    ListenForSignificantChanges = true,
-                //    PauseLocationUpdatesAutomatically = true
-                //});
-
-                Geolocation.Default.LocationChanged += Default_LocationChanged;
-            }
-            else if (Device.RuntimePlatform == Device.Android)
-            {
-
-                if (Helpers.Settings.UserIdGet != "4")
+                else if (Device.RuntimePlatform == Device.Android)
                 {
                     CancellationToken token = CancellationToken.None;
                     await StartAsync(token);
+
                 }
             }
-
         }
 
 

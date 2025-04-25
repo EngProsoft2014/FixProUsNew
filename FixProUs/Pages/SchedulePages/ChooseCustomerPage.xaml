@@ -41,7 +41,7 @@
 
                 <StackLayout Margin="30,10,30,0" Spacing="20">
                     <!--search bar Phone or Address-->
-                    <Border BackgroundColor="White" HeightRequest="42" HorizontalOptions="FillAndExpand">
+                    <Border BackgroundColor="White" HeightRequest="{OnPlatform Android=42, iOS=55}" HorizontalOptions="FillAndExpand">
                         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
                             <SearchBar x:Name="srchPhoneOrAddress" 
                                        Placeholder="Search by Phone or Address"
@@ -54,7 +54,7 @@
                         </StackLayout>
 
                         <Border.Shadow>
-                            <Shadow Brush="{OnPlatform Android=Gray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
+                            <Shadow Brush="{OnPlatform Android=LightGray, iOS=LightGray}" Radius="{OnPlatform Android=5,iOS=3}"></Shadow>
                         </Border.Shadow>
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="{OnPlatform Android=25,iOS=20}" Stroke="LightGray" StrokeThickness="1"></RoundRectangle>

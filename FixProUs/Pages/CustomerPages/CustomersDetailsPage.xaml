@@ -568,7 +568,7 @@
                         <ContentView x:Name="SchedulesView">
                             <StackLayout>
                                 <ScrollView VerticalOptions="FillAndExpand">
-                                    <StackLayout Margin="20,20,20,0">
+                                    <StackLayout Margin="20">
 
                                         <CollectionView x:Name="lstSchedules" SelectionMode="None" 
                                                       ItemsSource="{Binding LstSchedules}"
@@ -657,7 +657,7 @@
                             <Grid VerticalOptions="FillAndExpand">
 
                                 <ScrollView VerticalOptions="FillAndExpand">
-                                    <StackLayout Margin="0,20,0,0">
+                                    <StackLayout Margin="0,20,0,20">
 
                                         <CollectionView x:Name="lstEstimates" SelectionMode="None" 
                                                           ItemsSource="{Binding LstEstimates}"
@@ -828,7 +828,7 @@
                             <Grid VerticalOptions="FillAndExpand">
 
                                 <ScrollView VerticalOptions="FillAndExpand">
-                                    <StackLayout Margin="0,20,0,0">
+                                    <StackLayout Margin="0,20,0,20">
 
                                         <CollectionView x:Name="lstInvoices" SelectionMode="None" 
                                                           ItemsSource="{Binding LstInvoices}"

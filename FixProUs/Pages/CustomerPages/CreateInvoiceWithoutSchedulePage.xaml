@@ -14,7 +14,7 @@
         <!--Toolbar-->
         <StackLayout Orientation="Vertical" HorizontalOptions="FillAndExpand">
 
-            <StackLayout Orientation="Horizontal" Spacing="0" Padding="{OnPlatform iOS='15,0,15,10', Android='15,10,15,10'}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <StackLayout Orientation="Horizontal" Spacing="0" Padding="{OnPlatform iOS='15,0,15,5', Android='15,15,15,5'}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
 
                 <Image x:Name="imgBack">
                     <Image.Source>
@@ -32,8 +32,9 @@
             <Label 
                    Text="{Binding BranchName}" 
                    TextColor="#b66dff"
-                   FontSize="14"
-                   VerticalTextAlignment="End"
+                   FontSize="13"
+                VerticalOptions="Center"
+                   VerticalTextAlignment="Center"
                    HorizontalOptions="CenterAndExpand"></Label>
         </StackLayout>
 

@@ -1,7 +1,7 @@
 ﻿
-//using Microsoft.AspNet.SignalR.Client;
+using Microsoft.AspNet.SignalR.Client;
 using FixProUs.Models;
-using Microsoft.AspNetCore.SignalR.Client;
+//using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,29 +13,29 @@ namespace FixPro.Services.Data
     public class SignalRService
     {
         private readonly HubConnection _hubConnection;
-
+        private readonly IHubProxy _hubProxy;
         public event Action<string, string, string, string> OnMessageReceived;
         public event Action<string, string, string, string> OnMessageReceivedUserData;
         public event Action<DataMapsModel> OnMessageReceivedLocation;
 
         public SignalRService()
         {
-            _hubConnection = new HubConnectionBuilder()
-                .WithUrl("https://fixproapi.engprosoft.net/ChatHub") // Update with your hub URL
-                .WithAutomaticReconnect()
-                .Build();
 
-            _hubConnection.On<string, string, string, string>("ReceiveMessage", (user, message, userFrom, userTo) =>
+            _hubConnection = new HubConnection("https://api.fixprous.com/");
+            _hubConnection.TraceLevel = TraceLevels.All;
+            _hubConnection.TraceWriter = Console.Out;
+            _hubProxy = _hubConnection.CreateHubProxy("ChatHub");
+
+            _hubProxy.On<string, string, string, string>("ReceiveMessage", (user, message, userFrom, userTo) =>
             {
+                // Handle received message
                 OnMessageReceived?.Invoke(user, message, userFrom, userTo);
             });
-
-            _hubConnection.On<string, string, string, string>("ChangeUserData", (user, message, userFrom, userTo) =>
+            _hubProxy.On<string, string, string, string>("ChangeUserData", (user, message, userFrom, userTo) =>
             {
                 OnMessageReceivedUserData?.Invoke(user, message, userFrom, userTo);
             });
-
-            _hubConnection.On<DataMapsModel>("ReceiveLocation", (locationData) =>
+            _hubProxy.On<DataMapsModel>("ReceiveLocation", (locationData) =>
             {
                 OnMessageReceivedLocation?.Invoke(locationData);
             });
@@ -45,7 +45,7 @@ namespace FixPro.Services.Data
         {
             try
             {
-                await _hubConnection.StartAsync();
+                await _hubConnection.Start();
                 Console.WriteLine("SignalR connected.");
             }
             catch (Exception ex)
@@ -58,7 +58,7 @@ namespace FixPro.Services.Data
         {
             try
             {
-                await _hubConnection.StopAsync();
+                _hubConnection.Stop();
                 Console.WriteLine("SignalR disconnected.");
             }
             catch (Exception ex)
@@ -67,19 +67,30 @@ namespace FixPro.Services.Data
             }
         }
 
+        public async Task SendMessage(string user, string message)
+        {
+            try
+            {
+                await _hubProxy.Invoke("SendMessage", user, message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"SendMessage failed: {ex.Message}");
+            }
+        }
 
         public async Task SendLocation(DataMapsModel locationData)
         {
             try
             {
-                if (_hubConnection.State != HubConnectionState.Connected)
+                if (_hubConnection.State != ConnectionState.Connected)
                 {
                     await StartAsync();
                 }
 
-                if (_hubConnection.State == HubConnectionState.Connected)
+                if (_hubConnection.State == ConnectionState.Connected)
                 {
-                    await _hubConnection.InvokeAsync("UpdateLocation", locationData);
+                    await _hubProxy.Invoke("UpdateLocation", locationData);
                 }
                 else
                 {
@@ -91,38 +102,36 @@ namespace FixPro.Services.Data
                 Console.WriteLine($"SendLocation failed: {ex.Message}");
             }
         }
-
-        public async Task SendMessage(string user, string message)
-        {
-            try
-            {
-                await _hubConnection.InvokeAsync("SendMessage", user, message);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"SendMessage failed: {ex.Message}");
-            }
-        }
     }
 
     //public class SignalRService
     //{
     //    private readonly HubConnection _hubConnection;
-    //    private readonly IHubProxy _hubProxy;
+
     //    public event Action<string, string, string, string> OnMessageReceived;
+    //    public event Action<string, string, string, string> OnMessageReceivedUserData;
+    //    public event Action<DataMapsModel> OnMessageReceivedLocation;
 
     //    public SignalRService()
     //    {
+    //        _hubConnection = new HubConnectionBuilder()
+    //            .WithUrl("https://fixproapi.engprosoft.net/ChatHub") // Update with your hub URL
+    //            .WithAutomaticReconnect()
+    //            .Build();
 
-    //        _hubConnection = new HubConnection("https://fixproapi.engprosoft.net/");
-    //        _hubConnection.TraceLevel = TraceLevels.All;
-    //        _hubConnection.TraceWriter = Console.Out;
-    //        _hubProxy = _hubConnection.CreateHubProxy("ChatHub");
-
-    //        _hubProxy.On<string, string, string, string>("ReceiveMessage", (user, message, userFrom, userTo) =>
+    //        _hubConnection.On<string, string, string, string>("ReceiveMessage", (user, message, userFrom, userTo) =>
     //        {
-    //            // Handle received message
     //            OnMessageReceived?.Invoke(user, message, userFrom, userTo);
+    //        });
+
+    //        _hubConnection.On<string, string, string, string>("ChangeUserData", (user, message, userFrom, userTo) =>
+    //        {
+    //            OnMessageReceivedUserData?.Invoke(user, message, userFrom, userTo);
+    //        });
+
+    //        _hubConnection.On<DataMapsModel>("ReceiveLocation", (locationData) =>
+    //        {
+    //            OnMessageReceivedLocation?.Invoke(locationData);
     //        });
     //    }
 
@@ -130,7 +139,7 @@ namespace FixPro.Services.Data
     //    {
     //        try
     //        {
-    //            await _hubConnection.Start();
+    //            await _hubConnection.StartAsync();
     //            Console.WriteLine("SignalR connected.");
     //        }
     //        catch (Exception ex)
@@ -143,7 +152,7 @@ namespace FixPro.Services.Data
     //    {
     //        try
     //        {
-    //            _hubConnection.Stop();
+    //            await _hubConnection.StopAsync();
     //            Console.WriteLine("SignalR disconnected.");
     //        }
     //        catch (Exception ex)
@@ -152,11 +161,36 @@ namespace FixPro.Services.Data
     //        }
     //    }
 
+
+    //    public async Task SendLocation(DataMapsModel locationData)
+    //    {
+    //        try
+    //        {
+    //            if (_hubConnection.State != HubConnectionState.Connected)
+    //            {
+    //                await StartAsync();
+    //            }
+
+    //            if (_hubConnection.State == HubConnectionState.Connected)
+    //            {
+    //                await _hubConnection.InvokeAsync("UpdateLocation", locationData);
+    //            }
+    //            else
+    //            {
+    //                Console.WriteLine("Failed to send location: SignalR connection is still not active.");
+    //            }
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            Console.WriteLine($"SendLocation failed: {ex.Message}");
+    //        }
+    //    }
+
     //    public async Task SendMessage(string user, string message)
     //    {
     //        try
     //        {
-    //            await _hubProxy.Invoke("SendMessage", user, message);
+    //            await _hubConnection.InvokeAsync("SendMessage", user, message);
     //        }
     //        catch (Exception ex)
     //        {
@@ -164,4 +198,5 @@ namespace FixPro.Services.Data
     //        }
     //    }
     //}
+
 }

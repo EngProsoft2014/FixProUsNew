@@ -1,7 +1,9 @@
 ﻿
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Controls.UserDialogs.Maui;
+using FixPro.Services.Data;
 using FixProUs.Helpers;
 using FixProUs.Models;
 using System.Collections.ObjectModel;
@@ -55,7 +57,7 @@ namespace FixProUs.ViewModels
 
         public static DataMapsModel MapsModel { get; set; }
 
-        GetLocationService _signalRLocation = new GetLocationService();
+        SignalRService _signalRLocation = new SignalRService();
 
         DataTable employeesTable;
 
@@ -83,7 +85,7 @@ namespace FixProUs.ViewModels
             Listmap = new ObservableCollection<DataMapsModel>();
             LastListmap = new ObservableCollection<DataMapsModel>();
             CurrentTrack = new DataMapsModel();
-            GetDataEmployee();
+            //GetDataEmployee();
             //new Timer((Object stateInfo) => { GetDataEmployee(); }, new AutoResetEvent(false), 0, 3000);
         }
 
@@ -177,7 +179,7 @@ namespace FixProUs.ViewModels
 
         }
 
-        private async void GetDataEmployee()
+        private async Task GetDataEmployee()
         {
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
@@ -241,9 +243,18 @@ namespace FixProUs.ViewModels
 
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
-                UserDialogs.Instance.ShowLoading();
-                await App.Current!.MainPage!.Navigation.PushAsync(new Pages.MenuPages.TrckingMapPage(MapsModel, new EmployeesViewModel(employee, ORep, _service), ORep, _service));
-                UserDialogs.Instance.HideHud();
+                await GetDataEmployee();
+                if(MapsModel != null)
+                {
+                    UserDialogs.Instance.ShowLoading();
+                    await App.Current!.MainPage!.Navigation.PushAsync(new Pages.MenuPages.TrckingMapPage(MapsModel, new EmployeesViewModel(employee, ORep, _service), ORep, _service));
+                    UserDialogs.Instance.HideHud();
+                }
+                else
+                {
+                    var toast = Toast.Make("Sorry, No available location coordinates.", CommunityToolkit.Maui.Core.ToastDuration.Long, 15);
+                    await toast.Show();
+                }
             }
 
             IsEnable = true;

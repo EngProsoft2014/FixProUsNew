@@ -1,5 +1,5 @@
 ﻿
-using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.AspNet.SignalR.Client;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading;
@@ -9,36 +9,37 @@ using Microsoft.Maui.Devices.Sensors;
 using System;
 using FixProUs.Models;
 using FixPro.Services.Data;
+using Microsoft.AspNet.SignalR.Client;
 
 namespace FixProUs
 {
-
     public class GetLocationService
     {
         private readonly bool stopping = false;
         private static int Idincerment = 0;
         private readonly HubConnection _hubConnection;
+        private readonly IHubProxy _hubProxy;
         public event Action<DataMapsModel> OnMessageReceivedLocation;
 
         public GetLocationService()
         {
-            _hubConnection = new HubConnectionBuilder()
-               .WithUrl("https://api.fixprous.com/ChatHub") // Update with your hub URL
-               .WithAutomaticReconnect()
-               .Build();
+            _hubConnection = new HubConnection("https://fixproapi.engprosoft.net/");
+            _hubConnection.TraceLevel = TraceLevels.All;
+            _hubConnection.TraceWriter = Console.Out;
+            _hubProxy = _hubConnection.CreateHubProxy("ChatHub");
 
-            _hubConnection.On<DataMapsModel>("ReceiveLocation", (locationData) =>
+            _hubProxy.On<DataMapsModel>("ReceiveLocation", (locationData) =>
             {
                 OnMessageReceivedLocation?.Invoke(locationData);
             });
-            
+
         }
 
         public async Task StartAsync(CancellationToken token)
         {
             try
             {
-                await _hubConnection.StartAsync();
+                await _hubConnection.Start();
 
                 await Task.Run(async () =>
                 {
@@ -70,9 +71,9 @@ namespace FixProUs
                                 };
 
                                 // Send location data via SignalR
-                                if (_hubConnection.State == HubConnectionState.Connected)
+                                if (_hubConnection.State == ConnectionState.Connected)
                                 {
-                                    await _hubConnection.SendAsync("UpdateLocation", locationData);
+                                    //await _hubConnection.Send("UpdateLocation", locationData);
                                 }
                             }
                         }
@@ -93,14 +94,107 @@ namespace FixProUs
 
         public async Task StopAsync()
         {
-            if (_hubConnection.State == HubConnectionState.Connected)
+            if (_hubConnection.State == ConnectionState.Connected)
             {
-                await _hubConnection.StopAsync();
+                //await _hubConnection.StopAsync();
             }
         }
 
     }
 
+
+    //Code SignalR Core
+    //public class GetLocationService
+    //{
+    //    private readonly bool stopping = false;
+    //    private static int Idincerment = 0;
+    //    private readonly HubConnection _hubConnection;
+    //    public event Action<DataMapsModel> OnMessageReceivedLocation;
+
+    //    public GetLocationService()
+    //    {
+    //        _hubConnection = new HubConnectionBuilder()
+    //           .WithUrl("https://api.fixprous.com/ChatHub") // Update with your hub URL
+    //           .WithAutomaticReconnect()
+    //           .Build();
+
+    //        _hubConnection.On<DataMapsModel>("ReceiveLocation", (locationData) =>
+    //        {
+    //            OnMessageReceivedLocation?.Invoke(locationData);
+    //        });
+
+    //    }
+
+    //    public async Task StartAsync(CancellationToken token)
+    //    {
+    //        try
+    //        {
+    //            await _hubConnection.StartAsync();
+
+    //            await Task.Run(async () =>
+    //            {
+    //                while (!stopping)
+    //                {
+    //                    token.ThrowIfCancellationRequested();
+    //                    try
+    //                    {
+    //                        var location = await MainThread.InvokeOnMainThreadAsync<Location>(() =>
+    //                        {
+    //                            var request = new GeolocationRequest(GeolocationAccuracy.Medium);
+    //                            return Geolocation.GetLocationAsync(request);
+    //                        });
+
+    //                        if (location != null)
+    //                        {
+    //                            Idincerment += 1;
+
+    //                            var locationData = new DataMapsModel
+    //                            {
+    //                                Id = Idincerment,
+    //                                BranchId = int.Parse(Helpers.Settings.BranchId),
+    //                                EmployeeId = int.Parse(Helpers.Settings.UserId),
+    //                                Lat = location.Latitude.ToString(),
+    //                                Long = location.Longitude.ToString(),
+    //                                Time = location.Timestamp.ToString(),
+    //                                CreateDate = DateTime.Now.ToShortDateString(),
+    //                                MPosition = new Location(location.Latitude, location.Longitude),
+    //                            };
+
+    //                            // Send location data via SignalR
+    //                            if (_hubConnection.State == HubConnectionState.Connected)
+    //                            {
+    //                                await _hubConnection.SendAsync("UpdateLocation", locationData);
+    //                            }
+    //                        }
+    //                    }
+    //                    catch (Exception ex)
+    //                    {
+
+    //                    }
+
+    //                    await Task.Delay(2000); // Reduce CPU usage
+    //                }
+    //            }, token);
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            Console.WriteLine("SignalR Connection Error: " + ex.Message);
+    //        }
+    //    }
+
+    //    public async Task StopAsync()
+    //    {
+    //        if (_hubConnection.State == HubConnectionState.Connected)
+    //        {
+    //            await _hubConnection.StopAsync();
+    //        }
+    //    }
+
+    //}
+
+    // ======================================================
+
+    //Old Code
     //public class GetLocationService
     //{
     //    readonly bool stopping = false;
