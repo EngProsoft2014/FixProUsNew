@@ -521,7 +521,7 @@
             </StackLayout>
         </ScrollView>
 
-        <StackLayout x:Name="stkResponButtons" HorizontalOptions="FillAndExpand" VerticalOptions="End" Padding="{OnPlatform Android=10,iOS='20,10,10,50'}">
+        <StackLayout x:Name="stkResponButtons" HorizontalOptions="FillAndExpand" VerticalOptions="End" Padding="10">
             <StackLayout Orientation="Horizontal" Spacing="20" HorizontalOptions="FillAndExpand" Margin="10,0">
 
                 <Button Text="Submit" 

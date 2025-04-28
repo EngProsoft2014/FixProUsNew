@@ -131,7 +131,7 @@
 
                                                 <StackLayout HorizontalOptions="FillAndExpand">
                                                     <Label Text="Phone" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
-                                                    <Border BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
+                                                    <Border HeightRequest="45" BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
                                                         <StackLayout HorizontalOptions="FillAndExpand" Margin="5,12,5,12">
                                                             <Label 
                                                                  Text="{Binding CustomerDetails.Phone1}" 
@@ -154,7 +154,7 @@
 
                                                 <StackLayout Grid.Row="1" HorizontalOptions="FillAndExpand">
                                                     <Label Text="Email" TextColor="Black" FontSize="12" HorizontalOptions="StartAndExpand"></Label>
-                                                    <Border BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
+                                                    <Border HeightRequest="45" BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
                                                         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
                                                             <Label 
                                                                  Text="{Binding CustomerDetails.Email}" 
@@ -176,7 +176,7 @@
 
                                                 <StackLayout Grid.Row="2" HorizontalOptions="FillAndExpand">
                                                     <Label Text="Address" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
-                                                    <Border BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
+                                                    <Border HeightRequest="45" BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
                                                         <StackLayout HorizontalOptions="FillAndExpand" >
 
                                                             <Label 
@@ -200,7 +200,7 @@
 
                                                 <StackLayout Grid.Row="3" HorizontalOptions="FillAndExpand">
                                                     <Label Text="City/State" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
-                                                    <Border BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
+                                                    <Border HeightRequest="45" BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
                                                         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
                                                             <Label 
                                                                  TextColor="#8f1fff"
@@ -230,7 +230,7 @@
                                                 <StackLayout Orientation="Horizontal" Grid.Row="4" Grid.Column="0" Spacing="5" Margin="5,12,5,12" HorizontalOptions="FillAndExpand">
                                                     <StackLayout HorizontalOptions="FillAndExpand">
                                                         <Label Text="Year Built" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
-                                                        <Border BackgroundColor="White" Padding="10" HorizontalOptions="FillAndExpand">
+                                                        <Border HeightRequest="45" BackgroundColor="White" Padding="10" HorizontalOptions="FillAndExpand">
                                                             <Label 
                                                                    TextColor="#8f1fff" Text="{Binding CustomerDetails.YearBuit}"      
                                                                    HorizontalOptions="FillAndExpand"
@@ -254,7 +254,7 @@
 
                                                     <StackLayout HorizontalOptions="FillAndExpand">
                                                         <Label Text="Estimate Value" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
-                                                        <Border BackgroundColor="White" Padding="10" HorizontalOptions="FillAndExpand">
+                                                        <Border HeightRequest="45" BackgroundColor="White" Padding="10" HorizontalOptions="FillAndExpand">
                                                             <Label 
                                                                    Text="{Binding CustomerDetails.EstimedValueView}"            
                                                                    TextColor="#8f1fff"
@@ -278,7 +278,7 @@
 
                                                     <StackLayout HorizontalOptions="FillAndExpand">
                                                         <Label Text="Square Footage" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
-                                                        <Border BackgroundColor="White" Padding="10" HorizontalOptions="FillAndExpand">
+                                                        <Border HeightRequest="45" BackgroundColor="White" Padding="10" HorizontalOptions="FillAndExpand">
                                                             <Label 
                                                                  Text="{Binding CustomerDetails.Squirefootage}"               
                                                                  TextColor="#8f1fff"
@@ -304,7 +304,7 @@
 
                                                 <StackLayout Grid.Row="5" Margin="5,12,5,12" HorizontalOptions="FillAndExpand">
                                                     <Label Text="Notes" TextColor="Black" FontSize="12" HorizontalOptions="StartAndExpand"></Label>
-                                                    <Border BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
+                                                    <Border HeightRequest="45" BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
                                                         <StackLayout HorizontalOptions="FillAndExpand" >
                                                             <Label 
                                                                  Text="{Binding CustomerDetails.Notes}" 
@@ -350,7 +350,7 @@
 
                                                 <StackLayout Grid.Column="0" HorizontalOptions="FillAndExpand">
                                                     <Label Text="Category" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
-                                                    <Border BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
+                                                    <Border HeightRequest="45" BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
                                                         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
                                                             <Label 
                                                                  Text="{Binding CustomerDetails.CustomerCategory.CategoryName}" 
@@ -372,7 +372,7 @@
 
                                                 <StackLayout Grid.Row="1" HorizontalOptions="FillAndExpand">
                                                     <Label Text="Member" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
-                                                    <Border BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
+                                                    <Border HeightRequest="45" BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
                                                         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="5,12,5,12">
                                                             <Label x:Name="lblYesOrNo"
                                                                      TextColor="#8f1fff"
@@ -417,7 +417,7 @@
 
                                                 <StackLayout Grid.Row="2" HorizontalOptions="FillAndExpand">
                                                     <Label Text="Texable" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
-                                                    <Border BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
+                                                    <Border HeightRequest="45" BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
 
                                                         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" Margin="5,12,5,12">
                                                             <Label
@@ -455,7 +455,7 @@
 
                                                 <StackLayout Grid.Row="3" Grid.Column="0" HorizontalOptions="FillAndExpand">
                                                     <Label Text="Source" TextColor="Black" FontSize="13" HorizontalOptions="StartAndExpand"></Label>
-                                                    <Border BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
+                                                    <Border HeightRequest="45" BackgroundColor="White" Padding="5,0,5,0" HorizontalOptions="FillAndExpand">
                                                         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand" >
                                                             <Label Text="{Binding CustomerDetails.CampaignDTO.Lable}"
                                                                      TextColor="#8f1fff"

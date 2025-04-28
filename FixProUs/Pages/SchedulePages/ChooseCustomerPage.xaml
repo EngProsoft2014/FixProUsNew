@@ -67,14 +67,14 @@
                 <Line  X1="400" HorizontalOptions="CenterAndExpand" BackgroundColor="LightGray" Margin="0,10,0,10"></Line>
 
                 <ScrollView VerticalOptions="FillAndExpand" Padding="0,0,0,70">
-                    <StackLayout Padding="0,10,0,20">
+                    <StackLayout Padding="20,10,20,20">
 
                         <CollectionView x:Name="lstCustomers" SelectionMode="Single"
                               ItemsSource="{Binding LstCustomers}"
                               VerticalScrollBarVisibility="Never">
-                            <!--<CollectionView.ItemsLayout>
-                            <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="40"></GridItemsLayout>
-                        </CollectionView.ItemsLayout>-->
+                            <CollectionView.ItemsLayout>
+                                <GridItemsLayout Orientation="Vertical" VerticalItemSpacing="10"></GridItemsLayout>
+                            </CollectionView.ItemsLayout>
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
 
@@ -141,7 +141,7 @@
                                                         </DataTrigger>
                                                     </Button.Triggers>
                                                 </Button>
-                                                
+
                                             </StackLayout>
                                             <StackLayout.GestureRecognizers>
                                                 <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CustomersViewModel}}, Path= SelectionCommand}" CommandParameter="{Binding}" ></TapGestureRecognizer>
@@ -161,7 +161,7 @@
                                             <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CustomersViewModel}}, Path= SelectionCommand}" CommandParameter="{Binding}" ></TapGestureRecognizer>
                                         </Border.GestureRecognizers>
                                     </Border>
-                                    
+
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                             <CollectionView.Triggers>

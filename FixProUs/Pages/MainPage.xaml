@@ -19,7 +19,7 @@
         <!--Tabs-->
         <StackLayout VerticalOptions="FillAndExpand">
             <tabView:SfTabView x:Name="tabMain" IndicatorBackground="#9b5ff5" IndicatorPlacement="Top" FlowDirection="LeftToRight"
-                           TabBarHeight="60" VerticalOptions="EndAndExpand" TabBarPlacement="Bottom" SelectionChanged="SfTabView_SelectionChanged">
+                           TabBarHeight="60" VerticalOptions="FillAndExpand" TabBarPlacement="Bottom" SelectionChanged="SfTabView_SelectionChanged">
                 <tabView:SfTabView.Items>
                     <!--Schedules-->
                     <tabView:SfTabItem TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" BackgroundColor="#f7f5fa">
@@ -1031,7 +1031,7 @@
                                         </Border.StrokeShape>
                                     </Border>
                                     <tabView:SfTabView IndicatorBackground="#f6edff" IndicatorPlacement="Fill" FlowDirection="LeftToRight" Padding="0"
-                                                       TabBarHeight="50" VerticalOptions="EndAndExpand" TabBarPlacement="Top"
+                                                       TabBarHeight="50" VerticalOptions="FillAndExpand" TabBarPlacement="Top"
                                                        SelectionChanged="TimeSheet_SelectionChanged">
                                         <!--Check In-->
                                         <tabView:SfTabItem Header="Check In" TextColor="Black" BadgeText="{Binding NumIn}" FontSize="15" FontFamily="Almarai-Regular" 
@@ -1039,7 +1039,7 @@
                                             
                                             <tabView:SfTabItem.BadgeSettings >
                                                 <core:BadgeSettings FontSize="12" 
-                                                                    TextPadding="3"
+                                                                    TextPadding="{OnPlatform Android=3,iOS=1}"
                                                                     Position="TopRight" 
                                                                     Background="#b66dff"
                                                                     FontAttributes="Bold">
@@ -1257,7 +1257,7 @@
                                                            BackgroundColor="Transparent" FontAttributes="Bold">
                                             <tabView:SfTabItem.BadgeSettings >
                                                 <core:BadgeSettings FontSize="12" 
-                                                                    TextPadding="3"
+                                                                    TextPadding="{OnPlatform Android=3,iOS=1}"
                                                                     Position="TopRight"
                                                                     Background="#b66dff"
                                                                     FontAttributes="Bold">
