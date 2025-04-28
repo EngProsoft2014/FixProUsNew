@@ -18,7 +18,7 @@
     <Grid>
         <!--Tabs-->
         <StackLayout VerticalOptions="FillAndExpand">
-            <tabView:SfTabView x:Name="tabMain" IndicatorBackground="#9b5ff5" IndicatorPlacement="Bottom" FlowDirection="LeftToRight"
+            <tabView:SfTabView x:Name="tabMain" IndicatorBackground="#9b5ff5" IndicatorPlacement="Top" FlowDirection="LeftToRight"
                            TabBarHeight="60" VerticalOptions="EndAndExpand" TabBarPlacement="Bottom" SelectionChanged="SfTabView_SelectionChanged">
                 <tabView:SfTabView.Items>
                     <!--Schedules-->
@@ -963,13 +963,13 @@
                             <FontImageSource Glyph="" FontFamily="FontIconSolid" Color="Gray"></FontImageSource>
                         </tabView:SfTabItem.ImageSource>
                         <tabView:SfTabItem.Content>
-                            <ContentView x:Name="TimeSheetsView" Margin="20,20,20,10">
-                                <StackLayout Spacing="10">
+                            <ContentView x:Name="TimeSheetsView" Margin="0,20,0,10">
+                                <StackLayout Spacing="5">
                                     <!--Toolbar-->
                                     <Label x:Name="TimeSheetsTitle" Text="Time Sheet" TextColor="Black" FontAttributes="Bold" HorizontalOptions="CenterAndExpand"
-                                               FontSize="16" Margin="0,0,0,15"/>
+                                               FontSize="16" Margin="20,0,20,15"/>
                                     <!--Date-->
-                                    <Border StrokeShape="RoundRectangle 20" BackgroundColor="White" HeightRequest="60" HorizontalOptions="FillAndExpand">
+                                    <Border StrokeShape="RoundRectangle 20" Margin="20,0,20,0" BackgroundColor="White" HeightRequest="60" HorizontalOptions="FillAndExpand">
                                         <StackLayout Orientation="Horizontal" Padding="20,0,20,0" Spacing="0">
 
                                             <!--Back Date-->
@@ -1014,7 +1014,7 @@
                                         </StackLayout>
                                     </Border>
                                     <!--Search Bar-->
-                                    <Border BackgroundColor="White" HeightRequest="{OnPlatform Android=42, iOS=55}" Margin="0,10,0,10" HorizontalOptions="FillAndExpand">
+                                    <Border BackgroundColor="White" Margin="20,10,20,10" HeightRequest="{OnPlatform Android=42, iOS=55}" HorizontalOptions="FillAndExpand">
                                         <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
                                             <SearchBar x:Name="srcBarEmployee"
                                                        Placeholder="Search" TextColor="#333"
@@ -1031,7 +1031,7 @@
                                         </Border.StrokeShape>
                                     </Border>
                                     <tabView:SfTabView IndicatorBackground="#f6edff" IndicatorPlacement="Fill" FlowDirection="LeftToRight" Padding="0"
-                                                       TabBarHeight="50" VerticalOptions="EndAndExpand" TabBarPlacement="Bottom" Margin="-20,0,-20,-10"
+                                                       TabBarHeight="50" VerticalOptions="EndAndExpand" TabBarPlacement="Top"
                                                        SelectionChanged="TimeSheet_SelectionChanged">
                                         <!--Check In-->
                                         <tabView:SfTabItem Header="Check In" TextColor="Black" BadgeText="{Binding NumIn}" FontSize="15" FontFamily="Almarai-Regular" 
@@ -1047,7 +1047,7 @@
                                             </tabView:SfTabItem.BadgeSettings>
                                             
                                             <tabView:SfTabItem.Content>
-                                                <ContentView Margin="10,0,10,0">
+                                                <ContentView Margin="10,20,10,0">
                                                     <!--Clock IN-->
                                                     <StackLayout x:Name="stkClockIN" VerticalOptions="FillAndExpand">
 
@@ -1264,7 +1264,7 @@
                                                 </core:BadgeSettings>
                                             </tabView:SfTabItem.BadgeSettings>
                                             <tabView:SfTabItem.Content>
-                                                <ContentView Margin="10,0,10,0">
+                                                <ContentView Margin="10,20,10,0">
                                                     <!--Clock OUT-->
                                                     <StackLayout x:Name="stkClockOUT" VerticalOptions="FillAndExpand" IsVisible="False">
 
