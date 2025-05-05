@@ -10,7 +10,9 @@ using FixProUs.ViewModels;
 using Microsoft.AspNet.SignalR.Client;
 using Syncfusion.Maui.Calendar;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Twilio.Rest.Microvisor.V1;
 
 namespace FixProUs.Pages
@@ -39,16 +41,15 @@ namespace FixProUs.Pages
             InitializeComponent();
             ORep = GenericRep;
             _service = service;
-            scheduleViewModel = model;
-            SchedulesView.BindingContext = model;
+            SchedulesView.BindingContext = scheduleViewModel = model;
 
             tabMain.SelectedIndex = Controls.StaticMembers.TabSelected;
         }
 
 
-        async void Init()
+        async Task Init()
         {
-            if (tabMain.SelectedIndex == 0)
+            if ((int)tabMain.SelectedIndex == 0)
             {
                 await scheduleViewModel.GetAllSchedules();
 
@@ -87,37 +88,13 @@ namespace FixProUs.Pages
 
             if (scheduleViewModel.LstSchedules.Count <= 0)
             {
-                Init();
+                await Init();
             }
             //==========================================
             await SignalRservice();
             await StartGetLocation();
             //==========================================
-
-            //await Animation();
-            //AccountImg.Source = !string.IsNullOrEmpty(Helpers.Settings.UserPrictureGet) ? Helpers.Settings.UserPrictureGet : "avatar.png";
-
-            //try
-            //{
-            //    AccountImg.Source = Preferences.Default.Get(Helpers.Settings.UserPricture, "avatar.png");
-            //}
-            //catch (Exception)
-            //{
-            //    AccountImg.Source = "avatar.png";
-            //}
-            //await chatService.Connect();
-            //BadgeNotifications.Num = Messages.Count;
         }
-
-
-        protected override async void OnDisappearing()
-        {
-            base.OnDisappearing();
-
-            //await chatService.Disconnect();
-            //BadgeNotifications.Num = Messages.Count;
-        }
-
 
         protected override bool OnBackButtonPressed()
         {
@@ -128,7 +105,6 @@ namespace FixProUs.Pages
             });
             return true;
         }
-
 
         public async Task SignalRservice()
         {
@@ -222,7 +198,6 @@ namespace FixProUs.Pages
                 }
             }
         }
-
 
         //SignalR Location iOS
         private async void Default_LocationChanged(object? sender, GeolocationLocationChangedEventArgs e)
@@ -348,8 +323,8 @@ namespace FixProUs.Pages
         //Abdullah 
         private async void SfTabView_SelectionChanged(object sender, Syncfusion.Maui.TabView.TabSelectionChangedEventArgs e)
         {
-            if (e.NewIndex == 0)
-            {
+            if ((int)e.NewIndex == 0)
+            {       
                 SchedulesView.BindingContext = scheduleViewModel;
 
                 calendar.MonthView.SpecialDayPredicate = (date) =>
@@ -376,22 +351,22 @@ namespace FixProUs.Pages
                     return null;
                 };
             }
-            else if (e.NewIndex == 1)
+            else if ((int)e.NewIndex == 1)
             {
                 customerViewModel = new CustomersViewModel(ORep, _service);
                 CustomersView.BindingContext = customerViewModel;
             }
-            else if (e.NewIndex == 2)
+            else if ((int)e.NewIndex == 2)
             {
                 callsViewModel = new CallsViewModel(ORep, _service);
                 CallsView.BindingContext = callsViewModel;
             }
-            else if (e.NewIndex == 3)
+            else if ((int)e.NewIndex == 3)
             {
                 timeSheetViewModel = new TimeSheetViewModel(ORep, _service);
                 TimeSheetsView.BindingContext = timeSheetViewModel;
             }
-            else if (e.NewIndex == 4)
+            else if ((int)e.NewIndex == 4)
             {
                 moreViewModel = new MoreViewModel(ORep, _service);
                 MoreView.BindingContext = moreViewModel;

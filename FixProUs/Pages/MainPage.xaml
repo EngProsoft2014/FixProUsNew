@@ -1500,8 +1500,8 @@
 
             <Border StrokeShape="RoundRectangle 20"  TranslationY="-10"
                     BackgroundColor="#b66dff"
-                    HeightRequest="22"
-                    WidthRequest="22"
+                    HeightRequest="23"
+                    WidthRequest="23"
                     Margin="0" 
                     Padding="0"
                     Grid.Column="4"
@@ -1510,7 +1510,7 @@
                     Grid.RowSpan="4">
                 <Label x:Name="lblBadge"
                        Text="{Binding NumNotify}"
-                       FontSize="9" 
+                       FontSize="{OnPlatform Android=9,iOS=8}" 
                        VerticalTextAlignment="Center"
                        WidthRequest="10" 
                        HeightRequest="16" 
