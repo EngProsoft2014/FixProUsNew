@@ -123,12 +123,35 @@ namespace FixProUs
                 string plyId = !string.IsNullOrEmpty(OneSignal.User.PushSubscription.Id) ? OneSignal.User.PushSubscription.Id : "";
                 Preferences.Default.Set(Helpers.Settings.PlayerId, plyId);
 
+                await StatusLocation();
+
                 //==============================================
                 //await SignalRservice();
                 //await SignalRserviceChangeUserData();
                 //==============================================
 
                 await Controls.StartData.GetCom_Main();
+            }
+        }
+
+        async Task StatusLocation()
+        {
+            var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+
+            if(status != null)
+            {
+                if (status != PermissionStatus.Granted)
+                {
+                    await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+                }
+            }
+            else
+            {
+                status = await Permissions.CheckStatusAsync<Permissions.LocationAlways>();
+                if(status != null && status != PermissionStatus.Granted)
+                {
+                    await Permissions.RequestAsync<Permissions.LocationAlways>();
+                }
             }
         }
 

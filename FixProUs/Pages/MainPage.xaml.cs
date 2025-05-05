@@ -51,7 +51,7 @@ namespace FixProUs.Pages
         {
             if ((int)tabMain.SelectedIndex == 0)
             {
-                await scheduleViewModel.GetAllSchedules();
+                //await scheduleViewModel.GetAllSchedules();
 
                 calendar.MonthView.SpecialDayPredicate = (date) =>
                 {
@@ -153,13 +153,13 @@ namespace FixProUs.Pages
 
         async Task StartGetLocation()
         {
-            var permission = await Permissions.RequestAsync<Permissions.LocationAlways>();
+            //var permission = await Permissions.RequestAsync<Permissions.LocationAlways>();
 
-            if (permission == PermissionStatus.Denied)
-            {
-                // TODO Let the user know they need to accept
-                return;
-            }
+            //if (permission == PermissionStatus.Denied)
+            //{
+            //    // TODO Let the user know they need to accept
+            //    return;
+            //}
 
             if (Helpers.Settings.UserRoleGet != "4")
             {
