@@ -44,11 +44,11 @@ namespace FixProUs.ViewModels
             ORep = GenericRep;
             _service = service;
             Init();
-            MessagingCenter.Subscribe<AccountViewModel, bool>(this, "ChangedProfileImage", (sender, message) =>
+            MessagingCenter.Subscribe<AccountViewModel, string>(this, "ChangedProfileImage", (sender, message) =>
             {
-                if (true)
+                if (!string.IsNullOrEmpty(message))
                 {
-                    Init();
+                    AccountPhoto = Preferences.Default.Get(Settings.UserPricture, "avatar.png");
                 }
             });
         }
@@ -216,7 +216,7 @@ namespace FixProUs.ViewModels
                                 //AccountPhoto = ImageSource.FromStream(() => new MemoryStream(memoryStream.ToArray()));
                             }
 
-                            MessagingCenter.Send(this, "ChangedProfileImage", true);
+                            MessagingCenter.Send(this, "ChangedProfileImage", AccountPhoto);
 
                             //await App.Current!.MainPage!.Navigation.PushAsync(new AccountPage());
                             //App.Current!.MainPage!.Navigation.RemovePage(App.Current!.MainPage!.Navigation.NavigationStack[App.Current!.MainPage!.Navigation.NavigationStack.Count - 2]);
@@ -313,7 +313,7 @@ namespace FixProUs.ViewModels
                                 //AccountPhoto = ImageSource.FromStream(() => new MemoryStream(memoryStream.ToArray()));
                             }
 
-                            MessagingCenter.Send(this, "ChangedProfileImage", true);
+                            MessagingCenter.Send(this, "ChangedProfileImage", AccountPhoto);
 
                             //await App.Current!.MainPage!.Navigation.PushAsync(new AccountPage());
                             //App.Current!.MainPage!.Navigation.RemovePage(App.Current!.MainPage!.Navigation.NavigationStack[App.Current!.MainPage!.Navigation.NavigationStack.Count - 2]);
