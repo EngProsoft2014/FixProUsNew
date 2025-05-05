@@ -22,7 +22,7 @@
                            TabBarHeight="60" VerticalOptions="FillAndExpand" TabBarPlacement="Bottom" SelectionChanged="SfTabView_SelectionChanged">
                 <tabView:SfTabView.Items>
                     <!--Schedules-->
-                    <tabView:SfTabItem TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" BackgroundColor="#f7f5fa">
+                    <tabView:SfTabItem TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" BackgroundColor="White">
                         <tabView:SfTabItem.ImageSource>
                             <FontImageSource Glyph="" FontFamily="FontIconSolid" Color="Gray"></FontImageSource>
                         </tabView:SfTabItem.ImageSource>
@@ -596,7 +596,7 @@
                         </tabView:SfTabItem.Content>
                     </tabView:SfTabItem>
                     <!--Customers-->
-                    <tabView:SfTabItem TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" BackgroundColor="#f7f5fa">
+                    <tabView:SfTabItem TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" BackgroundColor="White">
                         <tabView:SfTabItem.ImageSource>
                             <FontImageSource Glyph="" FontFamily="FontIconSolid" Color="Gray"></FontImageSource>
                         </tabView:SfTabItem.ImageSource>
@@ -765,7 +765,7 @@
                         </tabView:SfTabItem.Content>
                     </tabView:SfTabItem>
                     <!--Calls-->
-                    <tabView:SfTabItem TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" BackgroundColor="#f7f5fa">
+                    <tabView:SfTabItem TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" BackgroundColor="White">
                         <tabView:SfTabItem.ImageSource>
                             <FontImageSource Glyph="" FontFamily="FontIconSolid" Color="Gray"></FontImageSource>
                         </tabView:SfTabItem.ImageSource>
@@ -958,7 +958,7 @@
                         </tabView:SfTabItem.Content>
                     </tabView:SfTabItem>
                     <!--Time Sheets-->
-                    <tabView:SfTabItem TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" BackgroundColor="#f7f5fa">
+                    <tabView:SfTabItem TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" BackgroundColor="White">
                         <tabView:SfTabItem.ImageSource>
                             <FontImageSource Glyph="" FontFamily="FontIconSolid" Color="Gray"></FontImageSource>
                         </tabView:SfTabItem.ImageSource>
@@ -1367,7 +1367,7 @@
                         </tabView:SfTabItem.Content>
                     </tabView:SfTabItem>
                     <!--More-->
-                    <tabView:SfTabItem TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" BackgroundColor="#f7f5fa">
+                    <tabView:SfTabItem TextColor="Black" FontSize="14" FontFamily="Almarai-Regular" BackgroundColor="White">
                         <tabView:SfTabItem.ImageSource>
                             <FontImageSource Glyph="" FontFamily="FontIconSolid" Color="Gray"></FontImageSource>
                         </tabView:SfTabItem.ImageSource>
