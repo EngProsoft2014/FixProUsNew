@@ -109,7 +109,7 @@ namespace FixProUs.ViewModels
             LstMessages = new ObservableCollection<NotificationsModel>();
             LstEmpInAccountId = new ObservableCollection<EmployeeModel>();
 
-            Task.WhenAll(Controls.StartData.GetAccountKeysAsync(), GetPerrmission(), GetAllSchedules(), GetNotifications(), GetEmployeesInAccountId());
+            Task.WhenAll(Controls.StartData.GetAccountKeysAsync(), GetNotifications(), GetEmployeesInAccountId(), GetAllSchedules());
 
             MessagingCenter.Subscribe<AddScheduleViewModel, bool>(this, "CreatedSchedule", (sender, message) =>
             {
@@ -157,27 +157,8 @@ namespace FixProUs.ViewModels
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
                 EmployeePermission = new EmployeeModel();
-                if (!string.IsNullOrEmpty(Helpers.Settings.UserNameGet) && !string.IsNullOrEmpty(Helpers.Settings.PasswordGet))
-                {
-                    var json = await ORep.GetLoginAsync<EmployeeModel>("api/Login/GetLogin?" + "UserName=" + Helpers.Settings.UserNameGet + "&" + "Password=" + Helpers.Settings.PasswordGet + "&" + "PlayerId=" + Preferences.Default.Get(Helpers.Settings.PlayerId, OneSignal.User.PushSubscription.Id));
-
-                    if (json != null)
-                    {
-                        if (!string.IsNullOrEmpty(json.EmployeeStatus) && json.EmployeeStatus.Contains("Try Again"))
-                        {
-                            Preferences.Default.Clear();
-                            Helpers.Utility.ServerUrl = Helpers.Utility.ServerUrlStatic;
-                            await App.Current!.MainPage!.Navigation.PushAsync(new Pages.LoginPage(new LoginViewModel(ORep, _service), ORep, _service));
-                            Controls.StartData.IsRunning = false;
-                            await App.Current!.MainPage!.DisplayAlert("Alert", "You’ve been logged out.\r\n(account is changed username and password)\r\n", "Ok");
-                        }
-                        else
-                        {
-                            EmployeePermission = json;
-                        }
-                    }
-
-                }
+                await Controls.StartData.CheckPermissionEmployee();
+                EmployeePermission = Controls.StartData.EmployeeDataStatic;
             }
         }
 
@@ -186,6 +167,7 @@ namespace FixProUs.ViewModels
         {
             if (Connectivity.NetworkAccess == NetworkAccess.Internet)
             {
+                await GetPerrmission();
                 string UserToken = await _service.UserToken();
                 
                 var json = await ORep.GetAsync<ObservableCollection<SchedulesModel>>(string.Format("api/Schedules/GetSchedules?" + "AccountId=" + Helpers.Settings.AccountIdGet + "&" + "EmpId=" + Helpers.Settings.UserIdGet + "&" + "EmpRole=" + EmployeePermission.UserRole + "&" + "lstEmp=" + Helpers.Settings.UserEmployeesGet + "&" + "TextSearch="), UserToken);
