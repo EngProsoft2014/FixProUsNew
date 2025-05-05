@@ -16,21 +16,21 @@
 
             <Grid VerticalOptions="FillAndExpand">
 
-                <StackLayout VerticalOptions="Start" HeightRequest="400">
+                <Border StrokeShape="RoundRectangle 0,0,0,0" Stroke="Transparent" VerticalOptions="Start" HeightRequest="400">
                     <!-- Gradient Background -->
-                    <StackLayout.Background>
+                    <Border.Background>
                         <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                             <GradientStop Color="#9a43fa" Offset="0.2" />
                             <GradientStop Color="#B36DFF" Offset="0.4" />
                             <GradientStop Color="#b983f2" Offset="0.6" />
                             <GradientStop Color="#FFFFFF" Offset="1.0" />
                         </LinearGradientBrush>
-                    </StackLayout.Background>
+                    </Border.Background>
                     <VerticalStackLayout Margin="20,70,20,0">
                         <Label Text="Welcome Back 👋" FontSize="34" TextColor="White" FontAttributes="Bold" FontFamily="AlmaraiBold"></Label>
                         <Label Text="Hey! Good to see you again" FontSize="18" TextColor="White" FontAttributes="Bold" FontFamily="AlmaraiBold"></Label>
                     </VerticalStackLayout>
-                </StackLayout>
+                </Border>
 
                 <Border StrokeShape="RoundRectangle 20" Padding="20" Margin="20" BackgroundColor="White" VerticalOptions="Center">
 

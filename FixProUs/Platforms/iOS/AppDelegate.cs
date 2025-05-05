@@ -10,6 +10,8 @@ namespace FixProUs
 
         public override bool FinishedLaunching(UIApplication application, NSDictionary launchOptions)
         {
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+
             var result = base.FinishedLaunching(application, launchOptions);
 
             // Get the main window
